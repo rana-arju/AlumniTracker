@@ -6,22 +6,18 @@ import {
   AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
-import Login from "../screens/profile/Login";
-import AuthStack from "./AuthStack";
+
 import Teachers from "../screens/Teachers";
 import Students from "../screens/Students";
 import Search from "../screens/Search";
 import Home from "../screens/Home";
-const Stack = createNativeStackNavigator();
+import HeaderProfile from "../components/HeaderProfile";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
-  const [login, setLogin] = useState(true);
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -42,6 +38,7 @@ const BottomTab = () => {
           borderTopColor: "#fff",
           ...styles.shadow,
         },
+        headerRight: () => <HeaderProfile />,
       }}
     >
       <Tab.Screen
@@ -145,7 +142,7 @@ const BottomTab = () => {
           ),
         }}
       />
-      {login ? (
+      {/* {login ? (
         <Tab.Screen
           name="Account"
           component={AuthStack}
@@ -175,31 +172,58 @@ const BottomTab = () => {
           }}
         />
       ) : (
-        <Tab.Screen
-          name="Login"
-          component={Login}
-          options={{
-            tabBarIcon: ({ color, focused, size }) => (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  top: 10,
-                }}
-              >
-                <MaterialIcons name="login" color={color} size={size} />
-                <Text
+        <>
+          <Tab.Screen
+            name="Login"
+            component={Login}
+            options={{
+              tabBarIcon: ({ color, focused, size }) => (
+                <View
                   style={{
-                    color: focused ? COLORS.tertiary : "#748c94",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    top: 10,
                   }}
                 >
-                  Login
-                </Text>
-              </View>
-            ),
-          }}
-        />
-      )}
+                  <MaterialIcons name="login" color={color} size={size} />
+                  <Text
+                    style={{
+                      color: focused ? COLORS.tertiary : "#748c94",
+                    }}
+                  >
+                    Login
+                  </Text>
+                </View>
+              ),
+            }}
+          />
+       
+         <Tab.Screen
+            name="Registration"
+            component={Registration}
+            options={{
+              tabBarIcon: ({ color, focused, size }) => (
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    top: 10,
+                  }}
+                >
+                  <MaterialIcons name="login" color={color} size={size} />
+                  <Text
+                    style={{
+                      color: focused ? COLORS.tertiary : "#748c94",
+                    }}
+                  >
+                    Register
+                  </Text>
+                </View>
+              ),
+            }}
+          />
+        </> */}
+      {/* )} */}
     </Tab.Navigator>
   );
 };

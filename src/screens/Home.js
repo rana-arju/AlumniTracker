@@ -33,7 +33,7 @@ const Home = () => {
             justifyContent: "center",
             fontSize: 18,
           }}
-          onPress={() => navigation.navigate("Account")}
+          onPress={() => navigation.navigate("My Profile")}
         >
           <Text
             style={{
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     height: "100%",
     paddingHorizontal: 20,
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 20,
     backgroundColor: "#fff",
     alignItems: "center",
   },

@@ -3,13 +3,10 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Home from "../screens/Home";
 import MyProfile from "../screens/profile/MyProfile";
-import Contact from "../screens/Contact";
 import EditProfile from "../screens/profile/EditProfile";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 import CustomDrawer from "./CustomDrawer";
-import BottomTab from "./BottomTab";
-import { View } from "react-native";
 
 const Drawer = createDrawerNavigator();
 

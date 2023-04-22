@@ -9,12 +9,15 @@ import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 
-const Login = ({ navigation }) => {
-  console.log(navigation.navigate);
-
+const Registration = ({ navigation }) => {
+  console.log(navigation);
   const [inputs, setInputs] = useState({
     email: "",
+    fullname: "",
+    phone: "",
     password: "",
+    roll: "",
+    register: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -25,50 +28,51 @@ const Login = ({ navigation }) => {
     if (!inputs.email) {
       handleError("Please input email", "email");
       isValid = false;
+    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+      handleError("Please input a valid email", "email");
+      isValid = false;
+    }
+
+    if (!inputs.fullname) {
+      handleError("Please input fullname", "fullname");
+      isValid = false;
+    }
+
+    if (!inputs.phone) {
+      handleError("Please input phone number", "phone");
+      isValid = false;
     }
 
     if (!inputs.password) {
       handleError("Please input password", "password");
       isValid = false;
+    } else if (inputs.password.length < 5) {
+      handleError("Min password length of 5", "password");
+      isValid = false;
     }
 
     if (isValid) {
-      login();
+      register();
     }
   };
-  const login = () => {
+  const register = () => {
     setLoading(true);
     setTimeout(async () => {
-      setLoading(false);
-      let userData = await AsyncStorage.getItem("userData");
-      if (userData) {
-        userData = JSON.parse(userData);
-        if (
-          inputs.email == userData.email &&
-          inputs.password == userData.password
-        ) {
-          navigation.navigate("Home");
-          await AsyncStorage.setItem(
-            "userData",
-            JSON.stringify({ ...userData, loggedIn: true })
-          );
-          Toast.show({
-            type: "success",
-            text1: "Login Successful.",
-            text2: "Welcome to our app",
-          });
-        } else {
-          Toast.show({
-            type: "error",
-            text1: "Error",
-            text2: "Invalid Details",
-          });
-        }
-      } else {
+      try {
+        setLoading(false);
+        Toast.show({
+          type: "success",
+          text1: "Register Successful!",
+          text2: "Continue your contribution 👋",
+        });
+        await AsyncStorage.setItem("userData", JSON.stringify(inputs));
+        navigation.navigate("Login");
+      } catch (error) {
+        Alert.alert("Error", "");
         Toast.show({
           type: "error",
           text1: "Error",
-          text2: "User does not exist",
+          text2: "Something went wrong",
         });
       }
     }, 3000);
@@ -92,12 +96,20 @@ const Login = ({ navigation }) => {
         }}
       >
         <Text style={{ color: COLORS.black, fontSize: 30, fontWeight: "bold" }}>
-          Login
+          Register
         </Text>
         <Text style={{ color: COLORS.gray, fontSize: 18, paddingVertical: 10 }}>
-          Enter your details to Login.
+          Enter your details to register.
         </Text>
         <View style={{ marginVertical: 20 }}>
+          <Input
+            onChangeText={(text) => handleOnchange(text, "fullname")}
+            onFocus={() => handleError(null, "fullname")}
+            iconName="account-outline"
+            label="Full Name"
+            placeholder="Enter your full name"
+            error={errors.fullname}
+          />
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
             onFocus={() => handleError(null, "email")}
@@ -108,6 +120,34 @@ const Login = ({ navigation }) => {
           />
 
           <Input
+            keyboardType="numeric"
+            onChangeText={(text) => handleOnchange(text, "roll")}
+            onFocus={() => handleError(null, "roll")}
+            iconName="format-list-numbered"
+            label="Roll Number"
+            placeholder="Enter your roll no"
+            error={errors.phone}
+          />
+          <Input
+            keyboardType="numeric"
+            onChangeText={(text) => handleOnchange(text, "register")}
+            onFocus={() => handleError(null, "register")}
+            iconName="format-list-numbered"
+            label="Register Number"
+            placeholder="Enter your register no"
+            error={errors.phone}
+          />
+          <Input
+            keyboardType="numeric"
+            onChangeText={(text) => handleOnchange(text, "phone")}
+            onFocus={() => handleError(null, "phone")}
+            iconName="phone-outline"
+            label="Phone Number"
+            placeholder="Enter your phone no"
+            error={errors.phone}
+          />
+      
+          <Input
             onChangeText={(text) => handleOnchange(text, "password")}
             onFocus={() => handleError(null, "password")}
             iconName="lock-outline"
@@ -116,9 +156,9 @@ const Login = ({ navigation }) => {
             error={errors.password}
             password
           />
-          <Button title="Login" onPress={validate} />
+          <Button title="Register" onPress={validate} />
           <Text
-            onPress={() => navigation.navigate("Registration")}
+            onPress={() => navigation.navigate("Login")}
             style={{
               color: COLORS.black,
               fontWeight: "bold",
@@ -126,7 +166,7 @@ const Login = ({ navigation }) => {
               fontSize: 14,
             }}
           >
-            Don't have account ?Register
+            Already have account ?Login
           </Text>
         </View>
       </ScrollView>
@@ -134,6 +174,6 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default Registration;
 
 const styles = StyleSheet.create({});

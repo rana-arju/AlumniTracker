@@ -11,14 +11,25 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Ionicons,
+} from "@expo/vector-icons";
+import { COLORS } from "../constants/theme";
 const CustomDrawer = (props) => {
+  const { navigation } = props;
   return (
-    <View style={{ flex: 1}}>
+    <View style={{ flex: 1 }}>
       <DrawerContentScrollView
         {...props}
         contentContainerStyle={{ backgroundColor: "#8200d6" }}
       >
+        <TouchableOpacity
+          style={styles.close}
+          onPress={() => navigation.closeDrawer()}
+        >
+          <AntDesign name="closecircleo" size={24} color={COLORS.white} />
+        </TouchableOpacity>
         <ImageBackground
           source={require("../../assets/images/menu-bg.jpeg")}
           style={{ padding: 20 }}
@@ -90,4 +101,11 @@ const CustomDrawer = (props) => {
 
 export default CustomDrawer;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  close: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    color: "#fff",
+    marginRight: 2,
+  },
+});
