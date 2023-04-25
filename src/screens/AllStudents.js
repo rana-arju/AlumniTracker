@@ -27,7 +27,7 @@ const AllStudents = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>All Students</Text>
+        <Text style={styles.headerTitle}>All Students shefaitur</Text>
       </View>
       <View style={styles.cardsContainer}>
         {isLoading ? (
@@ -73,7 +73,7 @@ export default AllStudents;
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    marginTop: 50
+    marginTop: 50,
   },
 
   allStudent: {
