@@ -27,7 +27,7 @@ const AllStudents = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>All Students shefaitur</Text>
+        <Text style={styles.headerTitle}>All Students</Text>
       </View>
       <View style={styles.cardsContainer}>
         {isLoading ? (
