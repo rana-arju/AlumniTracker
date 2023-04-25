@@ -1,0 +1,82 @@
+[
+  {
+    "name": "John Doe",
+    "roll": "2023001",
+    "registration": "2023A01",
+    "department": "computer",
+    "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCK7azPuZXKTQNvgdzHusGqDF6LqB7D9pTUw&usqp=CAU",
+    "present_job_details": "Software Engineer at Example Inc.",
+    "contact_number": "+1 (555) 123-4567",
+    "_id": 1
+  },
+  {
+    "name": "Sarah Johnson",
+    "roll": "2023002",
+    "registration": "2023A02",
+    "department": "civil",
+    "profile_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTubR2xa0AK3BCeN-O6-MKKBgZHY54Fw4eLww&usqp=CAU",
+    "present_job_details": "Civil Engineer at ACME Construction",
+    "contact_number": "+1 (555) 234-5678",
+    "_id": 2
+  },
+  {
+    "name": "Michael Smith",
+    "roll": "2023003",
+    "registration": "2023A03",
+    "department": "food",
+    "profile_image": "https://i.pinimg.com/736x/be/f4/ae/bef4aeccbc14c1964ebb6a50e6255f51.jpg",
+    "present_job_details": "Chef at Gourmet Cuisine",
+    "contact_number": "+1 (555) 345-6789",
+    "_id": 3
+  },
+  {
+    "name": "Emily Lee",
+    "roll": "2023004",
+    "registration": "2023A04",
+    "department": "tourism",
+    "profile_image": "",
+    "present_job_details": "Travel Consultant at Wanderlust Adventures",
+    "contact_number": "+1 (555) 456-7890",
+    "_id": 4
+  },
+  {
+    "name": "Jacob Chen",
+    "roll": "2023005",
+    "registration": "2023A05",
+    "department": "RAC",
+    "profile_image": "",
+    "present_job_details": "Mechanical Engineer at XYZ Motors",
+    "contact_number": "+1 (555) 567-8901",
+    "_id": 5
+  },
+  {
+    "name": "Isabella Rodriguez",
+    "roll": "2023006",
+    "registration": "2023A06",
+    "department": "computer",
+    "profile_image": "",
+    "present_job_details": "Frontend Developer at ABC Software",
+    "contact_number": "+1 (555) 678-9012",
+    "_id": 6
+  },
+  {
+    "name": "Aiden Taylor",
+    "roll": "2023007",
+    "registration": "2023A07",
+    "department": "civil",
+    "profile_image": "",
+    "present_job_details": "Structural Engineer at DEF Consulting",
+    "contact_number": "+1 (555) 789-0123",
+    "_id": 7
+  },
+  {
+    "name": "Olivia Brown",
+    "roll": "2023008",
+    "registration": "2023A08",
+    "department": "food",
+    "profile_image": "",
+    "present_job_details": "Pastry Chef at Sweet Delights",
+    "contact_number": "+1 (555) 890-1234",
+    "_id": 8
+  }
+]

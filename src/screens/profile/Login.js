@@ -10,7 +10,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 
 const Login = ({ navigation }) => {
-  console.log(navigation.navigate);
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -124,6 +123,7 @@ const Login = ({ navigation }) => {
               fontWeight: "bold",
               textAlign: "center",
               fontSize: 14,
+              color: COLORS.gray,
             }}
           >
             Don't have account ?Register

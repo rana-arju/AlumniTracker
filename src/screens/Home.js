@@ -42,7 +42,7 @@ const Home = () => {
               textTransform: "uppercase",
             }}
           >
-            Go Account
+            Go Profile
           </Text>
         </TouchableOpacity>
       </View>

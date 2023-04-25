@@ -25,13 +25,15 @@ import {
 } from "@expo/vector-icons";
 import Search from "./src/screens/Search";
 import Account from "./src/screens/profile/Account";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Login from "./src/screens/profile/Login";
 import BottomTab from "./src/navigation/BottomTab";
 import Toast from "react-native-toast-message";
 import Loader from "./src/components/Loader";
 import Registration from "./src/screens/profile/Registration";
 import Routes from "./src/navigation/Routes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,14 +41,13 @@ export default function App() {
   const [initialRouteName, setInitialRouteName] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      authUser();
-    }, 2000);
-  }, []);
+    authUser();
+  }, [initialRouteName]);
 
   const authUser = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
+
       if (userData) {
         userData = JSON.parse(userData);
         if (userData.loggedIn) {
@@ -61,29 +62,27 @@ export default function App() {
       setInitialRouteName("Registration");
     }
   };
+
   return (
-    <>
-        {!initialRouteName ? (
-          <Loader visible={true} />
-        ) : (
-          <>
-            {/* <Stack.Navigator
-              initialRouteName={initialRouteName}
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen
-                name="Registration"
-                component={Registration}
-              />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Home" component={Home} />
-            </Stack.Navigator>
-            <Stack.Screen name="Registration" component={<Registration />} /> */}
-        
+    <NavigationContainer>
+      {!initialRouteName ? (
+        <Loader visible={true} />
+      ) : (
+        <>
+          <Stack.Navigator
+            initialRouteName={initialRouteName}
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Registration" component={Registration} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Home" component={Routes} />
+          </Stack.Navigator>
+          <Stack.Screen name="Registration" component={<Registration />} />
+
           {/* <Routes /> */}
-          </>
-        )}
+        </>
+      )}
       <Toast />
-    </>
+    </NavigationContainer>
   );
 }

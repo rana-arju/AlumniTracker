@@ -6,18 +6,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import {
-  AntDesign,
-  Ionicons,
-} from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const CustomDrawer = (props) => {
   const { navigation } = props;
+  const [userDetails, setUserDetails] = useState();
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  const getUserData = async () => {
+    const userData = await AsyncStorage.getItem("userData");
+    if (userData) {
+      setUserDetails(JSON.parse(userData));
+    }
+  };
+  const logout = async () => {
+    await AsyncStorage.setItem(
+      "userData",
+      JSON.stringify({ ...userDetails, loggedIn: false })
+    );
+    navigation.navigate("Login");
+  };
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -35,7 +51,7 @@ const CustomDrawer = (props) => {
           style={{ padding: 20 }}
         >
           <Image
-            source={require("../../assets/images/user-profile.png")}
+            source={require("../../assets/images/ranaarju.jpg")}
             style={{
               height: 80,
               width: 80,
@@ -81,7 +97,7 @@ const CustomDrawer = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
+        <TouchableOpacity onPress={logout} style={{ paddingVertical: 15 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Ionicons name="exit-outline" size={22} />
             <Text

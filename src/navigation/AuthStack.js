@@ -1,54 +1,17 @@
 import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-
-import Home from "../screens/Home";
-import MyProfile from "../screens/profile/MyProfile";
-import EditProfile from "../screens/profile/EditProfile";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { COLORS } from "../constants/theme";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CustomDrawer from "./CustomDrawer";
+import Login from "../screens/profile/Login";
+import Registration from "../screens/profile/Registration";
 
-const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawer {...props} />}
-      screenOptions={{
-        headerShown: true,
-        drawerActiveBackgroundColor: COLORS.tertiary,
-        drawerActiveTintColor: "#fff",
-        drawerInactiveTintColor: "#333",
-
-        drawerLabelStyle: {
-          marginLeft: -25,
-          fontSize: 15,
-        },
-      }}
-    >
-      <Drawer.Screen
-        name="My Profile"
-        component={MyProfile}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="person-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Edit Profile"
-        component={EditProfile}
-        options={{
-          drawerIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="account-edit-outline"
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-    </Drawer.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Registration} />
+    </Stack.Navigator>
   );
 };
 

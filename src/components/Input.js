@@ -45,7 +45,7 @@ const Input = ({
           style={{ color: COLORS.tertiary, flex: 1 }}
           {...props}
         />
-        
+
         {password && (
           <Icon
             onPress={() => setHidePassword(!hidePassword)}
@@ -71,7 +71,6 @@ const style = StyleSheet.create({
   },
   inputContainer: {
     height: 55,
-   
     flexDirection: "row",
     paddingHorizontal: 15,
     borderWidth: 1,
