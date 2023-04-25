@@ -30,7 +30,7 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>CMT Students</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -60,7 +60,7 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Civil Students</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -90,7 +90,7 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Food Students</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -120,7 +120,7 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>RAC Students</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -150,7 +150,7 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Electrical Students</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>

@@ -73,6 +73,7 @@ export default AllStudents;
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    marginTop: 50
   },
 
   allStudent: {

@@ -64,19 +64,7 @@ const Routes = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="All Students"
-        component={AllStudents}
-        options={{
-          drawerIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="account-edit-outline"
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
+
     </Drawer.Navigator>
   );
 };
