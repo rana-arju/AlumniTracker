@@ -14,6 +14,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
+import AllStudents from "../screens/AllStudents";
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -41,7 +42,6 @@ const Routes = () => {
           ),
         }}
       />
-
       <Drawer.Screen
         name="My Profile"
         component={MyProfile}
@@ -54,6 +54,19 @@ const Routes = () => {
       <Drawer.Screen
         name="Edit Profile"
         component={EditProfile}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="account-edit-outline"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="All Students"
+        component={AllStudents}
         options={{
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons

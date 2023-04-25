@@ -77,7 +77,7 @@ const Registration = ({ navigation }) => {
           text2: "Continue your contribution 👋",
         });
         await AsyncStorage.setItem("userData", JSON.stringify(inputs));
-        navigation.navigate("Login");
+        navigation.navigate("Edit Profile");
       } catch (error) {
         Alert.alert("Error", "");
         Toast.show({
