@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { COLORS, FONT, SIZES } from "../constants/theme";
 import StudentCard from "../components/studentCard/StudentCard";
+import { useNavigation } from "@react-navigation/native";
 const data = require("../../data.json");
 
 const Students = () => {
@@ -17,8 +18,15 @@ const Students = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const navigation = useNavigation();
+  const handleCardPress = (item) => {
+    navigation.navigate(`studentDetails`, {
+      id: item._id,
+    });
+    // setSelectedJob(item.job_id);
+  };
   return (
-    <ScrollView style={{marginBottom: 100}}>
+    <ScrollView style={{ marginBottom: 100 }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>CMT Students</Text>
@@ -38,7 +46,7 @@ const Students = () => {
                 <StudentCard
                   item={item}
                   selectedStudent={selectedStudent}
-                  // handleCardPress={handleCardPress}
+                  handleCardPress={handleCardPress}
                 />
               )}
               keyExtractor={(item) => item?._id}
@@ -68,7 +76,7 @@ const Students = () => {
                 <StudentCard
                   item={item}
                   selectedStudent={selectedStudent}
-                  // handleCardPress={handleCardPress}
+                  handleCardPress={handleCardPress}
                 />
               )}
               keyExtractor={(item) => item?._id}
@@ -98,7 +106,7 @@ const Students = () => {
                 <StudentCard
                   item={item}
                   selectedStudent={selectedStudent}
-                  // handleCardPress={handleCardPress}
+                  handleCardPress={handleCardPress}
                 />
               )}
               keyExtractor={(item) => item?._id}
@@ -128,7 +136,7 @@ const Students = () => {
                 <StudentCard
                   item={item}
                   selectedStudent={selectedStudent}
-                  // handleCardPress={handleCardPress}
+                  handleCardPress={handleCardPress}
                 />
               )}
               keyExtractor={(item) => item?._id}
@@ -158,7 +166,7 @@ const Students = () => {
                 <StudentCard
                   item={item}
                   selectedStudent={selectedStudent}
-                  // handleCardPress={handleCardPress}
+                  handleCardPress={handleCardPress}
                 />
               )}
               keyExtractor={(item) => item?._id}

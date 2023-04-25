@@ -4,12 +4,12 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./StudentStyle";
 import { COLORS } from "../../constants/theme";
 
-const StudentCard = ({ item }) => {
+const StudentCard = ({ item, handleCardPress }) => {
   const [selectedStudent, setSelectedStudent] = useState("");
   return (
     <TouchableOpacity
       style={styles.container(selectedStudent, item)}
-      // onPress={() => handleCardPress(item)}
+      onPress={() => handleCardPress(item)}
     >
       <TouchableOpacity style={styles.logoContainer(selectedStudent, item)}>
         <Image
