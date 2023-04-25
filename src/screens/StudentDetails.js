@@ -1,8 +1,16 @@
-import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import data from "../../data.json";
 import { COLORS } from "../constants/theme";
 import phone from "../../assets/icons/smartphone.png";
+import { Feather } from "@expo/vector-icons";
 const StudentDetails = ({ navigation, route }) => {
   const { id } = route.params;
   const selectedStudent = data.find((student) => id == student._id);
@@ -22,13 +30,22 @@ const StudentDetails = ({ navigation, route }) => {
 
       <View style={styles.aboutLayout}>
         <Text style={styles.aboutSubHeader}> About me </Text>
-        <Text style={[styles.aboutPara]}>
-          Department: {selectedStudent?.department}
-        </Text>
-        <Text style={[styles.aboutPara]}>session: 19-20</Text>
-        <Text style={[styles.aboutPara]}>
-          Position: {selectedStudent?.present_job_details}
-        </Text>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <Feather name="check-circle" size={20} color={"#fff"} />
+          <Text style={[styles.aboutPara]}>
+            Department: {selectedStudent?.department}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <Feather name="check-circle" size={20} color={"#fff"} />
+          <Text style={[styles.aboutPara]}>session: 19-20</Text>
+        </View>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <Feather name="check-circle" size={20} color={"#fff"} />
+          <Text style={[styles.aboutPara]}>
+            Position: {selectedStudent?.present_job_details}
+          </Text>
+        </View>
       </View>
 
       <Text style={styles.mainHeader}> CONTACT INFO. </Text>
@@ -100,6 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#7d7d7d",
     paddingBottom: 30,
+   
   },
   aboutLayout: {
     backgroundColor: COLORS.tertiary,
@@ -121,6 +139,7 @@ const styles = StyleSheet.create({
   aboutPara: {
     color: "#fff",
     fontSize: 16,
+    marginBottom: 10
   },
   menuContainer: {
     width: "100%",

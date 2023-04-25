@@ -34,7 +34,7 @@ import Registration from "./src/screens/profile/Registration";
 import Routes from "./src/navigation/Routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
-import StudentDetails from "./src/navigation/StudentDetails";
+import StudentDetails from "./src/screens/StudentDetails";
 import AllStudents from "./src/screens/AllStudents";
 
 const Stack = createNativeStackNavigator();
@@ -88,8 +88,8 @@ export default function App() {
                 },
                 headerTitleAlign: "center",
               }}
-            />   
-             <Stack.Screen
+            />
+            <Stack.Screen
               name="allStudent"
               component={AllStudents}
               options={{

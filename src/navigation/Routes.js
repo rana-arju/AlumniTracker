@@ -14,7 +14,6 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
-import AllStudents from "../screens/AllStudents";
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -64,7 +63,6 @@ const Routes = () => {
           ),
         }}
       />
-
     </Drawer.Navigator>
   );
 };
