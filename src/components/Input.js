@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../constants/theme";
+import { Ionicons } from "@expo/vector-icons";
 const Input = ({
   label,
   iconName,
   error,
   password,
+  location,
   onFocus = () => {},
   ...props
 }) => {
@@ -30,10 +32,18 @@ const Input = ({
           },
         ]}
       >
-        <Icon
-          name={iconName}
-          style={{ color: COLORS.tertiary, fontSize: 22, marginRight: 10 }}
-        />
+        {location ? (
+          <Ionicons
+            name={iconName}
+            style={{ color: COLORS.tertiary, fontSize: 22, marginRight: 10 }}
+          />
+        ) : (
+          <Icon
+            name={iconName}
+            style={{ color: COLORS.tertiary, fontSize: 22, marginRight: 10 }}
+          />
+        )}
+     
         <TextInput
           autoCorrect={false}
           onFocus={() => {
