@@ -7,13 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 const HeaderProfile = () => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
-      style={{ flexDirection: "row", gap: 10 }}
-      onPress={() => navigation.openDrawer()}
-    >
-      <Text style={{ color: COLORS.gray, marginTop: 5 }}>Rana Arju</Text>
+    <TouchableOpacity style={{ flexDirection: "row", gap: 10 }}>
+      {/* <Text style={{ color: COLORS.gray, marginTop: 5 }}>Rana Arju</Text> */}
       <Image
-        source={require("../../assets/images/user-profile.png")}
+        source={require("../../assets/icons/cox.jpg")}
         style={{
           height: 32,
           width: 32,

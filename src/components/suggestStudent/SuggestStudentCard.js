@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
 const SuggestStudentCard = ({ student, handleNavigate }) => {
-  console.log(student.name);
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigate}>
       <TouchableOpacity style={styles.logoContainer}>
