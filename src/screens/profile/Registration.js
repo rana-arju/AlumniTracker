@@ -8,7 +8,7 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
-import { Picker } from "@react-native-community/picker";
+import { Picker } from "@react-native-picker/picker";
 
 const Registration = ({ navigation }) => {
   const [selectedRole, setSelectedRole] = useState("");

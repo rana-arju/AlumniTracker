@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,7 +14,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
-import AllStudents from "../screens/AllStudents";
+import HeaderProfile from "../components/HeaderProfile";
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -40,6 +40,9 @@ const Routes = () => {
           drawerIcon: ({ color }) => (
             <AntDesign name="home" size={22} color={color} />
           ),
+          headerTitleAlign: "center",
+          headerRight: () => <HeaderProfile />,
+          headerTitle: "Alumni",
         }}
       />
       <Drawer.Screen
@@ -64,7 +67,6 @@ const Routes = () => {
           ),
         }}
       />
-
     </Drawer.Navigator>
   );
 };
