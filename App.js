@@ -36,6 +36,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import StudentDetails from "./src/screens/StudentDetails";
 import AllStudents from "./src/screens/AllStudents";
+import EditProfile from "./src/screens/profile/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -92,6 +93,16 @@ export default function App() {
             <Stack.Screen
               name="allStudent"
               component={AllStudents}
+              options={{
+                headerTitleStyle: {
+                  fontSize: 25,
+                },
+                headerTitleAlign: "center",
+              }}
+            />
+            <Stack.Screen
+              name="editProfile"
+              component={EditProfile}
               options={{
                 headerTitleStyle: {
                   fontSize: 25,

@@ -10,8 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 
 const Login = ({ navigation }) => {
-
-  const [inputs, setInputs] = useState({
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
@@ -21,12 +20,12 @@ const Login = ({ navigation }) => {
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!inputs.email) {
+    if (!user.email) {
       handleError("Please input email", "email");
       isValid = false;
     }
 
-    if (!inputs.password) {
+    if (!user.password) {
       handleError("Please input password", "password");
       isValid = false;
     }
@@ -43,14 +42,28 @@ const Login = ({ navigation }) => {
       if (userData) {
         userData = JSON.parse(userData);
         if (
-          inputs.email == userData.email &&
-          inputs.password == userData.password
+          user.email == userData.email &&
+          user.password == userData.password
         ) {
-          navigation.navigate("Home");
+          setLoading(true);
+
+          const { data } = await axios.post(
+            `https://alumni-tracker.onrender.com/api/v1/Login`,
+            JSON.stringify(user),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          setLoading(false);
           await AsyncStorage.setItem(
             "userData",
-            JSON.stringify({ ...userData, loggedIn: true })
+            JSON.stringify({ ...data, loggedIn: true })
           );
+          navigation.navigate("Home");
+
           Toast.show({
             type: "success",
             text1: "Login Successful.",
@@ -74,7 +87,7 @@ const Login = ({ navigation }) => {
   };
 
   const handleOnchange = (text, input) => {
-    setInputs((prevState) => ({ ...prevState, [input]: text }));
+    setUser((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));

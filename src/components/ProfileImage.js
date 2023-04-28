@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -14,21 +14,39 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
-
+import { Cloudinary } from "cloudinary-core";
+import { set } from "react-native-reanimated";
+import Toast from "react-native-toast-message";
+import Button from "./Button";
+import { imageUpload } from "../function/imageUpload";
+const UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
+const CLOUD_NAME = "db8l1ulfq";
 export default function ProfileImage() {
-  const [imageUri, setImageUri] = useState(null);
+  const [imageURI, setImageURI] = useState(null);
+const token = "lkasdfkas;dfsskalsda;s23qrwklds";
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Toast.show({
+        type: "error",
+        text1: "Sorry, we need camera roll permissions to make this work!",
+        text2: "Allow camera permission",
+      });
+    }
+    if (status === "granted") {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      if (!result.canceled) {
+        setImageURI(result.assets[0].uri);
+      }
     }
   };
+
   const takePhoto = async () => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -39,27 +57,59 @@ export default function ProfileImage() {
     });
 
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      setImageURI(result.assets[0].uri);
     }
   };
-  console.log(imageUri);
+
+  const uploadProfileImage = async () => {
+    const formData = new FormData();
+    formData.append("profile", {
+      name: new Date() + "_profile",
+      uri: imageURI.uri,
+      type: "image/jpg",
+    });
+
+    try {
+      // const res = await client.post("/upload-profile", formData, {
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "multipart/form-data",
+      //     authorization: `Bearer ${token}`,
+      //   },
+      // });
+      if (!imageURI) {
+        Toast.show({
+          type: "error",
+          text1: "Please select an image to upload",
+          text2: "Select your profile photo from gallery or take photo",
+        });
+      } else {
+        const data = imageUpload(formData, token);
+        // if (data) {
+        //   setImageURI(data);
+        // }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <View style={styles.container}>
       <View>
         <TouchableOpacity onPress={pickImage}>
           <View style={styles.profileImageContainer}>
-            {imageUri ? (
+            {imageURI ? (
               <>
-                <Image source={{ uri: imageUri }} style={styles.profileImage} />
+                <Image source={{ uri: imageURI }} style={styles.profileImage} />
               </>
             ) : (
               <MaterialIcons name="photo-camera" size={40} color="#666" />
             )}
           </View>
         </TouchableOpacity>
-        {imageUri && (
+        {imageURI && (
           <TouchableOpacity
-            onPress={() => setImageUri(null)}
+            onPress={() => setImageURI(null)}
             style={styles.cross}
           >
             <Ionicons
@@ -77,6 +127,7 @@ export default function ProfileImage() {
           color={COLORS.tertiary}
         />
       </TouchableOpacity>
+      {imageURI && <Button title="Upload Photo" onPress={uploadProfileImage} />}
     </View>
   );
 }

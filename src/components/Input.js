@@ -9,6 +9,7 @@ const Input = ({
   error,
   password,
   location,
+  value,
   onFocus = () => {},
   ...props
 }) => {
@@ -43,9 +44,10 @@ const Input = ({
             style={{ color: COLORS.tertiary, fontSize: 22, marginRight: 10 }}
           />
         )}
-     
+
         <TextInput
           autoCorrect={false}
+          value={value}
           onFocus={() => {
             onFocus();
             setIsFocused(true);
