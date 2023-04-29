@@ -12,8 +12,8 @@ const HeaderProfile = () => {
       <Image
         source={require("../../assets/icons/cox.jpg")}
         style={{
-          height: 32,
-          width: 32,
+          height: 36,
+          width: 36,
           borderRadius: 40,
           marginBottom: 10,
           marginRight: 10,

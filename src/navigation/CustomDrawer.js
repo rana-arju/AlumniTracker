@@ -33,7 +33,6 @@ const CustomDrawer = (props) => {
     );
     navigation.navigate("Login");
   };
-  console.log("rana", userDetails);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView

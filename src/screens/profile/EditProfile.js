@@ -29,6 +29,7 @@ const EditProfile = ({ navigation }) => {
   const [sessionYears, setSessionYears] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [gender, setGender] = useState("");
 
   // session generate
   useEffect(() => {
@@ -110,6 +111,7 @@ const EditProfile = ({ navigation }) => {
     jobPosition: storeUser.jobPosition ? storeUser.jobPosition : "",
     session: storeUser.session ? storeUser.session : "",
     department: storeUser.department ? storeUser.department : "",
+    gender: storeUser.gender ? storeUser.gender : "",
   };
 
   const [user, setUser] = useState(initial);
@@ -186,7 +188,7 @@ const EditProfile = ({ navigation }) => {
       });
     }
   };
-console.log(userId);
+  console.log(userId);
   const handleOnchange = (text, input) => {
     setUser((prevState) => ({ ...prevState, [input]: text }));
   };
@@ -281,6 +283,22 @@ console.log(userId);
             value={user.mobile}
           />
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+            Select your gender:
+          </Text>
+          <Picker
+            selectedValue={gender}
+            onValueChange={(itemValue, itemIndex) => {
+              setGender(itemValue);
+              handleOnchange(itemValue, "gender");
+            }}
+            style={styles.selectInput}
+          >
+            <Picker.Item label="Select your Gender" value="" />
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Other" value="Other" />
+          </Picker>
+          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
             Select your department:
           </Text>
           <Picker
@@ -353,19 +371,26 @@ console.log(userId);
           >
             Contact Info:
           </Text>
+
           <Input
             onChangeText={(text) => handleOnchange(text, "whatsappNumber")}
             onFocus={() => handleError(null, "whatsappNumber")}
-            iconName="office-building"
-            label="WhatsApp Number"
+            iconName="whatsapp"
+            label="WhatsApp Number with country code"
             placeholder="Your whatsApp number"
             error={errors.whatsappNumber}
             value={user.whatsappNumber}
           />
+          <Text
+            style={{ fontSize: 12, color: COLORS.gray, fontStyle: "italic" }}
+          >
+            WhatsApp number enter with country code like: +880
+          </Text>
+
           <Input
             onChangeText={(text) => handleOnchange(text, "facebookLink")}
             onFocus={() => handleError(null, "facebookLink")}
-            iconName="briefcase"
+            iconName="facebook"
             label="Facebook account URL"
             placeholder="Your facebook account link"
             error={errors.facebookLink}
