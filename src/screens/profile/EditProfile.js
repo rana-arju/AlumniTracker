@@ -1,5 +1,5 @@
 import { Image, Keyboard, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { COLORS } from "../../constants/theme";
 import { ScrollView } from "react-native-gesture-handler";
@@ -8,28 +8,102 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import { Cloudinary } from "cloudinary-core";
 
 import ProfileImage from "../../components/ProfileImage";
+import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
 
 const EditProfile = ({ navigation }) => {
-  const [selectedRole, setSelectedRole] = useState("");
-  const [roleError, setRoleError] = useState(false);
-
-  const [inputs, setInputs] = useState({
-    email: "",
-    fullname: "",
-    phone: "",
-    password: "",
-    roll: "",
-    register: "",
-  });
-  const [errors, setErrors] = useState({});
+  const [userId, setUserId] = useState("");
+  const [storeUser, setStoreUser] = useState({});
+  const [department, setDepartment] = useState("");
+  const [session, setSession] = useState("");
+  const [sessionYears, setSessionYears] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // session generate
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const sessionStartYear = 2004;
+    const sessionEndYear = currentYear;
+    const years = [];
+    for (let i = sessionStartYear; i <= sessionEndYear; i++) {
+      years.push(`${i}-${i + 1}`);
+    }
+    setSessionYears(years);
+  }, []);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      if (userData) {
+        userData = JSON.parse(userData);
+        setUserId(userData);
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
+      });
+    }
+  };
+  const singleUser = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://alumni-tracker.onrender.com/api/v1/User/GetSingleUser/${userId.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userId.token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (data) {
+        setLoading(false);
+        setStoreUser(data);
+        console.log("data",data);
+        // setUser(data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    singleUser();
+  }, []);
+  const [errors, setErrors] = useState({});
+  const initial = {
+    email: storeUser.email || "",
+    name: storeUser.name || "",
+    mobile: storeUser.mobile || "",
+    rollNumber: storeUser.singleUser || "",
+    registrationNumber: storeUser.registrationNumber || "",
+    fatherName: storeUser.fatherName || "",
+    motherName: storeUser.motherName || "",
+    companyName: storeUser.companyName || "",
+    jobLocation: storeUser.jobLocation || "",
+    jobPosition: storeUser.jobPosition || "",
+    session: storeUser.session || "",
+    department: storeUser.department || "",
+  };
+
+  const [user, setUser] = useState(initial);
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-    if (!selectedRole) {
+
+    if (!department) {
       Toast.show({
         type: "error",
         text1: "Select role",
@@ -37,50 +111,57 @@ const EditProfile = ({ navigation }) => {
       });
       isValid = false;
     }
-    if (!inputs.email) {
+    if (!user.email) {
       handleError("Please input email", "email");
       isValid = false;
-    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+    } else if (!user.email.match(/\S+@\S+\.\S+/)) {
       handleError("Please input a valid email", "email");
       isValid = false;
     }
 
-    if (!inputs.fullname) {
-      handleError("Please input fullname", "fullname");
+    if (!user.name) {
+      handleError("Please input name", "name");
       isValid = false;
     }
 
-    if (selectedRole == "student" ? !inputs.phone : "") {
-      handleError("Please input phone number", "phone");
-      isValid = false;
-    }
-
-    if (!inputs.password) {
-      handleError("Please input password", "password");
-      isValid = false;
-    } else if (inputs.password.length < 5) {
-      handleError("Min password length of 5", "password");
+    if (department == "student" ? !user.mobile : "") {
+      handleError("Please input mobile number", "mobile");
       isValid = false;
     }
 
     if (isValid) {
-      register();
+      updateProfile();
     }
   };
-  const register = () => {
+
+  const updateProfile = () => {
     setLoading(true);
     setTimeout(async () => {
       try {
-        setLoading(false);
-        Toast.show({
-          type: "success",
-          text1: "Register Successful!",
-          text2: "Continue your contribution 👋",
-        });
-        await AsyncStorage.setItem("userData", JSON.stringify(inputs));
-        navigation.navigate("Edit Profile");
+        setLoading(true);
+        const { data } = await axios.post(
+          `https://alumni-tracker.onrender.com/api/v1/Registration`,
+          user,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (data.message == "success") {
+          setLoading(false);
+
+          await AsyncStorage.setItem("userData", JSON.stringify(user));
+          navigation.navigate("Home");
+          Toast.show({
+            type: "success",
+            text1: "Register Successful!",
+            text2: "Continue your contribution 👋",
+          });
+        }
       } catch (error) {
-        Alert.alert("Error", "");
         Toast.show({
           type: "error",
           text1: "Error",
@@ -91,11 +172,12 @@ const EditProfile = ({ navigation }) => {
   };
 
   const handleOnchange = (text, input) => {
-    setInputs((prevState) => ({ ...prevState, [input]: text }));
+    setUser((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
+  console.log("userId", storeUser);
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
@@ -107,18 +189,18 @@ const EditProfile = ({ navigation }) => {
           paddingHorizontal: 20,
           paddingBottom: 80,
         }}
-        showsVerticalScrollIndicator = {false}
+        showsVerticalScrollIndicator={false}
       >
-        {/* <Button title="Pick Image" onPress={pickImage} /> */}
         <ProfileImage />
         <View style={{ marginVertical: 20 }}>
           <Input
-            onChangeText={(text) => handleOnchange(text, "fullname")}
-            onFocus={() => handleError(null, "fullname")}
+            onChangeText={(text) => handleOnchange(text, "name")}
+            onFocus={() => handleError(null, "name")}
             iconName="account-outline"
             label="Full Name"
+            value={user?.name}
             placeholder="Enter your full name"
-            error={errors.fullname}
+            error={errors.name}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "fatherName")}
@@ -139,50 +221,70 @@ const EditProfile = ({ navigation }) => {
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
             onFocus={() => handleError(null, "email")}
+            value={user?.email}
             iconName="email-outline"
             label="Email"
             placeholder="Enter your email address"
             error={errors.email}
           />
-          {/* <Input
-            onChangeText={(text) => handleOnchange(text, "password")}
-            onFocus={() => handleError(null, "password")}
-            iconName="lock-outline"
-            label="Password"
-            placeholder="Enter your password"
-            error={errors.password}
-            password
-          />
-       */}
 
           <Input
             keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "roll")}
-            onFocus={() => handleError(null, "roll")}
+            onChangeText={(text) => handleOnchange(text, "rollNumber")}
+            onFocus={() => handleError(null, "rollNumber")}
             iconName="format-list-numbered"
             label="Roll Number"
             placeholder="Enter your roll no"
-            error={errors.roll}
+            error={errors.rollNumber}
           />
           <Input
             keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "register")}
-            onFocus={() => handleError(null, "register")}
+            onChangeText={(text) => handleOnchange(text, "registrationNumber")}
+            onFocus={() => handleError(null, "registrationNumber")}
             iconName="format-list-numbered"
             label="Register Number"
             placeholder="Enter your register no"
-            error={errors.roll}
+            error={errors.registrationNumber}
           />
 
           <Input
             keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "phone")}
-            onFocus={() => handleError(null, "phone")}
+            onChangeText={(text) => handleOnchange(text, "mobile")}
+            onFocus={() => handleError(null, "mobile")}
             iconName="phone-outline"
             label="Phone Number"
             placeholder="Enter your phone no"
-            error={errors.phone}
+            error={errors.mobile}
           />
+          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+            Select your department:
+          </Text>
+          <Picker
+            selectedValue={department}
+            onValueChange={(itemValue, itemIndex) => setDepartment(itemValue)}
+            style={styles.selectInput}
+          >
+            <Picker.Item label="Select your department" value="" />
+            <Picker.Item label="CMT" value="CMT" />
+            <Picker.Item label="CT" value="CT" />
+            <Picker.Item label="ET" value="ET" />
+            <Picker.Item label="RAC" value="RAC" />
+            <Picker.Item label="FT" value="FT" />
+            <Picker.Item label="THM" value="THM" />
+          </Picker>
+          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+            Select session:
+          </Text>
+          <Picker
+            selectedValue={session}
+            onValueChange={(itemValue, itemIndex) => setSession(itemValue)}
+            style={styles.selectInput}
+          >
+            <Picker.Item label="Select your Session" value="" />
+            {sessionYears.map((year) => (
+              <Picker.Item label={year} value={year} key={year} />
+            ))}
+          </Picker>
           <Text
             style={{ fontSize: 18, color: COLORS.gray, fontStyle: "italic" }}
           >
@@ -214,7 +316,6 @@ const EditProfile = ({ navigation }) => {
             location
           />
           <Button title="Save" onPress={validate} />
-          
         </View>
       </ScrollView>
     </SafeAreaView>

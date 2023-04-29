@@ -1,9 +1,20 @@
-import { Cloudinary } from "cloudinary-core";
+import axios from "axios";
+const instance = axios.create();
 
-const cloudinary = new Cloudinary({
-  cloud_name: db8l1ulfq,
-  api_key: 267738493593386,
-  api_secret: Epd9PMusflpRaK0b2dTx9Gaw3DE,
-});
-
-export default cloudinary;
+export const UploadImages = async (formData, path, token) => {
+  try {
+    const { data } = await instance.post(
+      `${process.env.REACT_APP_BACKEND_URL}/uploadImages`,
+      formData,
+      { path },
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};

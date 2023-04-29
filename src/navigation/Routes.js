@@ -46,12 +46,13 @@ const Routes = () => {
         }}
       />
       <Drawer.Screen
-        name="My Profile"
+        name="MyProfile"
         component={MyProfile}
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name="person-outline" size={22} color={color} />
           ),
+          headerTitle: "My Profile",
         }}
       />
       <Drawer.Screen

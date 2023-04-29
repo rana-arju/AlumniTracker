@@ -9,18 +9,24 @@ import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
-const Registration = ({ navigation }) => {
+const Registration = () => {
+  const navigation = useNavigation();
   const [selectedRole, setSelectedRole] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [roleError, setRoleError] = useState(false);
 
-  const [inputs, setInputs] = useState({
+  const [user, setUser] = useState({
     email: "",
-    fullname: "",
-    phone: "",
+    name: "",
+    mobile: "",
     password: "",
     roll: "",
-    register: "",
+    registration: "",
+    role: "",
+    department: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -36,28 +42,28 @@ const Registration = ({ navigation }) => {
       });
       isValid = false;
     }
-    if (!inputs.email) {
+    if (!user.email) {
       handleError("Please input email", "email");
       isValid = false;
-    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+    } else if (!user.email.match(/\S+@\S+\.\S+/)) {
       handleError("Please input a valid email", "email");
       isValid = false;
     }
 
-    if (!inputs.fullname) {
-      handleError("Please input fullname", "fullname");
+    if (!user.name) {
+      handleError("Please input name", "name");
       isValid = false;
     }
 
-    if (selectedRole == "student" ? !inputs.phone : "") {
-      handleError("Please input phone number", "phone");
-      isValid = false;
-    }
+    // if (selectedRole == "teacher" && !user.mobile) {
+    //   handleError("Please input mobile number", "mobile");
+    //   isValid = false;
+    // }
 
-    if (!inputs.password) {
+    if (!user.password) {
       handleError("Please input password", "password");
       isValid = false;
-    } else if (inputs.password.length < 5) {
+    } else if (user.password.length < 5) {
       handleError("Min password length of 5", "password");
       isValid = false;
     }
@@ -66,31 +72,50 @@ const Registration = ({ navigation }) => {
       register();
     }
   };
-  const register = () => {
+  // console.log("user", user);
+  const register = async () => {
     setLoading(true);
-    setTimeout(async () => {
-      try {
+    // setTimeout(async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `https://alumni-tracker.onrender.com/api/v1/Registration`,
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (data.message == "success") {
         setLoading(false);
         Toast.show({
           type: "success",
           text1: "Register Successful!",
           text2: "Continue your contribution 👋",
         });
-        await AsyncStorage.setItem("userData", JSON.stringify(inputs));
-        navigation.navigate("Edit Profile");
-      } catch (error) {
-        Alert.alert("Error", "");
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "Something went wrong",
-        });
+        await AsyncStorage.setItem(
+          "userData",
+          JSON.stringify({ ...data, loggedIn: true })
+        );
+        navigation.navigate("editProfile");
       }
-    }, 3000);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      const message = error.response.data.message;
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: message,
+      });
+    }
+    // }, 3000);
   };
-
   const handleOnchange = (text, input) => {
-    setInputs((prevState) => ({ ...prevState, [input]: text }));
+    setUser((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
@@ -114,12 +139,12 @@ const Registration = ({ navigation }) => {
         </Text>
         <View style={{ marginVertical: 20 }}>
           <Input
-            onChangeText={(text) => handleOnchange(text, "fullname")}
-            onFocus={() => handleError(null, "fullname")}
+            onChangeText={(text) => handleOnchange(text, "name")}
+            onFocus={() => handleError(null, "name")}
             iconName="account-outline"
             label="Full Name"
             placeholder="Enter your full name"
-            error={errors.fullname}
+            error={errors.name}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
@@ -143,7 +168,10 @@ const Registration = ({ navigation }) => {
           </Text>
           <Picker
             selectedValue={selectedRole}
-            onValueChange={(itemValue, itemIndex) => setSelectedRole(itemValue)}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedRole(itemValue);
+              handleOnchange(itemValue, "role");
+            }}
             style={styles.selectInput}
           >
             <Picker.Item label="Select register role" value="" />
@@ -152,6 +180,25 @@ const Registration = ({ navigation }) => {
           </Picker>
           {selectedRole == "student" ? (
             <>
+              <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+                Select Your Department:
+              </Text>
+              <Picker
+                selectedValue={selectedDepartment}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedDepartment(itemValue);
+                  handleOnchange(itemValue, "department");
+                }}
+                style={styles.selectInput}
+              >
+                <Picker.Item label="Select Your Department" value="" />
+                <Picker.Item label="CMT" value="CMT" />
+                <Picker.Item label="CT" value="CT" />
+                <Picker.Item label="ET" value="ET" />
+                <Picker.Item label="RAC" value="RAC" />
+                <Picker.Item label="FT" value="FT" />
+                <Picker.Item label="THM" value="THM" />
+              </Picker>
               <Input
                 keyboardType="numeric"
                 onChangeText={(text) => handleOnchange(text, "roll")}
@@ -163,23 +210,23 @@ const Registration = ({ navigation }) => {
               />
               <Input
                 keyboardType="numeric"
-                onChangeText={(text) => handleOnchange(text, "register")}
-                onFocus={() => handleError(null, "register")}
+                onChangeText={(text) => handleOnchange(text, "registration")}
+                onFocus={() => handleError(null, "registration")}
                 iconName="format-list-numbered"
-                label="Register Number"
-                placeholder="Enter your register no"
-                error={errors.roll}
+                label="Registration Number"
+                placeholder="Enter your Registration no"
+                error={errors.registration}
               />
             </>
           ) : selectedRole == "teacher" ? (
             <Input
               keyboardType="numeric"
-              onChangeText={(text) => handleOnchange(text, "phone")}
-              onFocus={() => handleError(null, "phone")}
+              onChangeText={(text) => handleOnchange(text, "mobile")}
+              onFocus={() => handleError(null, "mobile")}
               iconName="phone-outline"
-              label="Phone Number"
-              placeholder="Enter your phone no"
-              error={errors.phone}
+              label="Mobile Number"
+              placeholder="Enter your Mobile no"
+              error={errors.mobile}
             />
           ) : (
             ""
