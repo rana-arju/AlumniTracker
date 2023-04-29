@@ -91,7 +91,6 @@ const Registration = () => {
 
       if (data.message == "success") {
         setLoading(false);
-
         Toast.show({
           type: "success",
           text1: "Register Successful!",
@@ -106,11 +105,11 @@ const Registration = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-
+      const message = error.response.data.message;
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "Something went wrong",
+        text2: message,
       });
     }
     // }, 3000);

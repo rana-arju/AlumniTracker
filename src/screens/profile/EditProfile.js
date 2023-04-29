@@ -56,7 +56,6 @@ const EditProfile = ({ navigation }) => {
   const singleUser = async () => {
     try {
       setLoading(true);
-
       const { data } = await axios.get(
         `https://alumni-tracker.onrender.com/api/v1/User/GetSingleUser/${userId.id}`,
         {
@@ -68,33 +67,37 @@ const EditProfile = ({ navigation }) => {
         }
       );
       if (data) {
-        setStoreUser(data);
         setLoading(false);
+        setStoreUser(data);
+        console.log("data",data);
+        // setUser(data);
       }
       setLoading(false);
     } catch (error) {
+      console.log(error);
       setLoading(false);
-
     }
   };
   useEffect(() => {
     singleUser();
-  }, [userId]);
-  console.log("userId", storeUser);
-  const [user, setUser] = useState({
-    email: storeUser.email || "",
-    name: storeUser.name,
-    mobile: "",
-    roll: storeUser.singleUser || "",
-    registration: "",
-    fatherName: "",
-    motherName: "",
-    companyName: "",
-    jobLocation: "",
-    jobPosition: "",
-    session: "",
-  });
+  }, []);
   const [errors, setErrors] = useState({});
+  const initial = {
+    email: storeUser.email || "",
+    name: storeUser.name || "",
+    mobile: storeUser.mobile || "",
+    rollNumber: storeUser.singleUser || "",
+    registrationNumber: storeUser.registrationNumber || "",
+    fatherName: storeUser.fatherName || "",
+    motherName: storeUser.motherName || "",
+    companyName: storeUser.companyName || "",
+    jobLocation: storeUser.jobLocation || "",
+    jobPosition: storeUser.jobPosition || "",
+    session: storeUser.session || "",
+    department: storeUser.department || "",
+  };
+
+  const [user, setUser] = useState(initial);
 
   const validate = () => {
     Keyboard.dismiss();
@@ -174,6 +177,8 @@ const EditProfile = ({ navigation }) => {
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
+  console.log("userId", storeUser);
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -193,7 +198,7 @@ const EditProfile = ({ navigation }) => {
             onFocus={() => handleError(null, "name")}
             iconName="account-outline"
             label="Full Name"
-            value={storeUser.name || user.name}
+            value={user?.name}
             placeholder="Enter your full name"
             error={errors.name}
           />
@@ -216,39 +221,30 @@ const EditProfile = ({ navigation }) => {
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
             onFocus={() => handleError(null, "email")}
+            value={user?.email}
             iconName="email-outline"
             label="Email"
             placeholder="Enter your email address"
             error={errors.email}
           />
-          {/* <Input
-            onChangeText={(text) => handleOnchange(text, "password")}
-            onFocus={() => handleError(null, "password")}
-            iconName="lock-outline"
-            label="Password"
-            placeholder="Enter your password"
-            error={errors.password}
-            password
-          />
-       */}
 
           <Input
             keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "roll")}
-            onFocus={() => handleError(null, "roll")}
+            onChangeText={(text) => handleOnchange(text, "rollNumber")}
+            onFocus={() => handleError(null, "rollNumber")}
             iconName="format-list-numbered"
             label="Roll Number"
             placeholder="Enter your roll no"
-            error={errors.roll}
+            error={errors.rollNumber}
           />
           <Input
             keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "registration")}
-            onFocus={() => handleError(null, "registration")}
+            onChangeText={(text) => handleOnchange(text, "registrationNumber")}
+            onFocus={() => handleError(null, "registrationNumber")}
             iconName="format-list-numbered"
             label="Register Number"
             placeholder="Enter your register no"
-            error={errors.registration}
+            error={errors.registrationNumber}
           />
 
           <Input
