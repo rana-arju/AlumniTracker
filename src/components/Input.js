@@ -47,7 +47,7 @@ const Input = ({
 
         <TextInput
           autoCorrect={false}
-          value={value}
+          defaultValue={value}
           onFocus={() => {
             onFocus();
             setIsFocused(true);

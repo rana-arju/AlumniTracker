@@ -33,6 +33,7 @@ const CustomDrawer = (props) => {
     );
     navigation.navigate("Login");
   };
+  console.log("rana", userDetails);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -50,7 +51,7 @@ const CustomDrawer = (props) => {
           style={{ padding: 20 }}
         >
           <Image
-            source={require("../../assets/images/ranaarju.jpg")}
+            source={{ uri: userDetails?.image }}
             style={{
               height: 80,
               width: 80,
@@ -66,16 +67,18 @@ const CustomDrawer = (props) => {
                 marginBottom: 5,
               }}
             >
-              Rana Arju
+              {userDetails?.name}
             </Text>
-            <Image
-              source={require("../../assets/icons/verified.png")}
-              style={{
-                height: 20,
-                width: 20,
-                borderRadius: 40,
-              }}
-            />
+            {userDetails?.isAdmin && (
+              <Image
+                source={require("../../assets/icons/verified.png")}
+                style={{
+                  height: 20,
+                  width: 20,
+                  borderRadius: 40,
+                }}
+              />
+            )}
           </View>
         </ImageBackground>
         <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10 }}>

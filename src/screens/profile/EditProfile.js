@@ -1,5 +1,12 @@
-import { Image, Keyboard, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  Image,
+  Keyboard,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { COLORS } from "../../constants/theme";
 import { ScrollView } from "react-native-gesture-handler";
@@ -21,6 +28,7 @@ const EditProfile = ({ navigation }) => {
   const [session, setSession] = useState("");
   const [sessionYears, setSessionYears] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // session generate
   useEffect(() => {
@@ -40,12 +48,15 @@ const EditProfile = ({ navigation }) => {
 
   const loadUserData = async () => {
     try {
+      setLoading(true);
       let userData = await AsyncStorage.getItem("userData");
       if (userData) {
         userData = JSON.parse(userData);
         setUserId(userData);
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       Toast.show({
         type: "error",
         text1: "Error",
@@ -53,52 +64,56 @@ const EditProfile = ({ navigation }) => {
       });
     }
   };
+  useEffect(() => {
+    singleUser();
+  }, [refreshing]);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    singleUser();
+    setRefreshing(false);
+  }, []);
   const singleUser = async () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `https://alumni-tracker.onrender.com/api/v1/User/GetSingleUser/${userId.id}`,
+        `https://alumni-tracker-backend-api.vercel.app/api/v1/User/GetSingleUser/${userId.id}`,
         {
           headers: {
             Authorization: `Bearer ${userId.token}`,
             "Content-Type": "application/json",
-            Accept: "application/json",
           },
         }
       );
       if (data) {
         setLoading(false);
         setStoreUser(data);
-        console.log("data",data);
-        // setUser(data);
+        setUser(data);
+        setDepartment(data?.department);
+        setSession(data?.session);
       }
-      setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
-  useEffect(() => {
-    singleUser();
-  }, []);
-  const [errors, setErrors] = useState({});
   const initial = {
-    email: storeUser.email || "",
-    name: storeUser.name || "",
-    mobile: storeUser.mobile || "",
-    rollNumber: storeUser.singleUser || "",
-    registrationNumber: storeUser.registrationNumber || "",
-    fatherName: storeUser.fatherName || "",
-    motherName: storeUser.motherName || "",
-    companyName: storeUser.companyName || "",
-    jobLocation: storeUser.jobLocation || "",
-    jobPosition: storeUser.jobPosition || "",
-    session: storeUser.session || "",
-    department: storeUser.department || "",
+    email: storeUser.email ? storeUser.email : userId?.email,
+    name: storeUser.name ? storeUser.name : userId.name,
+    mobile: storeUser.mobile ? storeUser.mobile : "",
+    rollNumber: storeUser.singleUser ? storeUser.singleUser : "",
+    registrationNumber: storeUser.registrationNumber
+      ? storeUser.registrationNumber
+      : "",
+    fatherName: storeUser.fatherName ? storeUser.fatherName : "",
+    motherName: storeUser.motherName ? storeUser.motherName : "",
+    companyName: storeUser.companyName ? storeUser.companyName : "",
+    jobLocation: storeUser.jobLocation ? storeUser.jobLocation : "",
+    jobPosition: storeUser.jobPosition ? storeUser.jobPosition : "",
+    session: storeUser.session ? storeUser.session : "",
+    department: storeUser.department ? storeUser.department : "",
   };
 
   const [user, setUser] = useState(initial);
-
+  const [errors, setErrors] = useState({});
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -124,7 +139,7 @@ const EditProfile = ({ navigation }) => {
       isValid = false;
     }
 
-    if (department == "student" ? !user.mobile : "") {
+    if (!user.mobile) {
       handleError("Please input mobile number", "mobile");
       isValid = false;
     }
@@ -134,51 +149,50 @@ const EditProfile = ({ navigation }) => {
     }
   };
 
-  const updateProfile = () => {
+  const updateProfile = async () => {
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.post(
-          `https://alumni-tracker.onrender.com/api/v1/Registration`,
-          user,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
-
-        if (data.message == "success") {
-          setLoading(false);
-
-          await AsyncStorage.setItem("userData", JSON.stringify(user));
-          navigation.navigate("Home");
-          Toast.show({
-            type: "success",
-            text1: "Register Successful!",
-            text2: "Continue your contribution 👋",
-          });
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `https://alumni-tracker.onrender.com/api/v1/User/UpdateUser/${userId.id}`,
+        user,
+        {
+          headers: {
+            Authorization: `Bearer ${userId.token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
         }
-      } catch (error) {
+      );
+      console.log("data", data);
+      if (data.message == "success") {
+        setLoading(false);
+        setStoreUser(data);
+        await AsyncStorage.setItem("userData", JSON.stringify(user));
+        navigation.navigate("Home");
         Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "Something went wrong",
+          type: "success",
+          text1: "Register Successful!",
+          text2: "Continue your contribution 👋",
         });
       }
-    }, 3000);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
+      });
+    }
   };
-
+console.log(userId);
   const handleOnchange = (text, input) => {
     setUser((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
-  console.log("userId", storeUser);
-
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -190,6 +204,9 @@ const EditProfile = ({ navigation }) => {
           paddingBottom: 80,
         }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <ProfileImage />
         <View style={{ marginVertical: 20 }}>
@@ -209,6 +226,7 @@ const EditProfile = ({ navigation }) => {
             label="Father Name"
             placeholder="Enter your father name"
             error={errors.fatherName}
+            value={user.fatherName}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "motherName")}
@@ -217,15 +235,18 @@ const EditProfile = ({ navigation }) => {
             label="Mother Name"
             placeholder="Enter your mother name"
             error={errors.motherName}
+            value={user.motherName}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
             onFocus={() => handleError(null, "email")}
-            value={user?.email}
             iconName="email-outline"
             label="Email"
             placeholder="Enter your email address"
             error={errors.email}
+            value={user.email}
+            editable={false}
+            pointerEvents="none"
           />
 
           <Input
@@ -236,6 +257,7 @@ const EditProfile = ({ navigation }) => {
             label="Roll Number"
             placeholder="Enter your roll no"
             error={errors.rollNumber}
+            value={user.rollNumber}
           />
           <Input
             keyboardType="numeric"
@@ -245,6 +267,7 @@ const EditProfile = ({ navigation }) => {
             label="Register Number"
             placeholder="Enter your register no"
             error={errors.registrationNumber}
+            value={user.registrationNumber}
           />
 
           <Input
@@ -255,13 +278,17 @@ const EditProfile = ({ navigation }) => {
             label="Phone Number"
             placeholder="Enter your phone no"
             error={errors.mobile}
+            value={user.mobile}
           />
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
             Select your department:
           </Text>
           <Picker
             selectedValue={department}
-            onValueChange={(itemValue, itemIndex) => setDepartment(itemValue)}
+            onValueChange={(itemValue, itemIndex) => {
+              setDepartment(itemValue);
+              handleOnchange(itemValue, "department");
+            }}
             style={styles.selectInput}
           >
             <Picker.Item label="Select your department" value="" />
@@ -277,7 +304,10 @@ const EditProfile = ({ navigation }) => {
           </Text>
           <Picker
             selectedValue={session}
-            onValueChange={(itemValue, itemIndex) => setSession(itemValue)}
+            onValueChange={(itemValue, itemIndex) => {
+              setSession(itemValue);
+              handleOnchange(itemValue, "session");
+            }}
             style={styles.selectInput}
           >
             <Picker.Item label="Select your Session" value="" />
@@ -297,6 +327,7 @@ const EditProfile = ({ navigation }) => {
             label="Company Name"
             placeholder="Enter your company name"
             error={errors.companyName}
+            value={user.companyName}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "jobPosition")}
@@ -305,6 +336,7 @@ const EditProfile = ({ navigation }) => {
             label="Job Position"
             placeholder="Enter your Job position"
             error={errors.jobPosition}
+            value={user.jobPosition}
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "jobLocation")}
@@ -313,7 +345,31 @@ const EditProfile = ({ navigation }) => {
             label="Job Location"
             placeholder="Enter your Job Location"
             error={errors.jobLocation}
+            value={user.jobLocation}
             location
+          />
+          <Text
+            style={{ fontSize: 18, color: COLORS.gray, fontStyle: "italic" }}
+          >
+            Contact Info:
+          </Text>
+          <Input
+            onChangeText={(text) => handleOnchange(text, "whatsappNumber")}
+            onFocus={() => handleError(null, "whatsappNumber")}
+            iconName="office-building"
+            label="WhatsApp Number"
+            placeholder="Your whatsApp number"
+            error={errors.whatsappNumber}
+            value={user.whatsappNumber}
+          />
+          <Input
+            onChangeText={(text) => handleOnchange(text, "facebookLink")}
+            onFocus={() => handleError(null, "facebookLink")}
+            iconName="briefcase"
+            label="Facebook account URL"
+            placeholder="Your facebook account link"
+            error={errors.facebookLink}
+            value={user.facebookLink}
           />
           <Button title="Save" onPress={validate} />
         </View>

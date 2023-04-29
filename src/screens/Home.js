@@ -33,7 +33,7 @@ const Home = () => {
             justifyContent: "center",
             fontSize: 18,
           }}
-          onPress={() => navigation.navigate("My Profile")}
+          onPress={() => navigation.navigate("MyProfile")}
         >
           <Text
             style={{

@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import axios from "axios";
 
 const Login = ({ navigation }) => {
   const [user, setUser] = useState({
@@ -16,6 +17,7 @@ const Login = ({ navigation }) => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -34,14 +36,13 @@ const Login = ({ navigation }) => {
       login();
     }
   };
-  const login = async () => {
-    setLoading(true);
-    let userData = await AsyncStorage.getItem("userData");
-    if (userData) {
-      userData = JSON.parse(userData);
-      if (user.email == userData.email && user.password == userData.password) {
-        setLoading(true);
 
+  const login = async () => {
+    try {
+      setLoading(true);
+      if (user) {
+
+        setLoading(true);
         const { data } = await axios.post(
           `https://alumni-tracker.onrender.com/api/v1/Login`,
           user,
@@ -52,34 +53,30 @@ const Login = ({ navigation }) => {
             },
           }
         );
-        setLoading(false);
-        await AsyncStorage.setItem(
-          "userData",
-          JSON.stringify({ ...data, loggedIn: true })
-        );
-        navigation.navigate("Home");
-
-        Toast.show({
-          type: "success",
-          text1: "Login Successful.",
-          text2: "Welcome to our app",
-        });
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "Invalid Details",
-        });
+        if (data.message == "success") {
+          setLoading(false);
+          await AsyncStorage.setItem(
+            "userData",
+            JSON.stringify({ ...data, loggedIn: true })
+          );
+          navigation.navigate("Home");
+          Toast.show({
+            type: "success",
+            text1: "Login Successful.",
+            text2: "Welcome to our app",
+          });
+        }
       }
-    } else {
+    } catch (error) {
+
+      setLoading(false);
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "User does not exist",
+        text2: "Something error",
       });
     }
   };
-
   const handleOnchange = (text, input) => {
     setUser((prevState) => ({ ...prevState, [input]: text }));
   };

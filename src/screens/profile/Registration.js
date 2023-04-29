@@ -72,7 +72,6 @@ const Registration = () => {
       register();
     }
   };
-  // console.log("user", user);
   const register = async () => {
     setLoading(true);
     // setTimeout(async () => {
