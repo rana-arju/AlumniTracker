@@ -63,7 +63,7 @@ const MyProfile = ({ navigation }) => {
   };
 
   const handleLinkClick = () => {
-    const number = "+8801881220413";
+    const number = user?.whatsappNumber;
     const url = `whatsapp://send?phone=${number}&text=${encodeURIComponent(
       `Hello, ${user?.name}. How are you?`
     )}`;
@@ -76,7 +76,6 @@ const MyProfile = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Loader visible={loading} />
-
       <View style={{ marginBottom: 20 }}>
         <View style={styles.profile_img_area}>
           <Image
@@ -118,97 +117,103 @@ const MyProfile = ({ navigation }) => {
               {user?.email}
             </Text>
           </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Phone:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.mobile}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Gender:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.gender}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Department:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.department}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Session:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.session}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Roll:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.rollNumber}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Registration:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.registrationNumber}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Father Name:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.fatherName}
-            </Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Mother Name:</Text>
-            <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.motherName}
-            </Text>
-          </View>
+          {user?.mobile && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Phone:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.mobile}
+              </Text>
+            </View>
+          )}
+          {user?.gender && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Gender:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.gender}
+              </Text>
+            </View>
+          )}
+          {user?.department && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Department:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.department}
+              </Text>
+            </View>
+          )}
+          {user?.session && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Session:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.session}
+              </Text>
+            </View>
+          )}
+          {user?.rollNumber && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Roll:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.rollNumber}
+              </Text>
+            </View>
+          )}
+          {user?.registrationNumber && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Registration:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.registrationNumber}
+              </Text>
+            </View>
+          )}
+          {user?.fatherName && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Father Name:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.fatherName}
+              </Text>
+            </View>
+          )}
+          {user?.motherName && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Mother Name:</Text>
+              <Text style={{ fontSize: 16, color: COLORS.gray }}>
+                {user?.motherName}
+              </Text>
+            </View>
+          )}
+
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
             Contact info:
           </Text>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>WhatsApp:</Text>
-            <MaterialCommunityIcons
-              name="whatsapp"
-              size={30}
-              color="#25D366"
-              onPress={handleLinkClick}
-            />
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Facebook:</Text>
-            <MaterialCommunityIcons
-              name="facebook"
-              size={30}
-              color="#0165E1"
-              onPress={() =>
-                Linking.openURL(
-                  user?.facebookLink
-                    ? user?.facebookLink
-                    : "https://www.facebook.com"
-                )
-              }
-            />
-            {/* <Text style={{ fontSize: 16, color: COLORS.gray }}>
-              {user?.facebookLink}
-            </Text> */}
-          </View>
-          {/* <View style={styles.infoCard}>
-            <Text style={{ fontSize: 16 }}>Qualification:</Text>
-            <Text
-              style={{
-                fontSize: 16,
-                color: COLORS.gray,
-                width: "80%",
-                textAlign: "center",
-              }}
-            >
-              Diploma in Computer engineering
-            </Text>
-          </View> */}
+          {user?.whatsappNumber && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>WhatsApp:</Text>
+              <MaterialCommunityIcons
+                name="whatsapp"
+                size={30}
+                color="#25D366"
+                onPress={handleLinkClick}
+              />
+            </View>
+          )}
+          {user?.facebookLink && (
+            <View style={styles.infoCard}>
+              <Text style={{ fontSize: 16 }}>Facebook:</Text>
+              <MaterialCommunityIcons
+                name="facebook"
+                size={30}
+                color="#0165E1"
+                onPress={() =>
+                  Linking.openURL(
+                    user?.facebookLink
+                      ? user?.facebookLink
+                      : "https://www.facebook.com"
+                  )
+                }
+              />
+            </View>
+          )}
+
           <Button
             title="Edit Profile"
             onPress={() => navigation.navigate("Edit Profile")}

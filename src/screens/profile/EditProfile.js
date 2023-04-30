@@ -37,7 +37,7 @@ const EditProfile = ({ navigation }) => {
     const sessionStartYear = 2004;
     const sessionEndYear = currentYear;
     const years = [];
-    for (let i = sessionStartYear; i <= sessionEndYear; i++) {
+    for (let i = sessionStartYear; i < sessionEndYear; i++) {
       years.push(`${i}-${i + 1}`);
     }
     setSessionYears(years);
@@ -169,8 +169,20 @@ const EditProfile = ({ navigation }) => {
       console.log("data", data);
       if (data.message == "success") {
         setLoading(false);
-        setStoreUser(data);
-        await AsyncStorage.setItem("userData", JSON.stringify(user));
+        setStoreUser(data.user);
+        await AsyncStorage.setItem(
+          "userData",
+          JSON.stringify({
+            name: data?.user.name,
+            image: data?.user.image,
+            email: data?.user.email,
+            status: data?.user.status,
+            role: data?.user.role,
+            isAdmin: data?.user.isAdmin,
+            department: data?.user.department,
+            id: data?.user.id,
+          })
+        );
         navigation.navigate("Home");
         Toast.show({
           type: "success",
