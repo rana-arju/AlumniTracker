@@ -27,10 +27,7 @@ const CustomDrawer = (props) => {
     }
   };
   const logout = async () => {
-    await AsyncStorage.setItem(
-      "userData",
-      JSON.stringify({ ...userDetails, loggedIn: false })
-    );
+    await AsyncStorage.setItem("userData", "");
     navigation.navigate("Login");
   };
   return (

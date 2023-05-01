@@ -59,10 +59,10 @@ export default function App() {
           setInitialRouteName("Login");
         }
       } else {
-        setInitialRouteName("Registration");
+        setInitialRouteName("Login");
       }
     } catch (error) {
-      setInitialRouteName("Registration");
+      setInitialRouteName("Login");
     }
   };
 
