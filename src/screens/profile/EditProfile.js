@@ -20,6 +20,7 @@ import { Cloudinary } from "cloudinary-core";
 import ProfileImage from "../../components/ProfileImage";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
+import { log } from "react-native-reanimated";
 
 const EditProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -66,36 +67,70 @@ const EditProfile = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    singleUser();
-  }, [refreshing]);
+    fetchData();
+  }, []);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    singleUser();
+    fetchData();
     setRefreshing(false);
   }, []);
-  const singleUser = async () => {
+  // const singleUser = async () => {
+  //   setLoading(true);
+  //   if (userId) {
+  //     try {
+  //       setLoading(true);
+
+  //       const { data } = await axios.get(
+  //         `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${userId?.token}`,
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       if (data) {
+  //         setLoading(false);
+  //         setStoreUser(data.user);
+  //         setUser(data.user);
+  //         setDepartment(data.user?.department);
+  //         setSession(data.user?.session);
+  //       }
+  //     } catch (error) {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+  const options = {
+    method: "GET",
+    url: `https://alumni-tracker.onrender.com/api/v1/GetSingleUser/${userId?.id}`,
+    headers: {
+      Authorization: `Bearer ${userId?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `https://alumni-tracker-backend-api.vercel.app/api/v1/User/GetSingleUser/${userId.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userId.token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (data) {
+      const response = await axios.request(options);
+      if (response) {
         setLoading(false);
-        setStoreUser(data);
-        setUser(data);
-        setDepartment(data?.department);
-        setSession(data?.session);
+        setStoreUser(response.data.user);
+        setUser(response.data.user);
+        setDepartment(response.data.user.department);
+        setSession(response.data.user.session);
+        setGender(response.data.user.gender);
       }
     } catch (error) {
       setLoading(false);
+    } finally {
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [userId]);
   const initial = {
     email: storeUser.email ? storeUser.email : userId?.email,
     name: storeUser.name ? storeUser.name : userId.name,
@@ -116,7 +151,9 @@ const EditProfile = ({ navigation }) => {
 
   const [user, setUser] = useState(initial);
   const [errors, setErrors] = useState({});
+
   const validate = () => {
+    console.log("error", errors);
     Keyboard.dismiss();
     let isValid = true;
 
@@ -128,11 +165,8 @@ const EditProfile = ({ navigation }) => {
       });
       isValid = false;
     }
-    if (!user.email) {
+    if (!user?.email) {
       handleError("Please input email", "email");
-      isValid = false;
-    } else if (!user.email.match(/\S+@\S+\.\S+/)) {
-      handleError("Please input a valid email", "email");
       isValid = false;
     }
 
@@ -141,10 +175,10 @@ const EditProfile = ({ navigation }) => {
       isValid = false;
     }
 
-    if (!user.mobile) {
-      handleError("Please input mobile number", "mobile");
-      isValid = false;
-    }
+    // if (!user.mobile) {
+    //   handleError("Please input mobile number", "mobile");
+    //   isValid = false;
+    // }
 
     if (isValid) {
       updateProfile();
@@ -153,46 +187,50 @@ const EditProfile = ({ navigation }) => {
 
   const updateProfile = async () => {
     setLoading(true);
+
     try {
       setLoading(true);
+
       const { data } = await axios.post(
-        `https://alumni-tracker.onrender.com/api/v1/User/UpdateUser/${userId.id}`,
+        `https://alumni-tracker.onrender.com/api/v1/UpdateUser/${userId?.id}`,
         user,
         {
           headers: {
-            Authorization: `Bearer ${userId.token}`,
+            Authorization: `Bearer ${userId?.token}`,
             "Content-Type": "application/json",
             Accept: "application/json",
           },
         }
       );
       console.log("data", data);
-      if (data.message == "success") {
+      if (data) {
         setLoading(false);
-        setStoreUser(data.user);
+        setStoreUser(data);
         await AsyncStorage.setItem(
           "userData",
           JSON.stringify({
-            name: data?.user.name,
-            image: data?.user.image,
-            email: data?.user.email,
-            status: data?.user.status,
-            role: data?.user.role,
-            isAdmin: data?.user.isAdmin,
-            department: data?.user.department,
-            id: data?.user.id,
+            name: data?.name,
+            image: data?.image,
+            email: data?.email,
+            status: data?.status,
+            role: data?.role,
+            isAdmin: data?.isAdmin,
+            department: data?.department,
+            id: data?.id,
+            loggedIn: true,
+            token: userId?.token,
           })
         );
-        navigation.navigate("Home");
+        navigation.navigate("MyProfile");
         Toast.show({
           type: "success",
-          text1: "Register Successful!",
+          text1: "Profile update Successful!",
           text2: "Continue your contribution 👋",
         });
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.log("er", error);
       Toast.show({
         type: "error",
         text1: "Error",
@@ -200,13 +238,13 @@ const EditProfile = ({ navigation }) => {
       });
     }
   };
-  console.log(userId);
   const handleOnchange = (text, input) => {
     setUser((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
+  console.log("store", storeUser);
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -292,7 +330,7 @@ const EditProfile = ({ navigation }) => {
             label="Phone Number"
             placeholder="Enter your phone no"
             error={errors.mobile}
-            value={user.mobile}
+            value={user?.mobile}
           />
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
             Select your gender:
@@ -306,8 +344,8 @@ const EditProfile = ({ navigation }) => {
             style={styles.selectInput}
           >
             <Picker.Item label="Select your Gender" value="" />
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Male" value="male" />
+            <Picker.Item label="Female" value="female" />
             <Picker.Item label="Other" value="Other" />
           </Picker>
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>

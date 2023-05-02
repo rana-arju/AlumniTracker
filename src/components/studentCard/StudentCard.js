@@ -12,15 +12,21 @@ const StudentCard = ({ item, handleCardPress }) => {
       onPress={() => handleCardPress(item)}
     >
       <TouchableOpacity style={styles.logoContainer(selectedStudent, item)}>
-        <Image
-          source={{
-            uri: item.profile_image
-              ? item.profile_image
-              : "../../../assets/images/user-profile.png",
-          }}
-          resizeMode="contain"
-          style={styles.logoImage}
-        />
+        {item.image ? (
+          <Image
+            source={{
+              uri: item.image,
+            }}
+            resizeMode="contain"
+            style={styles.logoImage}
+          />
+        ) : (
+          <Image
+            source={require("../../../assets/images/user-profile.png")}
+            resizeMode="contain"
+            style={styles.logoImage}
+          />
+        )}
       </TouchableOpacity>
       <Text style={styles.companyName} numberOfLines={1}>
         {item.name}

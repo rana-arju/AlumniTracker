@@ -6,24 +6,57 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import data from "../../data.json";
 import { COLORS } from "../constants/theme";
 import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
+import Loader from "../components/Loader";
+import axios from "axios";
 const StudentDetails = ({ navigation, route }) => {
-  const { id } = route.params;
-  const selectedStudent = data.find((student) => id == student._id);
+  const { id, token } = route.params;
+  const [data, setData] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const options = {
+    method: "GET",
+    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const fetchData = async () => {
+    setLoading(true);
+    console.log(options);
+    try {
+      const response = await axios.request(options);
+      setData(response.data.user);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      alert("There is an error!");
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
   return (
     <View style={styles.aboutContainer}>
-      <Text style={styles.mainHeader}> {selectedStudent.name} </Text>
+      <Loader visible={isLoading} />
+
+      <Text style={styles.mainHeader}> {data?.name} </Text>
       <Text style={styles.paraStyle}> I am a full stack developer 😀 </Text>
 
       <View>
         <Image
           style={styles.imgStyle}
           source={{
-            uri: selectedStudent.profile_image,
+            uri: data?.image,
           }}
         />
       </View>
@@ -32,19 +65,17 @@ const StudentDetails = ({ navigation, route }) => {
         <Text style={styles.aboutSubHeader}> About me </Text>
         <View style={{ flexDirection: "row", gap: 5 }}>
           <Feather name="check-circle" size={20} color={"#fff"} />
-          <Text style={[styles.aboutPara]}>
-            Department: {selectedStudent?.department}
-          </Text>
+          <Text style={[styles.aboutPara]}>Department: {data?.department}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5 }}>
           <Feather name="check-circle" size={20} color={"#fff"} />
-          <Text style={[styles.aboutPara]}>session: 19-20</Text>
+          <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5 }}>
           <Feather name="check-circle" size={20} color={"#fff"} />
-          <Text style={[styles.aboutPara]}>
+          {/* <Text style={[styles.aboutPara]}>
             Position: {selectedStudent?.present_job_details}
-          </Text>
+          </Text> */}
         </View>
       </View>
 
@@ -117,7 +148,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#7d7d7d",
     paddingBottom: 30,
-   
   },
   aboutLayout: {
     backgroundColor: COLORS.tertiary,
@@ -139,7 +169,7 @@ const styles = StyleSheet.create({
   aboutPara: {
     color: "#fff",
     fontSize: 16,
-    marginBottom: 10
+    marginBottom: 10,
   },
   menuContainer: {
     width: "100%",

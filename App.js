@@ -50,7 +50,7 @@ export default function App() {
   const authUser = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
-
+console.log("userData", userData);
       if (userData) {
         userData = JSON.parse(userData);
         if (userData.loggedIn) {

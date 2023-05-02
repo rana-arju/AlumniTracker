@@ -1,5 +1,12 @@
-import { Image, Linking, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  Image,
+  Linking,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS } from "../../constants/theme";
 import { SHADOWS } from "../../constants/theme";
@@ -14,12 +21,21 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const MyProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [user, setUser] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadUserData();
   }, []);
-
+  useEffect(() => {
+    fetchData();
+  }, [refreshing]);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  }, []);
   const loadUserData = async () => {
     try {
       setLoading(true);
@@ -38,30 +54,35 @@ const MyProfile = ({ navigation }) => {
       });
     }
   };
-  useEffect(() => {
-    singleUser();
-  }, []);
-  const singleUser = async () => {
+
+  const options = {
+    method: "GET",
+    url: `https://alumni-tracker.onrender.com/api/v1/GetSingleUser/${userId?.id}`,
+    headers: {
+      Authorization: `Bearer ${userId?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const fetchData = async () => {
+    setLoading(true);
+    console.log(userId);
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `https://alumni-tracker-backend-api.vercel.app/api/v1/User/GetSingleUser/${userId.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userId.token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (data) {
+      const response = await axios.request(options);
+      if (response) {
         setLoading(false);
-        setUser(data);
+        setUser(response.data.user);
       }
     } catch (error) {
+      console.log(error);
       setLoading(false);
+      setError(error);
+    } finally {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [userId]);
   const handleLinkClick = () => {
     const number = user?.whatsappNumber;
     const url = `whatsapp://send?phone=${number}&text=${encodeURIComponent(
@@ -74,7 +95,12 @@ const MyProfile = ({ navigation }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Loader visible={loading} />
       <View style={{ marginBottom: 20 }}>
         <View style={styles.profile_img_area}>
