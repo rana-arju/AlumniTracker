@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import styles from "./StudentStyle";
-import { COLORS } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 
 const StudentCard = ({ item, handleCardPress }) => {
   const [selectedStudent, setSelectedStudent] = useState("");
@@ -28,9 +28,25 @@ const StudentCard = ({ item, handleCardPress }) => {
           />
         )}
       </TouchableOpacity>
-      <Text style={styles.studentName} numberOfLines={1}>
-        {item.name}
-      </Text>
+      <View
+        style={{ flexDirection: "row", alignItems: "center", columnGap: 5 }}
+      >
+        <Text style={styles.studentName} numberOfLines={1}>
+          {item.name}
+        </Text>
+        {item?.isAdmin && (
+          <Image
+            source={require("../../../assets/icons/verified.png")}
+            style={{
+              height: 20,
+              width: 20,
+              borderRadius: 40,
+              marginTop: SIZES.small / 1.5,
+            }}
+          />
+        )}
+      </View>
+
       <View style={styles.infoContainer}>
         <Text style={styles.deptName(selectedStudent, item)}>
           Department:

@@ -59,9 +59,20 @@ const StudentDetails = ({ navigation, route }) => {
       <Loader visible={isLoading} />
 
       <Text style={styles.mainHeader}> {data?.name} </Text>
-      <Text style={styles.paraStyle}>
-        I am a {data?.jobPosition ? data?.jobPosition : "Student"}
-      </Text>
+      {data?.role == "student" && (
+        <>
+          <Text style={styles.paraStyle}>
+            I am a {data?.jobPosition ? data?.jobPosition : "Student"}
+          </Text>
+        </>
+      )} 
+       {data?.role == "teacher" && (
+        <>
+          <Text style={[styles.paraStyle, {textAlign: "center", paddingHorizontal: 10}]}>
+            I am a {data?.position  && data?.position} of cox's bazar polytechnic institute.
+          </Text>
+        </>
+      )}
 
       <View>
         <Image
@@ -74,30 +85,14 @@ const StudentDetails = ({ navigation, route }) => {
 
       <View style={styles.aboutLayout}>
         <Text style={styles.aboutSubHeader}> About me </Text>
-        <View style={{ flexDirection: "row", gap: 5 }}>
-          <Feather name="check-circle" size={20} color={"#fff"} />
-          <Text style={[styles.aboutPara]}>Department: {data?.department}</Text>
-        </View>
-        {data?.session && (
+    
+        {data?.position && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
+            <Text style={[styles.aboutPara]}>Position: {data?.position}</Text>
           </View>
         )}
-        {data.jobPosition && (
-          <View style={{ flexDirection: "row", gap: 5 }}>
-            <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>Position: {data.jobPosition}</Text>
-          </View>
-        )}
-        {data?.jobLocation && (
-          <View style={{ flexDirection: "row", gap: 5 }}>
-            <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>
-              Job Location: {data.jobLocation}
-            </Text>
-          </View>
-        )}
+     
       </View>
 
       <Text style={styles.mainHeader}> CONTACT INFO. </Text>
