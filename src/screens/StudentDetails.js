@@ -29,7 +29,6 @@ const StudentDetails = ({ navigation, route }) => {
   };
   const fetchData = async () => {
     setLoading(true);
-    console.log(options);
     try {
       const response = await axios.request(options);
       setData(response.data.user);

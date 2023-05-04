@@ -41,6 +41,7 @@ import EditProfile from "./src/screens/profile/EditProfile";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [userData, setUserData] = useState({});
   const [initialRouteName, setInitialRouteName] = useState("");
 
   useEffect(() => {
@@ -50,7 +51,6 @@ export default function App() {
   const authUser = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
-console.log("userData", userData);
       if (userData) {
         userData = JSON.parse(userData);
         if (userData.loggedIn) {
@@ -113,7 +113,7 @@ console.log("userData", userData);
           </Stack.Navigator>
         </>
       )}
-      <Toast />
+      <Toast visibilityTime={2000} />
     </NavigationContainer>
   );
 }

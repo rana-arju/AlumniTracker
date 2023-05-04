@@ -1,11 +1,4 @@
-import {
-  Image,
-  Keyboard,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Keyboard, RefreshControl, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { COLORS } from "../../constants/theme";
@@ -15,12 +8,10 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
-import { Cloudinary } from "cloudinary-core";
 
 import ProfileImage from "../../components/ProfileImage";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-import { log } from "react-native-reanimated";
 
 const EditProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -31,6 +22,7 @@ const EditProfile = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [gender, setGender] = useState("");
+  const [imageURI, setImageURI] = useState("");
 
   // session generate
   useEffect(() => {
@@ -75,33 +67,7 @@ const EditProfile = ({ navigation }) => {
     fetchData();
     setRefreshing(false);
   }, []);
-  // const singleUser = async () => {
-  //   setLoading(true);
-  //   if (userId) {
-  //     try {
-  //       setLoading(true);
 
-  //       const { data } = await axios.get(
-  //         `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${userId?.token}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-  //       if (data) {
-  //         setLoading(false);
-  //         setStoreUser(data.user);
-  //         setUser(data.user);
-  //         setDepartment(data.user?.department);
-  //         setSession(data.user?.session);
-  //       }
-  //     } catch (error) {
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
   const options = {
     method: "GET",
     url: `https://alumni-tracker.onrender.com/api/v1/GetSingleUser/${userId?.id}`,
@@ -121,6 +87,7 @@ const EditProfile = ({ navigation }) => {
         setDepartment(response.data.user.department);
         setSession(response.data.user.session);
         setGender(response.data.user.gender);
+        setImageURI(response.data.user.image);
       }
     } catch (error) {
       setLoading(false);
@@ -147,13 +114,12 @@ const EditProfile = ({ navigation }) => {
     session: storeUser.session ? storeUser.session : "",
     department: storeUser.department ? storeUser.department : "",
     gender: storeUser.gender ? storeUser.gender : "",
+    image: storeUser.image ? storeUser.image : "",
   };
-
   const [user, setUser] = useState(initial);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
-    console.log("error", errors);
     Keyboard.dismiss();
     let isValid = true;
 
@@ -202,7 +168,6 @@ const EditProfile = ({ navigation }) => {
           },
         }
       );
-      console.log("data", data);
       if (data) {
         setLoading(false);
         setStoreUser(data);
@@ -221,16 +186,15 @@ const EditProfile = ({ navigation }) => {
             token: userId?.token,
           })
         );
-        navigation.navigate("MyProfile");
         Toast.show({
           type: "success",
           text1: "Profile update Successful!",
           text2: "Continue your contribution 👋",
         });
+        navigation.navigate("MyProfile");
       }
     } catch (error) {
       setLoading(false);
-      console.log("er", error);
       Toast.show({
         type: "error",
         text1: "Error",
@@ -244,7 +208,7 @@ const EditProfile = ({ navigation }) => {
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
-  console.log("store", storeUser);
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -260,7 +224,12 @@ const EditProfile = ({ navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <ProfileImage />
+        <ProfileImage
+          imageURI={imageURI}
+          setImageURI={setImageURI}
+          setUser={setUser}
+          user={user}
+        />
         <View style={{ marginVertical: 20 }}>
           <Input
             onChangeText={(text) => handleOnchange(text, "name")}

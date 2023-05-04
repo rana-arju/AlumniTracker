@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 const useFetch = (endPoint, token) => {
+  console.log(`endpoint: ${endPoint}, token: ${token}`);
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,22 +18,29 @@ const useFetch = (endPoint, token) => {
   const fetchData = async () => {
     setLoading(true);
     try {
+      setLoading(true);
+
       const response = await axios.request(options);
       setData(response.data);
       setLoading(false);
+      setError("");
     } catch (error) {
       setLoading(false);
       setError(error);
-      alert("There is an error!");
+      console.log(error);
     } finally {
     }
   };
 
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     fetchData();
   }, [token]);
   const refetch = () => {
     setLoading(true);
+
     fetchData();
   };
   return { data, isLoading, error, refetch };

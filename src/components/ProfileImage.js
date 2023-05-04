@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import {
   Ionicons,
@@ -14,16 +7,10 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
-import { Cloudinary } from "cloudinary-core";
-import { set } from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import Button from "./Button";
-import { imageUpload } from "../function/imageUpload";
-const UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
-const CLOUD_NAME = "db8l1ulfq";
-export default function ProfileImage() {
-  const [imageURI, setImageURI] = useState(null);
-const token = "lkasdfkas;dfsskalsda;s23qrwklds";
+
+export default function ProfileImage({ imageURI, setImageURI, setUser,user}) {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -37,7 +24,7 @@ const token = "lkasdfkas;dfsskalsda;s23qrwklds";
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 4],
+        aspect: [1, 1],
         quality: 1,
       });
 
@@ -61,36 +48,33 @@ const token = "lkasdfkas;dfsskalsda;s23qrwklds";
     }
   };
 
-  const uploadProfileImage = async () => {
-    const formData = new FormData();
-    formData.append("profile", {
-      name: new Date() + "_profile",
-      uri: imageURI.uri,
-      type: "image/jpg",
-    });
+  const imageExtension = imageURI?.split(/(.(?:jpe?g|png|gif|webp))$/)[1];
 
+  const uploadProfileImage = async () => {
     try {
-      // const res = await client.post("/upload-profile", formData, {
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "multipart/form-data",
-      //     authorization: `Bearer ${token}`,
-      //   },
-      // });
-      if (!imageURI) {
-        Toast.show({
-          type: "error",
-          text1: "Please select an image to upload",
-          text2: "Select your profile photo from gallery or take photo",
+      const formData = new FormData();
+      formData.append("file", {
+        name: new Date() + "_profile",
+        uri: imageURI,
+        type: `image/${imageExtension?.split(".")[1]}`,
+      });
+      formData.append("upload_preset", "alumniTracker");
+      formData.append("cloud_name", "db8l1ulfq");
+
+      const data = fetch(
+        "https://api.cloudinary.com/v1_1/db8l1ulfq/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setImageURI(data.url);
+          setUser({ ...user, image: data.url });
         });
-      } else {
-        const data = imageUpload(formData, token);
-        // if (data) {
-        //   setImageURI(data);
-        // }
-      }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
   return (

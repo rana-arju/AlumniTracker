@@ -65,7 +65,6 @@ const MyProfile = ({ navigation }) => {
   };
   const fetchData = async () => {
     setLoading(true);
-    console.log(userId);
     try {
       const response = await axios.request(options);
       if (response) {
@@ -73,7 +72,6 @@ const MyProfile = ({ navigation }) => {
         setUser(response.data.user);
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
       setError(error);
     } finally {

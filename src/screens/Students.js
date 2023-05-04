@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { COLORS, FONT, SIZES } from "../constants/theme";
 import StudentCard from "../components/studentCard/StudentCard";
 import { useNavigation } from "@react-navigation/native";
@@ -22,9 +23,6 @@ const Students = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  useEffect(() => {
-    loadUserData();
-  }, []);
 
   const loadUserData = async () => {
     try {
@@ -44,6 +42,9 @@ const Students = () => {
       });
     }
   };
+  useEffect(() => {
+    loadUserData();
+  }, []);
   const navigation = useNavigation();
   const handleCardPress = (item) => {
     navigation.navigate(`studentDetails`, {
@@ -52,13 +53,12 @@ const Students = () => {
     });
     // setSelectedJob(item.job_id);
   };
-
-  const {
-    data: cmtStudents,
-    isLoading: cmtLoading,
-    error: cmtError,
-    refetch: cmtRefetch,
-  } = useFetch("ListByComputerDepartment", userId?.token);
+    const {
+      data: cmtStudents,
+      isLoading: cmtLoading,
+      error: cmtError,
+      refetch: cmtRefetch,
+    } = useFetch("ListByComputerDepartment", userId?.token);
   const {
     data: ctStudents,
     isLoading: ctLoading,
@@ -82,15 +82,27 @@ const Students = () => {
     isLoading: etLoading,
     error: etError,
     refetch: etRefetch,
-  } = useFetch("ListByElectricalDepartment", userId?.token); 
-   const {
-     data: thmStudents,
-     isLoading: thmLoading,
-     error: thmError,
-     refetch: thmRefetch,
-   } = useFetch("ListByTourismDepartment", userId?.token);
+  } = useFetch("ListByElectricalDepartment", userId?.token);
+  const {
+    data: thmStudents,
+    isLoading: thmLoading,
+    error: thmError,
+    refetch: thmRefetch,
+  } = useFetch("ListByTourismDepartment", userId?.token);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    cmtRefetch();
+    ctRefetch(), ftRefetch(), thmRefetch(), etRefetch(), racRefetch();
+    setRefreshing(false);
+  }, []);
   return (
-    <ScrollView style={{ marginBottom: 100 }}>
+    <ScrollView
+      style={{ marginBottom: 100 }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>CMT Students</Text>
@@ -99,9 +111,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading && cmtLoading ? (
+          {cmtLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : cmtError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
@@ -129,9 +141,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading ? (
+          {ctLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : ctError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
@@ -159,9 +171,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading ? (
+          {ftLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : ftError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
@@ -189,9 +201,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading ? (
+          {racLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : racError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
@@ -219,9 +231,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading ? (
+          {etLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : etError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
@@ -248,9 +260,9 @@ const Students = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.cardsContainer}>
-          {isLoading ? (
+          {thmLoading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />
-          ) : error ? (
+          ) : thmError ? (
             <Text>Something went wrong</Text>
           ) : (
             <FlatList
