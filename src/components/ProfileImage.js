@@ -10,7 +10,7 @@ import { COLORS } from "../constants/theme";
 import Toast from "react-native-toast-message";
 import Button from "./Button";
 
-export default function ProfileImage({ imageURI, setImageURI, setUser,user}) {
+export default function ProfileImage({ imageURI, setImageURI, setUser, user }) {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -48,7 +48,7 @@ export default function ProfileImage({ imageURI, setImageURI, setUser,user}) {
     }
   };
 
-  const imageExtension = imageURI?.split(/(.(?:jpe?g|png|gif|webp))$/)[1];
+  const imageExtension = imageURI?.split(/(.(?:jpe?g|png|gif|webp|jpeg))$/)[1];
 
   const uploadProfileImage = async () => {
     try {

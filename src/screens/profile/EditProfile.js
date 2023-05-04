@@ -12,6 +12,7 @@ import Toast from "react-native-toast-message";
 import ProfileImage from "../../components/ProfileImage";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
+import { Positions } from "../../utils/data";
 
 const EditProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -23,6 +24,7 @@ const EditProfile = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [gender, setGender] = useState("");
   const [imageURI, setImageURI] = useState("");
+  const [position, setPosition] = useState("");
 
   // session generate
   useEffect(() => {
@@ -60,7 +62,7 @@ const EditProfile = ({ navigation }) => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [userId]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -70,7 +72,7 @@ const EditProfile = ({ navigation }) => {
 
   const options = {
     method: "GET",
-    url: `https://alumni-tracker.onrender.com/api/v1/GetSingleUser/${userId?.id}`,
+    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -113,6 +115,7 @@ const EditProfile = ({ navigation }) => {
     jobPosition: storeUser.jobPosition ? storeUser.jobPosition : "",
     session: storeUser.session ? storeUser.session : "",
     department: storeUser.department ? storeUser.department : "",
+    position: storeUser.position ? storeUser.position : "",
     gender: storeUser.gender ? storeUser.gender : "",
     image: storeUser.image ? storeUser.image : "",
   };
@@ -158,7 +161,7 @@ const EditProfile = ({ navigation }) => {
       setLoading(true);
 
       const { data } = await axios.post(
-        `https://alumni-tracker.onrender.com/api/v1/UpdateUser/${userId?.id}`,
+        `https://worrisome-lion-necklace.cyclic.app/api/v1/UpdateUser/${userId?.id}`,
         user,
         {
           headers: {
@@ -208,7 +211,6 @@ const EditProfile = ({ navigation }) => {
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
-
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -240,24 +242,29 @@ const EditProfile = ({ navigation }) => {
             placeholder="Enter your full name"
             error={errors.name}
           />
-          <Input
-            onChangeText={(text) => handleOnchange(text, "fatherName")}
-            onFocus={() => handleError(null, "fatherName")}
-            iconName="account-outline"
-            label="Father Name"
-            placeholder="Enter your father name"
-            error={errors.fatherName}
-            value={user.fatherName}
-          />
-          <Input
-            onChangeText={(text) => handleOnchange(text, "motherName")}
-            onFocus={() => handleError(null, "motherName")}
-            iconName="account-outline"
-            label="Mother Name"
-            placeholder="Enter your mother name"
-            error={errors.motherName}
-            value={user.motherName}
-          />
+          {user?.role == "student" && (
+            <>
+              <Input
+                onChangeText={(text) => handleOnchange(text, "fatherName")}
+                onFocus={() => handleError(null, "fatherName")}
+                iconName="account-outline"
+                label="Father Name"
+                placeholder="Enter your father name"
+                error={errors.fatherName}
+                value={user.fatherName}
+              />
+              <Input
+                onChangeText={(text) => handleOnchange(text, "motherName")}
+                onFocus={() => handleError(null, "motherName")}
+                iconName="account-outline"
+                label="Mother Name"
+                placeholder="Enter your mother name"
+                error={errors.motherName}
+                value={user.motherName}
+              />
+            </>
+          )}
+
           <Input
             onChangeText={(text) => handleOnchange(text, "email")}
             onFocus={() => handleError(null, "email")}
@@ -269,27 +276,32 @@ const EditProfile = ({ navigation }) => {
             editable={false}
             pointerEvents="none"
           />
-
-          <Input
-            keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "rollNumber")}
-            onFocus={() => handleError(null, "rollNumber")}
-            iconName="format-list-numbered"
-            label="Roll Number"
-            placeholder="Enter your roll no"
-            error={errors.rollNumber}
-            value={user.rollNumber}
-          />
-          <Input
-            keyboardType="numeric"
-            onChangeText={(text) => handleOnchange(text, "registrationNumber")}
-            onFocus={() => handleError(null, "registrationNumber")}
-            iconName="format-list-numbered"
-            label="Register Number"
-            placeholder="Enter your register no"
-            error={errors.registrationNumber}
-            value={user.registrationNumber}
-          />
+          {user?.role == "student" && (
+            <>
+              <Input
+                keyboardType="numeric"
+                onChangeText={(text) => handleOnchange(text, "rollNumber")}
+                onFocus={() => handleError(null, "rollNumber")}
+                iconName="format-list-numbered"
+                label="Roll Number"
+                placeholder="Enter your roll no"
+                error={errors.rollNumber}
+                value={user.rollNumber}
+              />
+              <Input
+                keyboardType="numeric"
+                onChangeText={(text) =>
+                  handleOnchange(text, "registrationNumber")
+                }
+                onFocus={() => handleError(null, "registrationNumber")}
+                iconName="format-list-numbered"
+                label="Register Number"
+                placeholder="Enter your register no"
+                error={errors.registrationNumber}
+                value={user.registrationNumber}
+              />
+            </>
+          )}
 
           <Input
             keyboardType="numeric"
@@ -317,6 +329,31 @@ const EditProfile = ({ navigation }) => {
             <Picker.Item label="Female" value="female" />
             <Picker.Item label="Other" value="Other" />
           </Picker>
+          {user?.role == "teacher" && (
+            <>
+              <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+                Teacher Position:
+              </Text>
+              <Picker
+                selectedValue={position}
+                onValueChange={(itemValue, itemIndex) => {
+                  setPosition(itemValue);
+                  handleOnchange(itemValue, "position");
+                }}
+                style={styles.selectInput}
+              >
+                <Picker.Item label="Select teacher position" value="" />
+                {Positions?.map((item, index) => (
+                  <Picker.Item
+                    label={item.value}
+                    value={item.value}
+                    key={index}
+                  />
+                ))}
+              </Picker>
+            </>
+          )}
+
           <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
             Select your department:
           </Text>
@@ -335,56 +372,68 @@ const EditProfile = ({ navigation }) => {
             <Picker.Item label="RAC" value="RAC" />
             <Picker.Item label="FT" value="FT" />
             <Picker.Item label="THM" value="THM" />
+            {user?.role == "teacher" && (
+              <Picker.Item label="Other" value="Other" />
+            )}
           </Picker>
-          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
-            Select session:
-          </Text>
-          <Picker
-            selectedValue={session}
-            onValueChange={(itemValue, itemIndex) => {
-              setSession(itemValue);
-              handleOnchange(itemValue, "session");
-            }}
-            style={styles.selectInput}
-          >
-            <Picker.Item label="Select your Session" value="" />
-            {sessionYears.map((year) => (
-              <Picker.Item label={year} value={year} key={year} />
-            ))}
-          </Picker>
-          <Text
-            style={{ fontSize: 18, color: COLORS.gray, fontStyle: "italic" }}
-          >
-            Current Job Details:
-          </Text>
-          <Input
-            onChangeText={(text) => handleOnchange(text, "companyName")}
-            onFocus={() => handleError(null, "companyName")}
-            iconName="office-building"
-            label="Company Name"
-            placeholder="Enter your company name"
-            error={errors.companyName}
-            value={user.companyName}
-          />
-          <Input
-            onChangeText={(text) => handleOnchange(text, "jobPosition")}
-            onFocus={() => handleError(null, "jobPosition")}
-            iconName="briefcase"
-            label="Job Position"
-            placeholder="Enter your Job position"
-            error={errors.jobPosition}
-            value={user.jobPosition}
-          />
-          <Input
-            onChangeText={(text) => handleOnchange(text, "jobLocation")}
-            onFocus={() => handleError(null, "jobLocation")}
-            iconName="location-outline"
-            label="Job Location"
-            placeholder="Enter your Job Location"
-            error={errors.jobLocation}
-            value={user.jobLocation}
-            location
-          />
+          {user?.role == "student" && (
+            <>
+              <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+                Select session:
+              </Text>
+              <Picker
+                selectedValue={session}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSession(itemValue);
+                  handleOnchange(itemValue, "session");
+                }}
+                style={styles.selectInput}
+              >
+                <Picker.Item label="Select your Session" value="" />
+                {sessionYears.map((year) => (
+                  <Picker.Item label={year} value={year} key={year} />
+                ))}
+              </Picker>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: COLORS.gray,
+                  fontStyle: "italic",
+                }}
+              >
+                Current Job Details:
+              </Text>
+              <Input
+                onChangeText={(text) => handleOnchange(text, "companyName")}
+                onFocus={() => handleError(null, "companyName")}
+                iconName="office-building"
+                label="Company Name"
+                placeholder="Enter your company name"
+                error={errors.companyName}
+                value={user.companyName}
+              />
+              <Input
+                onChangeText={(text) => handleOnchange(text, "jobPosition")}
+                onFocus={() => handleError(null, "jobPosition")}
+                iconName="briefcase"
+                label="Job Position"
+                placeholder="Enter your Job position"
+                error={errors.jobPosition}
+                value={user.jobPosition}
+              />
+              <Input
+                onChangeText={(text) => handleOnchange(text, "jobLocation")}
+                onFocus={() => handleError(null, "jobLocation")}
+                iconName="location-outline"
+                label="Job Location"
+                placeholder="Enter your Job Location"
+                error={errors.jobLocation}
+                value={user.jobLocation}
+                location
+              />
+            </>
+          )}
+
           <Text
             style={{ fontSize: 18, color: COLORS.gray, fontStyle: "italic" }}
           >

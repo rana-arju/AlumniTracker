@@ -11,12 +11,14 @@ import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { Positions } from "../../utils/data";
 
 const Registration = () => {
   const navigation = useNavigation();
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [roleError, setRoleError] = useState(false);
+  const [position, setPosition] = useState("");
 
   const [user, setUser] = useState({
     email: "",
@@ -27,6 +29,7 @@ const Registration = () => {
     registration: "",
     role: "",
     department: "",
+    position: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -87,7 +90,6 @@ const Registration = () => {
           },
         }
       );
-
       if (data.message == "success") {
         setLoading(false);
         Toast.show({
@@ -177,27 +179,51 @@ const Registration = () => {
             <Picker.Item label="Student" value="student" />
             <Picker.Item label="Teacher" value="teacher" />
           </Picker>
-          {selectedRole == "student" ? (
+          {selectedRole == "teacher" && (
             <>
               <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
-                Select Your Department:
+                Teacher Position:
               </Text>
               <Picker
-                selectedValue={selectedDepartment}
+                selectedValue={position}
                 onValueChange={(itemValue, itemIndex) => {
-                  setSelectedDepartment(itemValue);
-                  handleOnchange(itemValue, "department");
+                  setPosition(itemValue);
+                  handleOnchange(itemValue, "position");
                 }}
                 style={styles.selectInput}
               >
-                <Picker.Item label="Select Your Department" value="" />
-                <Picker.Item label="CMT" value="CMT" />
-                <Picker.Item label="CT" value="CT" />
-                <Picker.Item label="ET" value="ET" />
-                <Picker.Item label="RAC" value="RAC" />
-                <Picker.Item label="FT" value="FT" />
-                <Picker.Item label="THM" value="THM" />
+                <Picker.Item label="Select teacher position" value="" />
+                {Positions?.map((item, index) => (
+                  <Picker.Item
+                    label={item.value}
+                    value={item.value}
+                    key={index}
+                  />
+                ))}
               </Picker>
+            </>
+          )}
+          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+            Select Your Department:
+          </Text>
+          <Picker
+            selectedValue={selectedDepartment}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedDepartment(itemValue);
+              handleOnchange(itemValue, "department");
+            }}
+            style={styles.selectInput}
+          >
+            <Picker.Item label="Select Your Department" value="" />
+            <Picker.Item label="CMT" value="CMT" />
+            <Picker.Item label="CT" value="CT" />
+            <Picker.Item label="ET" value="ET" />
+            <Picker.Item label="RAC" value="RAC" />
+            <Picker.Item label="FT" value="FT" />
+            <Picker.Item label="THM" value="THM" />
+          </Picker>
+          {selectedRole == "student" ? (
+            <>
               <Input
                 keyboardType="numeric"
                 onChangeText={(text) => handleOnchange(text, "roll")}
