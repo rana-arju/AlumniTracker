@@ -44,12 +44,24 @@ const StudentDetails = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
   }, [id]);
+  const handleLinkClick = () => {
+    const number = data?.whatsappNumber;
+    const url = `whatsapp://send?phone=${number}&text=${encodeURIComponent(
+      `Hello, ${data?.name}. How are you?`
+    )}`;
+
+    Linking.openURL(url).catch((err) =>
+      console.error("An error occurred:", err)
+    );
+  };
   return (
     <View style={styles.aboutContainer}>
       <Loader visible={isLoading} />
 
       <Text style={styles.mainHeader}> {data?.name} </Text>
-      <Text style={styles.paraStyle}> I am a full stack developer 😀 </Text>
+      <Text style={styles.paraStyle}>
+        I am a {data?.jobPosition ? data?.jobPosition : "Student"}
+      </Text>
 
       <View>
         <Image
@@ -66,58 +78,70 @@ const StudentDetails = ({ navigation, route }) => {
           <Feather name="check-circle" size={20} color={"#fff"} />
           <Text style={[styles.aboutPara]}>Department: {data?.department}</Text>
         </View>
-        <View style={{ flexDirection: "row", gap: 5 }}>
-          <Feather name="check-circle" size={20} color={"#fff"} />
-          <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
-        </View>
-        <View style={{ flexDirection: "row", gap: 5 }}>
-          <Feather name="check-circle" size={20} color={"#fff"} />
-          {/* <Text style={[styles.aboutPara]}>
-            Position: {selectedStudent?.present_job_details}
-          </Text> */}
-        </View>
+        {data?.session && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
+          </View>
+        )}
+        {data.jobPosition && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>Position: {data.jobPosition}</Text>
+          </View>
+        )}
+        {data?.jobLocation && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>
+              Job Location: {data.jobLocation}
+            </Text>
+          </View>
+        )}
       </View>
 
       <Text style={styles.mainHeader}> CONTACT INFO. </Text>
 
       <View style={styles.menuContainer}>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() =>
-            Linking.openURL("https://www.instagram.com/thapatechnical/")
-          }
-        >
-          <Image
-            style={styles.iconStyle}
-            source={require("../../assets/icons/facebook.png")}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() =>
-            Linking.openURL(
-              "https://www.youtube.com/channel/UCwfaAHy4zQUb2APNOGXUCCA"
-            )
-          }
-        >
-          <Image
-            style={styles.iconStyle}
-            source={require("../../assets/icons/whatsapp.png")}
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() =>
-            Linking.openURL(`tel:${selectedStudent.contact_number}`)
-          }
-        >
-          <Image
-            style={styles.iconStyle}
-            source={require("../../assets/icons/smartphone.png")}
-          />
-        </TouchableOpacity>
+        {data?.facebookLink && (
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() =>
+              Linking.openURL(
+                data?.facebookLink
+                  ? data?.facebookLink
+                  : "https://www.facebook.com"
+              )
+            }
+          >
+            <Image
+              style={styles.iconStyle}
+              source={require("../../assets/icons/facebook.png")}
+            />
+          </TouchableOpacity>
+        )}
+        {data?.whatsappNumber && (
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={handleLinkClick}
+          >
+            <Image
+              style={styles.iconStyle}
+              source={require("../../assets/icons/whatsapp.png")}
+            />
+          </TouchableOpacity>
+        )}
+        {data.mobile && (
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => Linking.openURL(`tel:${data.mobile}`)}
+          >
+            <Image
+              style={styles.iconStyle}
+              source={require("../../assets/icons/smartphone.png")}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -130,8 +154,8 @@ const styles = StyleSheet.create({
   },
 
   imgStyle: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 100,
   },
   mainHeader: {

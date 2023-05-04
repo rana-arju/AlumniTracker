@@ -19,11 +19,12 @@ const useFetch = (endPoint, token) => {
     setLoading(true);
     try {
       setLoading(true);
-
-      const response = await axios.request(options);
-      setData(response.data);
-      setLoading(false);
-      setError("");
+      if (token) {
+        const response = await axios.request(options);
+        setData(response.data);
+        setLoading(false);
+        setError("");
+      }
     } catch (error) {
       setLoading(false);
       setError(error);

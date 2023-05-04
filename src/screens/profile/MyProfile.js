@@ -114,10 +114,8 @@ const MyProfile = ({ navigation }) => {
           </Text>
           {user?.jobPosition && (
             <Text style={{ fontSize: 16, color: COLORS.white }}>
-              Profession:
-              <Text style={{ color: COLORS.white }}>
-                {user?.jobPosition && user?.jobPosition} at
-                <Text style={{ fontWeight: "bold" }}>{user?.companyName}</Text>
+              Profession: <Text style={{ color: COLORS.white }}>
+                {user?.jobPosition && user?.jobPosition} at <Text style={{ fontWeight: "bold" }}>{user?.companyName}</Text>
               </Text>
             </Text>
           )}

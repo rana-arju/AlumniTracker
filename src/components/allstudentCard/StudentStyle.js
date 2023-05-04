@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
-import { COLORS, FONT, SIZES } from "../../constants/theme";
+import { COLORS, FONT, SHADOWS, SIZES } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: (selectedStudent, item) => ({
     width: 160,
-    padding: SIZES.xLarge,
+    padding: SIZES.small,
     backgroundColor: selectedStudent === item.job_id ? COLORS.primary : "#FFF",
     borderRadius: SIZES.medium,
     justifyContent: "space-between",
-    // ...SHADOWS.medium,
+    ...SHADOWS.medium,
     shadowColor: COLORS.white,
   }),
   logoContainer: (selectedStudent, item) => ({
@@ -24,31 +24,24 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  companyName: {
+  studentName: {
     fontSize: SIZES.medium,
     // fontFamily: FONT.regular,
     color: "#B3AEC6",
     marginTop: SIZES.small / 1.5,
   },
   infoContainer: {
-    marginTop: SIZES.large,
+    marginTop: SIZES.medium,
   },
   deptName: (selectedStudent, item) => ({
     fontSize: SIZES.medium,
     // fontFamily: FONT.medium,
     color: selectedStudent === item.job_id ? COLORS.white : COLORS.primary,
+    justifyContent: "space-between",
+    
   }),
-  infoWrapper: {
-    flexDirection: "row",
-    marginTop: 5,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  publisher: (selectedStudent) => ({
-    fontSize: SIZES.medium - 2,
-    // fontFamily: FONT.bold,
-    color: selectedStudent === item.job_id ? COLORS.white : COLORS.primary,
-  }),
+
+
   job: {
     fontSize: SIZES.medium - 2,
     // fontFamily: FONT.regular,

@@ -44,7 +44,7 @@ const Students = () => {
   };
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, [refreshing]);
   const navigation = useNavigation();
   const handleCardPress = (item) => {
     navigation.navigate(`studentDetails`, {
@@ -53,12 +53,12 @@ const Students = () => {
     });
     // setSelectedJob(item.job_id);
   };
-    const {
-      data: cmtStudents,
-      isLoading: cmtLoading,
-      error: cmtError,
-      refetch: cmtRefetch,
-    } = useFetch("ListByComputerDepartment", userId?.token);
+  const {
+    data: cmtStudents,
+    isLoading: cmtLoading,
+    error: cmtError,
+    refetch: cmtRefetch,
+  } = useFetch("ListByComputerDepartment", userId?.token);
   const {
     data: ctStudents,
     isLoading: ctLoading,
@@ -93,7 +93,11 @@ const Students = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     cmtRefetch();
-    ctRefetch(), ftRefetch(), thmRefetch(), etRefetch(), racRefetch();
+    ctRefetch();
+    ftRefetch();
+    thmRefetch();
+    etRefetch();
+    racRefetch();
     setRefreshing(false);
   }, []);
   return (
@@ -105,8 +109,15 @@ const Students = () => {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>CMT Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <Text style={styles.headerTitle}>Computer Students</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByComputerDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -136,7 +147,14 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Civil Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByCivilDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -166,7 +184,14 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Food Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByFoodDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -196,7 +221,14 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>RAC Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByRACDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -226,7 +258,14 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Electrical Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByElectricalDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>
@@ -255,7 +294,14 @@ const Students = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>THM Students</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("allStudent")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("allStudent", {
+                endPoint: "ListByTourismDepartment",
+                token: userId?.token,
+              })
+            }
+          >
             <Text style={styles.headerBtn}>Show All</Text>
           </TouchableOpacity>
         </View>

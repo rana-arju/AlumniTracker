@@ -20,40 +20,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
   }),
-  logoImage: {
-    width: "100%",
-    height: "100%",
-  },
-  companyName: {
+  studentName: {
     fontSize: SIZES.medium,
     // fontFamily: FONT.regular,
     color: "#B3AEC6",
     marginTop: SIZES.small / 1.5,
   },
-  infoContainer: {
-    marginTop: SIZES.large,
+  logoImage: {
+    width: "100%",
+    height: "100%",
   },
+
   deptName: (selectedStudent, item) => ({
     fontSize: SIZES.medium,
     // fontFamily: FONT.medium,
     color: selectedStudent === item.job_id ? COLORS.white : COLORS.primary,
   }),
-  infoWrapper: {
-    flexDirection: "row",
-    marginTop: 5,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  publisher: (selectedStudent) => ({
-    fontSize: SIZES.medium - 2,
-    // fontFamily: FONT.bold,
-    color: selectedStudent === item.job_id ? COLORS.white : COLORS.primary,
-  }),
+
   job: {
-    fontSize: SIZES.medium - 2,
+    fontSize: SIZES.medium,
     // fontFamily: FONT.regular,
-    color: "#B3AEC6",
+  },
+  infoContainer: {
+    marginTop: SIZES.medium,
   },
 });
-
 export default styles;

@@ -28,16 +28,25 @@ const StudentCard = ({ item, handleCardPress }) => {
           />
         )}
       </TouchableOpacity>
-      <Text style={styles.companyName} numberOfLines={1}>
+      <Text style={styles.studentName} numberOfLines={1}>
         {item.name}
       </Text>
       <View style={styles.infoContainer}>
         <Text style={styles.deptName(selectedStudent, item)}>
-          Dept: <Text style={{ color: COLORS.gray }}>{item.department}</Text>
+          Department:
+          <Text style={{ color: COLORS.gray }}>{item.department}</Text>
         </Text>
-        <Text style={styles.job}>
-          Job: <Text>{item.present_job_details}</Text>
-        </Text>
+        {item?.session && (
+          <Text style={styles.deptName(selectedStudent, item)}>
+            session: <Text style={{ color: COLORS.gray }}>{item.session}</Text>
+          </Text>
+        )}
+
+        {item?.jobPosition && (
+          <Text style={styles.job}>
+            Job: <Text style={{ color: COLORS.gray }}>{item.jobPosition}</Text>
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );

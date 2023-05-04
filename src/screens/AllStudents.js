@@ -10,12 +10,19 @@ import {
 import React, { useState } from "react";
 import { COLORS, SIZES } from "../constants/theme";
 import AllStudentCard from "../components/allstudentCard/StudentCard";
+import useFetch from "../../hook/useFetch";
 
-const AllStudents = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const AllStudents = ({ navigation, route }) => {
+  const { endPoint, token } = route.params;
+  console.log("endpoint", endPoint, "token", token);
   const [selectedStudent, setSelectedStudent] = useState();
-  const [error, setError] = useState("");
-  const data = require("../../data.json");
+   const handleCardPress = (item) => {
+     navigation.navigate(`studentDetails`, {
+       id: item._id,
+       token: token,
+     });
+     // setSelectedJob(item.job_id);
+   };
   const renderSeparator = () => (
     <View
       style={{
@@ -24,6 +31,7 @@ const AllStudents = () => {
     />
   );
   const renderFooter = () => <View style={{ height: 50 }} />;
+  const { data, isLoading, error, refetch } = useFetch(endPoint, token);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -41,7 +49,7 @@ const AllStudents = () => {
               <AllStudentCard
                 item={item}
                 selectedStudent={selectedStudent}
-                // handleCardPress={handleCardPress}
+                handleCardPress={handleCardPress}
               />
             )}
             columnWrapperStyle={{
