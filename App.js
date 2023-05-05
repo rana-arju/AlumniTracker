@@ -38,6 +38,10 @@ import StudentDetails from "./src/screens/StudentDetails";
 import AllStudents from "./src/screens/AllStudents";
 import EditProfile from "./src/screens/profile/EditProfile";
 
+import VerifyOtp from "./src/screens/otp/VerifyOtp";
+import CreatePassword from "./src/screens/otp/CreatePassword";
+import SendOtp from "./src/screens/otp/SendOtp";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -79,6 +83,9 @@ export default function App() {
             <Stack.Screen name="Registration" component={Registration} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Routes} />
+            <Stack.Screen name="sendOtp" component={SendOtp} />
+            <Stack.Screen name="verifyOtp" component={VerifyOtp} />
+            <Stack.Screen name="createPassword" component={CreatePassword} />
             {/* studentDetails Screen  */}
             <Stack.Screen
               name="studentDetails"

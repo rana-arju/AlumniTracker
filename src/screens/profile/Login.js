@@ -131,6 +131,18 @@ const Login = ({ navigation }) => {
           >
             Don't have account ?Register
           </Text>
+          <Text
+            onPress={() => navigation.navigate("sendOtp")}
+            style={{
+              color: COLORS.black,
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: 14,
+              color: COLORS.gray,
+            }}
+          >
+            Forget Password
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
