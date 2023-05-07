@@ -41,7 +41,6 @@ const Login = ({ navigation }) => {
     try {
       setLoading(true);
       if (user) {
-
         setLoading(true);
         const { data } = await axios.post(
           `https://alumni-tracker.onrender.com/api/v1/Login`,
@@ -68,7 +67,6 @@ const Login = ({ navigation }) => {
         }
       }
     } catch (error) {
-
       setLoading(false);
       Toast.show({
         type: "error",

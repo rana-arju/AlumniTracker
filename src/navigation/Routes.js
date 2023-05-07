@@ -3,6 +3,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
+import { Provider } from "react-redux";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import BottomTab from "./BottomTab";
 import MyProfile from "../screens/profile/MyProfile";
@@ -15,6 +16,7 @@ import {
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
+import Admin from "../components/admin/admin";
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -62,6 +64,19 @@ const Routes = () => {
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="account-edit-outline"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Dashboard"
+        component={Admin}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="view-dashboard"
               size={24}
               color={color}
             />
