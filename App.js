@@ -42,6 +42,9 @@ import VerifyOtp from "./src/screens/otp/VerifyOtp";
 import CreatePassword from "./src/screens/otp/CreatePassword";
 import SendOtp from "./src/screens/otp/SendOtp";
 
+
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

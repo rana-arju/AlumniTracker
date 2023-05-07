@@ -6,23 +6,28 @@ import { ScrollView } from "react-native-gesture-handler";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { RecoverVerifyEmailRequest } from "../../apiRequests/OtpApiRequest";
-import axios from "axios";
+import Toast from "react-native-toast-message";
+
 const SendOtp = ({ navigation }) => {
-  let [email, setEmail] = useState("sariothossain1011@gmail.com");
+  let [email, setEmail] = useState("");
 
 
   const VerifyOtpSave = async () => {
     if (!email) {
-      alert("Valid Email Address Required !");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Valid Email Address Required !",
+      });
     } else {
       let result = await RecoverVerifyEmailRequest(email);
-      alert(result+"123")
       if (result === true) {
-        // alert("success")
-        navigation.navigate("sendOtp");
-      }else{
-        alert("fail")
-        
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Verify E-mail Success.",
+        });
+        navigation.navigate("verifyOtp");
       }
     }
   };
@@ -49,18 +54,6 @@ const SendOtp = ({ navigation }) => {
             onChangeText={(input) => setEmail(input)}
           />
           <Button title="Verify Email" onPress={VerifyOtpSave} />
-          <Text
-            onPress={() => navigation.navigate("verifyOtp")}
-            style={{
-              color: COLORS.black,
-              fontWeight: "bold",
-              textAlign: "center",
-              fontSize: 14,
-              color: COLORS.gray,
-            }}
-          >
-            Verify Otp
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,87 +1,120 @@
 import axios from "axios";
-import { setEmail, setOTP } from "../screens/otp/helper/SessionHelper";
-const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1";
-import axiosRetry from "axios-retry";
-axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+
+const BaseURL = "http://10.0.2.2:8080/api/v1/";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export async function RecoverVerifyEmailRequest(email) {
   try {
-    let URL = BaseURL + "/RecoverVerifyEmail/" + email;
+    const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
 
-    let res = await axios.get(URL, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-    console.log(res + "res");
-    if (res.data["status"] === 200) {
-
-      alert(res.data["status"] + " status");
-
+    let res = await axios.get(URL);
+    if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
-
-        alert("No user found");
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "No user found",
+        });
         return false;
-
       } else {
-
-        setEmail(email);
-        alert(
-          "A 6 Digit verification code has been sent to your email address. "
-        );
+        await AsyncStorage.setItem("email",email)
+        Toast.show({
+          type: "success",
+          text1: "Success.",
+          text2: "Verify E-mail Successful.",
+        });
         return true;
       }
     }
   } catch (error) {
-    alert("User Not Found" + error);
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Something Went Wrong",
+    });
     return false;
   }
 }
 
 export async function RecoverVerifyOTPRequest(email, otp) {
   try {
-    let URL = BaseURL + "/RecoverVerifyOTP/" + email + "/" + otp;
+    let URL = `${BaseURL}RecoverVerifyOTP/${email}/${otp}`;
     let res = await axios.get(URL);
-
-    if (res.status === 200) {
+    if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
-        alert("Code Verification Fail");
+        alert("fail")
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Something Went Wrong",
+        });
         return false;
       } else {
-        setOTP(otp);
-        alert("Code Verification Success");
+        await AsyncStorage.setItem("otp",otp)
+        Toast.show({
+          type: "success",
+          text1: "Success.",
+          text2: "Code Verification Success.",
+        });
         return true;
       }
-    } else {
-      alert("Something Went Wrong");
-      return false;
     }
-  } catch (e) {
-    alert("Something Went Wrong");
+  } catch (error) {
+    console.log(error)
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Something Went Wrong",
+    });
     return false;
   }
 }
 
 export async function RecoverResetPassRequest(email, otp, password) {
   try {
-    let URL = BaseURL + "/RecoverResetPass";
+    let URL = `${BaseURL}RecoverResetPass`;
     let PostBody = { email: email, otp: otp, password: password };
     let res = await axios.post(URL, PostBody);
-    if (res.status === 200) {
+    if (res.status===200) {
       if (res.data["status"] === "fail") {
-        alert(res.data["data"]);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Invalid Request",
+        });
         return false;
       } else {
-        setOTP(otp);
-        alert("NEW PASSWORD CREATED");
+        await AsyncStorage.setItem("otp",otp)
+        Toast.show({
+          type: "success",
+          text1: "Success.",
+          text2: "NEW PASSWORD CREATED",
+        });
         return true;
       }
     } else {
-      alert("Something Went Wrong");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something Went Wrong",
+      });
       return false;
     }
-  } catch (e) {
-    alert("Something Went Wrong");
+  } catch (error) {
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Something Went Wrong",
+    });
     return false;
   }
 }
+
+// {
+//   methods: "GET",
+//   headers: {
+//     "Content-Type": "application/json",
+//     Accept: "application/json",
+//   },
+// }
