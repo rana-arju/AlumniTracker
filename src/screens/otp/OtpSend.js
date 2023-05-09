@@ -8,9 +8,8 @@ import Button from "../../components/Button";
 import { RecoverVerifyEmailRequest } from "../../apiRequests/OtpApiRequest";
 import Toast from "react-native-toast-message";
 
-const SendOtp = ({ navigation }) => {
+const OtpSend = ({ navigation }) => {
   let [email, setEmail] = useState("");
-
 
   const VerifyOtpSave = async () => {
     if (!email) {
@@ -60,6 +59,7 @@ const SendOtp = ({ navigation }) => {
   );
 };
 
-export default SendOtp;
+         
+export default OtpSend;
 
 const styles = StyleSheet.create({});

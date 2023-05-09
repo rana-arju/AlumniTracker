@@ -10,8 +10,7 @@ import Toast from "react-native-toast-message";
 import { RecoverVerifyOTPRequest } from "../../apiRequests/OtpApiRequest";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-const VerifyOtp = ({ navigation }) => {
+const OtpVerify = ({ navigation }) => {
   const [otp, setOTP] = useState("");
   const [email, SetEmail] = useState("");
   const SubmitOTP = async () => {
@@ -72,6 +71,6 @@ const VerifyOtp = ({ navigation }) => {
   );
 };
 
-export default VerifyOtp;
+export default OtpVerify;
 
 const styles = StyleSheet.create({});
