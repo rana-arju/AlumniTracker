@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BaseURL = "http://10.0.2.2:8080/api/v1/";
+// const BaseURL = "http://10.0.2.2:8080/api/v1/";
+const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -8,7 +9,12 @@ export async function RecoverVerifyEmailRequest(email) {
   try {
     const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
 
-    let res = await axios.get(URL);
+    let res = await axios.get(URL,{timeout: 10000},{
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
     if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
         Toast.show({
@@ -28,6 +34,8 @@ export async function RecoverVerifyEmailRequest(email) {
       }
     }
   } catch (error) {
+    console.log(error)
+    alert(error)
     Toast.show({
       type: "error",
       text1: "Error",
@@ -43,7 +51,6 @@ export async function RecoverVerifyOTPRequest(email, otp) {
     let res = await axios.get(URL);
     if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
-        alert("fail")
         Toast.show({
           type: "error",
           text1: "Error",
