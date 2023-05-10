@@ -65,11 +65,17 @@ const StudentDetails = ({ navigation, route }) => {
             I am a {data?.jobPosition ? data?.jobPosition : "Student"}
           </Text>
         </>
-      )} 
-       {data?.role == "teacher" && (
+      )}
+      {data?.role == "teacher" && (
         <>
-          <Text style={[styles.paraStyle, {textAlign: "center", paddingHorizontal: 10}]}>
-            I am a {data?.position  && data?.position} of cox's bazar polytechnic institute.
+          <Text
+            style={[
+              styles.paraStyle,
+              { textAlign: "center", paddingHorizontal: 10 },
+            ]}
+          >
+            I am a {data?.position && data?.position} of cox's bazar polytechnic
+            institute.
           </Text>
         </>
       )}
@@ -85,14 +91,42 @@ const StudentDetails = ({ navigation, route }) => {
 
       <View style={styles.aboutLayout}>
         <Text style={styles.aboutSubHeader}> About me </Text>
-    
+
         {data?.position && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
             <Text style={[styles.aboutPara]}>Position: {data?.position}</Text>
           </View>
         )}
-     
+        {data?.department && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>
+              Department: {data?.department}
+            </Text>
+          </View>
+        )}
+
+        {data?.session && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
+          </View>
+        )}
+        {data.jobPosition && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>Position: {data.jobPosition}</Text>
+          </View>
+        )}
+        {data?.jobLocation && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>
+              Job Location: {data.jobLocation}
+            </Text>
+          </View>
+        )}
       </View>
 
       <Text style={styles.mainHeader}> CONTACT INFO. </Text>

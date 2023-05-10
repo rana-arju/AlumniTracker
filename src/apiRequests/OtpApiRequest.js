@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// const BaseURL = "http://10.0.2.2:8080/api/v1/";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
@@ -14,10 +15,16 @@ export async function RecoverVerifyEmailRequest(email) {
   };
   console.log(options);
   try {
-    const res = await axios.request(options);
-    console.log("res", res);
-    if (res.data["status"] == "success") {
-      if (res.data.status == "No User Found") {
+    const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
+
+    let res = await axios.get(URL,{timeout: 10000},{
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    if (res.data["status"] === "success" && res.status === 200) {
+      if (res.data["status"] === "fail") {
         Toast.show({
           type: "error",
           text1: "Error",
@@ -35,6 +42,8 @@ export async function RecoverVerifyEmailRequest(email) {
       }
     }
   } catch (error) {
+    console.log(error)
+    alert(error)
     Toast.show({
       type: "error",
       text1: "Error",
@@ -50,7 +59,6 @@ export async function RecoverVerifyOTPRequest(email, otp) {
     let res = await axios.get(URL);
     if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
-        alert("fail");
         Toast.show({
           type: "error",
           text1: "Error",
