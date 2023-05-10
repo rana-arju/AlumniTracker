@@ -14,7 +14,6 @@ import useFetch from "../../hook/useFetch";
 
 const AllStudents = ({ navigation, route }) => {
   const { endPoint, token } = route.params;
-  console.log("endpoint", endPoint, "token", token);
   const [selectedStudent, setSelectedStudent] = useState();
    const handleCardPress = (item) => {
      navigation.navigate(`studentDetails`, {

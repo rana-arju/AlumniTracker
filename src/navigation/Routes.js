@@ -15,6 +15,7 @@ import {
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
+import Admin from "../screens/admin/Admin";
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -62,6 +63,19 @@ const Routes = () => {
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="account-edit-outline"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Dashboard"
+        component={Admin}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="view-dashboard"
               size={24}
               color={color}
             />
