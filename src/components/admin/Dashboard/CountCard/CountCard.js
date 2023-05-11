@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { COLORS } from "../../../../constants/theme";
 
-const CountCard = ({ name, count ,icon}) => {
+const CountCard = ({ name, count ,icon, isLoading}) => {
   return (
     <TouchableOpacity style={styles.cardView}>
       <Text style={{ textAlign: "center" }}>
@@ -16,7 +17,11 @@ const CountCard = ({ name, count ,icon}) => {
           fontSize: 20,
         }}
       >
-        {count}
+        {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.white} />
+        ) : (
+          <>{count ? count : 0}</>
+        )}
       </Text>
       <Text
         style={{
@@ -24,8 +29,7 @@ const CountCard = ({ name, count ,icon}) => {
           color: "#fff",
           fontSize: 20,
           fontWeight: 600,
-          textTransform: "uppercase"
-          
+          textTransform: "uppercase",
         }}
       >
         {name}

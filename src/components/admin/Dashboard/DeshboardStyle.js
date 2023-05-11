@@ -22,12 +22,14 @@ export default styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    rowGap: 10
+    rowGap: 10,
+    justifyContent: "center"
   },
   cartItem: {
     width: "45%",
     backgroundColor: COLORS.tertiary,
     borderRadius: 7,
     marginRight: 10,
+    justifyContent: "center",
   },
 });
