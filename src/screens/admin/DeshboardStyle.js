@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../../constants/theme";
+import { COLORS } from "../../constants/theme";
 
 export default styles = StyleSheet.create({
   header: {
@@ -23,7 +23,7 @@ export default styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     rowGap: 10,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   cartItem: {
     width: "45%",

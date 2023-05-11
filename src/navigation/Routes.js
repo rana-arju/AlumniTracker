@@ -16,6 +16,8 @@ import {
 import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
 import Admin from "../screens/admin/Admin";
+import AdminTab from "./AdminTab";
+
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -71,7 +73,7 @@ const Routes = () => {
       />
       <Drawer.Screen
         name="Dashboard"
-        component={Admin}
+        component={AdminTab}
         options={{
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -80,6 +82,8 @@ const Routes = () => {
               color={color}
             />
           ),
+          headerTitleAlign: "center",
+          headerRight: () => <HeaderProfile />,
         }}
       />
     </Drawer.Navigator>
