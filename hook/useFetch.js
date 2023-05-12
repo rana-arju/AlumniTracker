@@ -43,6 +43,7 @@ const useFetch = (endPoint, token) => {
       return;
     }
     setLoading(true);
+
     fetchData();
   };
   return { data, isLoading, error, refetch };

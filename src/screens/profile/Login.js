@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
       if (user) {
         setLoading(true);
         const { data } = await axios.post(
-          `https://alumni-tracker.onrender.com/api/v1/Login`,
+          `http://10.0.2.2:8080/api/v1/Login`,
           user,
           {
             headers: {

@@ -61,6 +61,9 @@ const EditProfile = ({ navigation }) => {
     }
   };
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
     fetchData();
   }, [userId]);
 
@@ -98,6 +101,9 @@ const EditProfile = ({ navigation }) => {
   };
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
     fetchData();
   }, [userId]);
   const initial = {

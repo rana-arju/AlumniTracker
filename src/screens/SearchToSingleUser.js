@@ -13,60 +13,46 @@ import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../components/Loader";
 import axios from "axios";
-const StudentDetails = ({ navigation, route }) => {
-  const { id, token } = route.params;
-  const [data, setData] = useState({});
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+const UserProfileScreen = ({ route }) => {
+  const { item } = route.params;
+  console.log(item);
+  const navigation = useNavigation();
 
-  const options = {
-    method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${id}`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  };
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.request(options);
-      setData(response.data.user);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-      alert("There is an error!");
-    } finally {
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
   const handleLinkClick = () => {
-    const number = data?.whatsappNumber;
+    const number = item.whatsappNumber;
     const url = `whatsapp://send?phone=${number}&text=${encodeURIComponent(
-      `Hello, ${data?.name}. How are you?`
+      `Hello, ${item.name}. How are you?`
     )}`;
 
     Linking.openURL(url).catch((err) =>
       console.error("An error occurred:", err)
     );
   };
+  const handleNavigate = () => {
+    navigation.navigate('Search');
+  };
   return (
     <View style={styles.aboutContainer}>
-      <Loader visible={isLoading} />
-
-      <Text style={styles.mainHeader}> {data?.name} </Text>
-      {data?.role == "student" && (
+        <AntDesign style={{}} name="arrowleft" size={24} onPress={handleNavigate} color="black" />
+      <View>
+        <Image
+          style={styles.imgStyle}
+          source={{
+            uri: item.image,
+          }}
+        />
+      </View>
+      <Text style={styles.mainHeader}> {item.name} </Text>
+      {item.role == "student" && (
         <>
           <Text style={styles.paraStyle}>
-            I am a {data?.jobPosition ? data?.jobPosition : "Student"}
+            I am a {item.jobPosition ? item.jobPosition : "Student"}
           </Text>
         </>
       )}
-      {data?.role == "teacher" && (
+      {item.role == "teacher" && (
         <>
           <Text
             style={[
@@ -74,56 +60,47 @@ const StudentDetails = ({ navigation, route }) => {
               { textAlign: "center", paddingHorizontal: 10 },
             ]}
           >
-            I am a {data?.position && data?.position} of cox's bazar polytechnic
+            I am a {item.position && item.position} of cox's bazar polytechnic
             institute.
           </Text>
         </>
       )}
 
-      <View>
-        <Image
-          style={styles.imgStyle}
-          source={{
-            uri: data?.image,
-          }}
-        />
-      </View>
-
       <View style={styles.aboutLayout}>
         <Text style={styles.aboutSubHeader}> About me </Text>
 
-        {data?.position && (
+        {item.position && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>Position: {data?.position}</Text>
+            <Text style={[styles.aboutPara]}>Position: {item.position}</Text>
           </View>
         )}
-        {data?.department && (
+        {item.department && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
             <Text style={[styles.aboutPara]}>
-              Department: {data?.department}
+              Department: {item.department}
             </Text>
           </View>
         )}
 
-        {data?.session && (
+        {item.session && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
+            <Text style={[styles.aboutPara]}>session: {item.session}</Text>
           </View>
         )}
-        {data.jobPosition && (
+        {item.jobPosition && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
-            <Text style={[styles.aboutPara]}>Position: {data.jobPosition}</Text>
+            <Text style={[styles.aboutPara]}>Position: {item.jobPosition}</Text>
           </View>
         )}
-        {data?.jobLocation && (
+        {item.jobLocation && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
             <Text style={[styles.aboutPara]}>
-              Job Location: {data.jobLocation}
+              Job Location: {item.jobLocation}
             </Text>
           </View>
         )}
@@ -132,13 +109,13 @@ const StudentDetails = ({ navigation, route }) => {
       <Text style={styles.mainHeader}> CONTACT INFO. </Text>
 
       <View style={styles.menuContainer}>
-        {data?.facebookLink && (
+        {item.facebookLink && (
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={() =>
               Linking.openURL(
-                data?.facebookLink
-                  ? data?.facebookLink
+                item.facebookLink
+                  ? item.facebookLink
                   : "https://www.facebook.com"
               )
             }
@@ -149,7 +126,7 @@ const StudentDetails = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         )}
-        {data?.whatsappNumber && (
+        {item.whatsappNumber && (
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={handleLinkClick}
@@ -160,10 +137,10 @@ const StudentDetails = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         )}
-        {data.mobile && (
+        {item.mobile && (
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={() => Linking.openURL(`tel:${data.mobile}`)}
+            onPress={() => Linking.openURL(`tel:${item.mobile}`)}
           >
             <Image
               style={styles.iconStyle}
@@ -176,10 +153,13 @@ const StudentDetails = ({ navigation, route }) => {
   );
 };
 
+export default UserProfileScreen;
+
 const styles = StyleSheet.create({
   aboutContainer: {
     display: "flex",
     alignItems: "center",
+    marginTop: 50,
   },
 
   imgStyle: {
@@ -188,18 +168,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   mainHeader: {
-    fontSize: 18,
+    fontSize: 22,
     color: COLORS.gray,
     textTransform: "uppercase",
     fontWeight: "500",
-    marginTop: 50,
-    marginBottom: 10,
-    // fontFamily: "JosefinSans_700Bold",
+    marginTop: 20,
+    marginBottom: 5,
+    //   fontFamily: "JosefinSans_700Bold",
   },
   paraStyle: {
     fontSize: 18,
     color: "#7d7d7d",
-    paddingBottom: 30,
+    paddingBottom: 10,
   },
   aboutLayout: {
     backgroundColor: COLORS.tertiary,
@@ -236,4 +216,59 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StudentDetails;
+// import { StyleSheet, Text, View, Image  } from 'react-native'
+
+// const SearchToSingleUser = ({ route }) => {
+//   const { item } = route.params;
+//   console.log(item)
+//   alert(item)
+
+//   return (
+//     <View style={styles.container}>
+//       <Image
+//         source={{
+//         //   uri: item.profile_image,
+//         }}
+//         resizeMode="contain"
+//         style={styles.logoImage}
+//       />
+//       <Text style={styles.name}>{item.name}</Text>
+//       <Text style={styles.department}>{item.department}</Text>
+//       <Text style={styles.email}>{item.email}</Text>
+//       <Text style={styles.phone}>{item.phone}</Text>
+//     </View>
+//   );
+// };
+
+// export default SearchToSingleUser;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   logoImage: {
+//     width: 100,
+//     height: 100,
+//     borderRadius: 50,
+//     marginBottom: 10,
+//   },
+//   name: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 5,
+//   },
+//   department: {
+//     fontSize: 16,
+//     marginBottom: 5,
+//   },
+//   email: {
+//     fontSize: 16,
+//     marginBottom: 5,
+//   },
+//   phone: {
+//     fontSize: 16,
+//     marginBottom: 5,
+//   },
+// });

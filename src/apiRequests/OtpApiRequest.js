@@ -1,11 +1,20 @@
 import axios from "axios";
 
-const BaseURL = "http://10.0.2.2:8080/api/v1/";
+// const BaseURL = "http://10.0.2.2:8080/api/v1/";
 // const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
 
 export async function RecoverVerifyEmailRequest(email) {
+  const options = {
+    method: "GET",
+    url: `${BaseURL}/RecoverVerifyEmail/${email}`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  console.log(options);
   try {
     const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
 
@@ -19,7 +28,7 @@ export async function RecoverVerifyEmailRequest(email) {
         });
         return false;
       } else {
-        await AsyncStorage.setItem("email",email)
+        await AsyncStorage.setItem("email", email);
         Toast.show({
           type: "success",
           text1: "Success.",
@@ -40,7 +49,7 @@ export async function RecoverVerifyEmailRequest(email) {
 
 export async function RecoverVerifyOTPRequest(email, otp) {
   try {
-    let URL = `${BaseURL}RecoverVerifyOTP/${email}/${otp}`;
+    let URL = `${BaseURL}/RecoverVerifyOTP/${email}/${otp}`;
     let res = await axios.get(URL);
     if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
@@ -51,7 +60,7 @@ export async function RecoverVerifyOTPRequest(email, otp) {
         });
         return false;
       } else {
-        await AsyncStorage.setItem("otp",otp)
+        await AsyncStorage.setItem("otp", otp);
         Toast.show({
           type: "success",
           text1: "Success.",
@@ -61,7 +70,7 @@ export async function RecoverVerifyOTPRequest(email, otp) {
       }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     Toast.show({
       type: "error",
       text1: "Error",
@@ -76,7 +85,7 @@ export async function RecoverResetPassRequest(email, otp, password) {
     let URL = `${BaseURL}RecoverResetPass`;
     let PostBody = { email: email, otp: otp, password: password };
     let res = await axios.post(URL, PostBody);
-    if (res.status===200) {
+    if (res.status === 200) {
       if (res.data["status"] === "fail") {
         Toast.show({
           type: "error",
@@ -85,7 +94,7 @@ export async function RecoverResetPassRequest(email, otp, password) {
         });
         return false;
       } else {
-        await AsyncStorage.setItem("otp",otp)
+        await AsyncStorage.setItem("otp", otp);
         Toast.show({
           type: "success",
           text1: "Success.",

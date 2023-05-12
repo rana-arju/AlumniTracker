@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
@@ -27,7 +28,6 @@
     "expo-status-bar": "~1.4.4",
     "patch-package": "^7.0.0",
     "react": "18.2.0",
-    "react-code-input": "^3.10.1",
     "react-native": "0.71.7",
     "react-native-confirmation-code-input": "^1.0.4",
     "react-native-gesture-handler": "~2.9.0",
