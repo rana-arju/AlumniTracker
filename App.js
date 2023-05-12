@@ -39,7 +39,8 @@ import AllStudents from "./src/screens/AllStudents";
 import EditProfile from "./src/screens/profile/EditProfile";
 import OtpVerify from "./src/screens/otp/OtpVerify";
 import CreatePassword from "./src/screens/otp/CreatePassword";
-import SendOtp from "./src/screens/otp/SendOtp";
+import OtpSend from "./src/screens/otp/OtpSend";
+import SearchToSingleUser from "./src/screens/SearchToSingleUser";
 
 
 

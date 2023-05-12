@@ -37,7 +37,7 @@ const useFetch = (endPoint, token) => {
     }
     fetchData();
   }, [token]);
-  
+
   const refetch = () => {
     if (!token) {
       return;

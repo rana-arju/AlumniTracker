@@ -15,7 +15,7 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-const UserProfileScreen = ({ route }) => {
+const SearchToSingleUser = ({ route }) => {
   const { item } = route.params;
   console.log(item);
   const navigation = useNavigation();
@@ -153,7 +153,7 @@ const UserProfileScreen = ({ route }) => {
   );
 };
 
-export default UserProfileScreen;
+export default SearchToSingleUser;
 
 const styles = StyleSheet.create({
   aboutContainer: {
