@@ -1,22 +1,23 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import ActionCard from "../../components/admin/AdminActions/ActionCard";
 import { COLORS } from "../../constants/theme";
+import AdminCard from "../../components/admin/AdminMake/AdminCard";
 
-const AdminAction = () => {
+const MakeAdmin = () => {
   return (
     <View style={{padding: 10}}>
       <View style={styles.header} horizontal  >
         <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Name</Text>
         <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Email</Text>
-        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Status</Text>
+        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Admin</Text>
         <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Actions</Text>
       </View>
-      <ActionCard />
+      <AdminCard />
     </View>
   );
 };
 
-export default AdminAction;
+export default MakeAdmin;
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
