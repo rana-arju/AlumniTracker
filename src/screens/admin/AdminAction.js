@@ -1,15 +1,41 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import ActionCard from "../../components/admin/AdminActions/ActionCard";
 import { COLORS } from "../../constants/theme";
+import Search from "../../components/admin/Search/Search";
 
 const AdminAction = () => {
   return (
-    <View style={{padding: 10}}>
-      <View style={styles.header} horizontal  >
-        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Name</Text>
-        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Email</Text>
-        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Status</Text>
-        <Text style={{fontSize: 16, fontWeight: "bold", color: COLORS.tertiary}}>Actions</Text>
+    <View style={{ padding: 10 }}>
+      <Search />
+      <View style={styles.header} horizontal>
+        <Text
+          style={{ fontSize: 16, fontWeight: "bold", color: COLORS.tertiary }}
+        >
+          Name
+        </Text>
+        <Text
+          style={{ fontSize: 16, fontWeight: "bold", color: COLORS.tertiary }}
+        >
+          Email
+        </Text>
+        <Text
+          style={{ fontSize: 16, fontWeight: "bold", color: COLORS.tertiary }}
+        >
+          Status
+        </Text>
+        <Text
+          style={{ fontSize: 16, fontWeight: "bold", color: COLORS.tertiary }}
+        >
+          Actions
+        </Text>
       </View>
       <ActionCard />
     </View>
@@ -24,6 +50,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 10,
     borderBottomColor: COLORS.gray,
-    
   },
 });

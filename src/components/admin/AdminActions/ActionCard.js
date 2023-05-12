@@ -207,7 +207,7 @@ const ActionCard = () => {
   ];
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <ScrollView style={{ marginBottom: 150 }}>
+      <ScrollView style={{ marginBottom: 250 }}>
         {users.map((user, index) => (
           <View key={index} style={styles.table}>
             <Text style={{fontSize: 10}}>

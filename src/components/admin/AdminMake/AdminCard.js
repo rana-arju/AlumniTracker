@@ -207,16 +207,16 @@ const AdminCard = () => {
   ];
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <ScrollView style={{ marginBottom: 150 }}>
+      <ScrollView style={{ marginBottom: 250 }}>
         {users.map((user, index) => (
           <View key={index} style={styles.table}>
-            <Text style={{fontSize: 10}}>
+            <Text style={{ fontSize: 10 }}>
               {user.name.length > 12
                 ? user.name.substring(0, 12) + "..."
                 : user.name}
             </Text>
-            <Text style={{fontSize: 10}}>
-              { user.email > 20 ? user.email.substring(0,20) : user.email}
+            <Text style={{ fontSize: 10 }}>
+              {user.email > 20 ? user.email.substring(0, 20) : user.email}
             </Text>
             <Text>
               {user.status == "Request" && (
@@ -234,7 +234,7 @@ const AdminCard = () => {
                 />
               )}
             </Text>
-            <View style={{flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }}>
               <Text style={[styles.iconBox, { marginRight: 10 }]}>
                 <MaterialCommunityIcons
                   name="delete-outline"
