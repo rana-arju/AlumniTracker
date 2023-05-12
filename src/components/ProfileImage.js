@@ -72,6 +72,11 @@ export default function ProfileImage({ imageURI, setImageURI, setUser, user }) {
         .then((data) => {
           setImageURI(data.url);
           setUser({ ...user, image: data.url });
+          Toast.show({
+            type: "success",
+            text1: "Click 'SAVE' button for update!",
+            text2: "Profile photo update Successful!",
+          });
         });
     } catch (error) {
       console.log(error);
