@@ -17,7 +17,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 const SearchToSingleUser = ({ route }) => {
   const { item } = route.params;
-  console.log(item);
   const navigation = useNavigation();
 
   const handleLinkClick = () => {

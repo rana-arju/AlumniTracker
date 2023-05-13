@@ -70,7 +70,6 @@ export async function RecoverVerifyOTPRequest(email, otp) {
       }
     }
   } catch (error) {
-    console.log(error);
     Toast.show({
       type: "error",
       text1: "Error",

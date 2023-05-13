@@ -16,12 +16,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { statusApi } from "../../../apiRequests/adminApi";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+
 const ActionCard = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
-  const [againLoad, setAgainLoad] = useState(false);
+  const [againLoad, setAgainLoad] = useState("");
 
   const loadUserData = async () => {
     try {
@@ -47,7 +48,6 @@ const ActionCard = () => {
 
   const handleStatus = async (id, UserStatus) => {
     let status;
-
     if (UserStatus == "Request") {
       status = "Approve";
     }
@@ -68,19 +68,25 @@ const ActionCard = () => {
           }
         );
         if (data) {
-          setAgainLoad(true);
+          setAgainLoad(data);
+          Toast.show({
+            type: "success",
+            text1: `Status ${data.status} Successful!`,
+            text2: "Status Change",
+          });
         }
       } catch (error) {
-        console.log(error);
         return false;
       } finally {
       }
     }
   };
-  const { data, loading, error, refetch } = useFetch(
-    "UserRequestList",
-    userId?.token
-  );
+  const {
+    data,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useFetch("UserRequestList", userId?.token);
   const navigation = useNavigation();
 
   const handleCardPress = (id) => {
@@ -88,25 +94,53 @@ const ActionCard = () => {
       id: id,
       token: userId?.token,
     });
-    // setSelectedJob(item.job_id);
+  };
+  const handleDelete = async (id) => {
+    if (id && userId) {
+      try {
+        const { data } = await axios.post(
+          `${BaseURL}/DeleteUser/${id}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userId?.token}`,
+            },
+          }
+        );
+        if (data.message == "successful") {
+          setAgainLoad(data.data);
+        }
+      } catch (error) {
+        return false;
+      } finally {
+      }
+    }
   };
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     refetch();
     setRefreshing(false);
+  }, []);
+  useEffect(() => {
+    refetch();
   }, [againLoad]);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[COLORS.tertiary]}
+        />
       }
     >
       {loading ? (
         <ActivityIndicator
           size="large"
           color={COLORS.tertiary}
-          style={{ marginTop: 250 }}
+          style={{ marginTop: 200 }}
         />
       ) : (
         <ScrollView style={{ marginBottom: 250 }}>
@@ -137,7 +171,10 @@ const ActionCard = () => {
                 )}
               </Text>
               <View style={{ flexDirection: "row" }}>
-                <Text style={[styles.iconBox, { marginRight: 10 }]}>
+                <Text
+                  style={[styles.iconBox, { marginRight: 10 }]}
+                  onPress={() => handleDelete(user._id)}
+                >
                   <MaterialCommunityIcons
                     name="delete-outline"
                     size={22}
