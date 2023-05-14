@@ -1,10 +1,6 @@
 import axios from "axios";
 
-// const BaseURL = "http://10.0.2.2:8080/api/v1/";
-<<<<<<< HEAD
-// const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
-=======
->>>>>>> 77388be47e43deb45a44aca23fee762890c09630
+
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
