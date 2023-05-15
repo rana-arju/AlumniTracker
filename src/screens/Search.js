@@ -23,14 +23,10 @@ const Search = () => {
   const [userId, setUserId] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  console.log(userId);
-  console.log(searchKeyword);
-  console.log(searchResults);
 
   const options = {
     method: "GET",
     url: `https://alumni-tracker-backend-api.vercel.app/api/v1/SearchByName/${searchKeyword}`,
-    // url: `http://10.0.2.2:8080/api/v1/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -41,7 +37,7 @@ const Search = () => {
       await handleClick(searchKeyword);
       await loadUserData();
     })();
-  }, []);
+  }, [searchKeyword]);
 
   const handleClick = async () => {
     try {
@@ -50,7 +46,7 @@ const Search = () => {
         setSearchResults(response.data);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error + " error");
     } finally {
     }
   };
@@ -76,7 +72,8 @@ const Search = () => {
 
   const renderListItem = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.containerItem}>
+      <ScrollView>
+        <TouchableOpacity style={styles.containerItem}>
         <TouchableOpacity style={styles.logoContainer}>
           {item?.profile_image ? (
             <Image
@@ -112,47 +109,61 @@ const Search = () => {
           </TouchableWithoutFeedback>
         </View>
       </TouchableOpacity>
+      </ScrollView>
     );
   };
 
   return (
-      <ScrollView style={{ padding: 20, backgroundColor: COLORS.white }}>
-        <View style={styles.searchContainer}>
-          <View style={styles.searchWrapper}>
-            <TextInput
-              style={styles.searchInput}
-              value={searchKeyword}
-              onChangeText={(text) => setSearchKeyword(text)}
-              placeholder="What is Student name?"
-            />
+    <TouchableOpacity style={{ padding: 20, backgroundColor: COLORS.white }}>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            value={searchKeyword}
+            onChangeText={(input) => setSearchKeyword(input)}
+            placeholder="What is Student name?"
+          />
+        </View>
+        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
+          <Image
+            source={require("../../assets/icons/search.png")}
+            resizeMode="contain"
+            style={styles.searchBtnImage}
+          />
+        </TouchableOpacity>
+      </View>
+      <View>
+        <View>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Suggested Student</Text>
+            <TouchableOpacity>
+              <Text style={styles.headerBtn}>Show All</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
-            <Image
-              source={require("../../assets/icons/search.png")}
-              resizeMode="contain"
-              style={styles.searchBtnImage}
-            />
-          </TouchableOpacity>
         </View>
         <View>
-          <View>
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Suggested Student</Text>
-              <TouchableOpacity>
-                <Text style={styles.headerBtn}>Show All</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
+          {searchResults.length > 0 ? (
             <FlatList
               style={{ marginTop: 15 }}
               data={searchResults}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderListItem}
             />
-          </View>
+          ) : (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 15,
+              }}
+            >
+              <Text style={{ fontSize: 20,marginTop:100 }}>Not Found Data</Text>
+              <Text style={{ fontSize: 20 }}>Please Search</Text>
+            </View>
+          )}
         </View>
-      </ScrollView>
+      </View>
+    </TouchableOpacity>
   );
 };
 
