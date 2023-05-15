@@ -10,8 +10,10 @@ import {
 import ActionCard from "../../components/admin/AdminActions/ActionCard";
 import { COLORS } from "../../constants/theme";
 import Search from "../../components/admin/Search/Search";
+import { useEffect, useState } from "react";
 
 const AdminAction = () => {
+
   return (
     <View style={{ padding: 10 }}>
       <Search />

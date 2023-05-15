@@ -38,8 +38,10 @@ import StudentDetails from "./src/screens/StudentDetails";
 import AllStudents from "./src/screens/AllStudents";
 import EditProfile from "./src/screens/profile/EditProfile";
 import OtpVerify from "./src/screens/otp/OtpVerify";
-import OtpSend from "./src/screens/otp/OtpSend";
 import CreatePassword from "./src/screens/otp/CreatePassword";
+import OtpSend from "./src/screens/otp/OtpSend";
+import SearchToSingleUser from "./src/screens/SearchToSingleUser";
+
 
 
 
@@ -71,7 +73,6 @@ export default function App() {
       setInitialRouteName("Login");
     }
   };
-
   return (
     <NavigationContainer>
       {!initialRouteName ? (

@@ -16,11 +16,8 @@ import {
 import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
 import Admin from "../screens/admin/Admin";
-<<<<<<< HEAD
-=======
 import AdminTab from "./AdminTab";
 
->>>>>>> 77388be47e43deb45a44aca23fee762890c09630
 const Drawer = createDrawerNavigator();
 
 const Routes = () => {
@@ -76,11 +73,7 @@ const Routes = () => {
       />
       <Drawer.Screen
         name="Dashboard"
-<<<<<<< HEAD
-        component={Admin}
-=======
         component={AdminTab}
->>>>>>> 77388be47e43deb45a44aca23fee762890c09630
         options={{
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -89,11 +82,8 @@ const Routes = () => {
               color={color}
             />
           ),
-<<<<<<< HEAD
-=======
           headerTitleAlign: "center",
           headerRight: () => <HeaderProfile />,
->>>>>>> 77388be47e43deb45a44aca23fee762890c09630
         }}
       />
     </Drawer.Navigator>

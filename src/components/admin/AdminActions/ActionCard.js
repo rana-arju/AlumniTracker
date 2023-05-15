@@ -1,259 +1,198 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { COLORS } from "../../../constants/theme";
 import { width } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
+import useFetch from "../../../../hook/useFetch";
+import { useCallback, useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { statusApi } from "../../../apiRequests/adminApi";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const ActionCard = () => {
-  const handleDetails = (id) => {
-    console.log(id);
+  const [refreshing, setRefreshing] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
+  const [againLoad, setAgainLoad] = useState("");
+
+  const loadUserData = async () => {
+    try {
+      setIsLoading(true);
+      let userData = await AsyncStorage.getItem("userData");
+      if (userData) {
+        userData = JSON.parse(userData);
+        setUserId(userData);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
+      });
+    }
   };
-  const users = [
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      image: "https://i.ibb.co/3v7BvSV/images-1.jpg",
-      name: "shefaitur",
-      email: "shefaitur@gmail.com",
-      mobile: "01851694920",
-      password: "12345678",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      role: "teacher",
-      status: "Approved",
-      isAdmin: false,
-    },
-    {
-      name: "Rana Arju rana ar",
-      image: "https://i.ibb.co/TKjtLch/avatar2-large-modified.png",
-      email: "ranaarju2023rana@gmail.com",
-      mobile: "01851694910",
-      password: "123456",
-      position: "Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      status: "Request",
-      role: "Teacher",
-      isAdmin: true,
-    },
-    {
-      name: "Clementine Bauch",
-      email: "clementine@gmail.com",
-      mobile: "01851694923",
-      password: "123456710",
-      position: "Junior Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      image: "https://i.ibb.co/DGXzTZw/Avatar-Profile-Vector-PNG-Clipart.png",
-      status: "Request",
-      role: "Teacher",
-      isAdmin: false,
-    },
-    {
-      name: "Romaguera-Jacobson",
-      email: "jacobson@gmail.com",
-      mobile: "01851694924",
-      password: "123456782",
-      position: "Guest Teacher",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      image: "https://i.ibb.co/8NTbvPC/download-2.jpg",
-      status: "Request",
-      role: "Teacher",
-      isAdmin: false,
-    },
-    {
-      name: "Patricia Lebsack",
-      email: "patricia@gmail.com",
-      mobile: "01851694925",
-      password: "12345673",
-      image: "https://i.ibb.co/mqLdk0T/download-1-modified.png",
-      position: "Craft Instructor",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      status: "Request",
-      role: "Teacher",
-      isAdmin: false,
-    },
-    {
-      name: "Chelsey Dietrich",
-      email: "chelsey@gmail.com",
-      mobile: "01851694926",
-      password: "12345674",
-      image: "https://i.ibb.co/N15hn5H/download.jpg",
-      position: "Lab Assistant",
-      facebookLink: "https://www.facebook.com/MD.Shefaitur.rahman.nayon/",
-      whatsappNumber: "01851694920",
-      status: "Request",
-      role: "Teacher",
-      isAdmin: false,
-    },
-  ];
+  useEffect(() => {
+    loadUserData();
+  }, [refreshing, againLoad]);
+
+  const handleStatus = async (id, UserStatus) => {
+    let status;
+    if (UserStatus == "Request") {
+      status = "Approve";
+    }
+    if (UserStatus == "Approve") {
+      status = "Request";
+    }
+
+    if (status && userId) {
+      try {
+        const { data } = await axios.post(
+          `${BaseURL}/UpdateUserStatus/${id}/${status}`,
+          { status },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userId?.token}`,
+            },
+          }
+        );
+        if (data) {
+          setAgainLoad(data);
+          Toast.show({
+            type: "success",
+            text1: `Status ${data.status} Successful!`,
+            text2: "Status Change",
+          });
+        }
+      } catch (error) {
+        return false;
+      } finally {
+      }
+    }
+  };
+  const {
+    data,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useFetch("UserRequestList", userId?.token);
+  const navigation = useNavigation();
+
+  const handleCardPress = (id) => {
+    navigation.navigate(`studentDetails`, {
+      id: id,
+      token: userId?.token,
+    });
+  };
+  const handleDelete = async (id) => {
+    if (id && userId) {
+      try {
+        const { data } = await axios.post(
+          `${BaseURL}/DeleteUser/${id}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userId?.token}`,
+            },
+          }
+        );
+        if (data.message == "successful") {
+          setAgainLoad(data.data);
+        }
+      } catch (error) {
+        return false;
+      } finally {
+      }
+    }
+  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
+  useEffect(() => {
+    refetch();
+  }, [againLoad]);
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <ScrollView style={{ marginBottom: 250 }}>
-        {users.map((user, index) => (
-          <View key={index} style={styles.table}>
-            <Text style={{fontSize: 10}}>
-              {user.name.length > 12
-                ? user.name.substring(0, 12) + "..."
-                : user.name}
-            </Text>
-            <Text style={{fontSize: 10}}>
-              { user.email > 20 ? user.email.substring(0,20) : user.email}
-            </Text>
-            <Text>
-              {user.status == "Request" && (
-                <MaterialCommunityIcons
-                  name="toggle-switch-off"
-                  size={24}
-                  color={COLORS.tertiary}
-                />
-              )}
-              {user.status == "Approved" && (
-                <MaterialCommunityIcons
-                  name="toggle-switch"
-                  size={24}
-                  color={"#00A67E"}
-                />
-              )}
-            </Text>
-            <View style={{flexDirection: "row"}}>
-              <Text style={[styles.iconBox, { marginRight: 10 }]}>
-                <MaterialCommunityIcons
-                  name="delete-outline"
-                  size={22}
-                  color={COLORS.red}
-                />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[COLORS.tertiary]}
+        />
+      }
+    >
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={COLORS.tertiary}
+          style={{ marginTop: 200 }}
+        />
+      ) : (
+        <ScrollView style={{ marginBottom: 250 }}>
+          {data?.RequestList?.map((user, index) => (
+            <View key={index} style={styles.table}>
+              <Text style={{ fontSize: 10 }}>
+                {user.name.length > 12
+                  ? user.name.substring(0, 12) + "..."
+                  : user.name}
               </Text>
-              <Text>
-                <Feather
-                  name="external-link"
-                  size={22}
-                  color={COLORS.tertiary}
-                  onPress={() => handleDetails(user.name)}
-                />
+              <Text style={{ fontSize: 10 }}>
+                {user.email > 20 ? user.email.substring(0, 20) : user.email}
               </Text>
+              <Text onPress={() => handleStatus(user?._id, user?.status)}>
+                {user.status == "Request" && (
+                  <MaterialCommunityIcons
+                    name="toggle-switch-off"
+                    size={24}
+                    color={COLORS.tertiary}
+                  />
+                )}
+                {user.status == "Approved" && (
+                  <MaterialCommunityIcons
+                    name="toggle-switch"
+                    size={24}
+                    color={"#00A67E"}
+                  />
+                )}
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  style={[styles.iconBox, { marginRight: 10 }]}
+                  onPress={() => handleDelete(user._id)}
+                >
+                  <MaterialCommunityIcons
+                    name="delete-outline"
+                    size={22}
+                    color={COLORS.red}
+                  />
+                </Text>
+                <Text onPress={() => handleCardPress(user?._id)}>
+                  <Feather
+                    name="external-link"
+                    size={22}
+                    color={COLORS.tertiary}
+                  />
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      )}
     </ScrollView>
   );
 };

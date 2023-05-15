@@ -11,7 +11,6 @@ import Toast from "react-native-toast-message";
 import axios from "axios";
 
 const Login = ({ navigation }) => {
-  
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -44,7 +43,7 @@ const Login = ({ navigation }) => {
       if (user) {
         setLoading(true);
         const { data } = await axios.post(
-          `http://10.0.2.2:8080/api/v1/Login`,
+          `https://worrisome-lion-necklace.cyclic.app/api/v1/Login`,
           user,
           {
             headers: {

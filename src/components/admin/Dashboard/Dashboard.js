@@ -59,7 +59,6 @@ export default function Dashboard() {
     error: approveError,
     refetch: approveRefetch,
   } = useFetch("UserApprovedCount", userId?.token);
-
   const {
     data: studentUser,
     isLoading: studentLoading,

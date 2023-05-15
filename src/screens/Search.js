@@ -15,30 +15,33 @@ import { COLORS, FONT, SIZES } from "../constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const Search = () => {
   const navigation = useNavigation();
   const [userId, setUserId] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  // console.log(searchResults)
+  console.log(userId);
+  console.log(searchKeyword);
+  console.log(searchResults);
+
   const options = {
     method: "GET",
-    url: `http://10.0.2.2:8080/api/v1/SearchByName/${searchKeyword}`,
+    url: `https://alumni-tracker-backend-api.vercel.app/api/v1/SearchByName/${searchKeyword}`,
+    // url: `http://10.0.2.2:8080/api/v1/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
     },
   };
-  useEffect(()=>{
+  useEffect(() => {
     (async () => {
-        await handleClick(searchKeyword);
-        await loadUserData()
+      await handleClick(searchKeyword);
+      await loadUserData();
     })();
-},[searchKeyword])
-
+  }, []);
 
   const handleClick = async () => {
     try {
@@ -58,7 +61,6 @@ const Search = () => {
       if (userData) {
         userData = JSON.parse(userData);
         setUserId(userData);
-        setSearchKeyword(userData)
       }
     } catch (error) {
       Toast.show({
@@ -69,13 +71,12 @@ const Search = () => {
     }
   };
   const handleNavigate = (item) => {
-    navigation.navigate('UserDetails', { item });
+    navigation.navigate("UserDetails", { item });
   };
-  
 
   const renderListItem = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.containerItem} >
+      <TouchableOpacity style={styles.containerItem}>
         <TouchableOpacity style={styles.logoContainer}>
           {item?.profile_image ? (
             <Image
@@ -94,58 +95,64 @@ const Search = () => {
           )}
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={styles.jobName}>{item.name.slice(0, 14)}{(item.name.length > 14) ? '..' : ''}</Text>
+          <Text style={styles.jobName}>
+            {item.name.slice(0, 14)}
+            {item.name.length > 14 ? ".." : ""}
+          </Text>
           <Text style={styles.jobType}>{item.department}</Text>
           <TouchableWithoutFeedback onPress={() => handleNavigate(item)}>
-          <View>
-            <AntDesign style={styles.detailsIcon} name="arrowright" size={24} color="black" />
-          </View>
-        </TouchableWithoutFeedback>
+            <View>
+              <AntDesign
+                style={styles.detailsIcon}
+                name="arrowright"
+                size={24}
+                color="black"
+              />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <ScrollView style={{ padding: 20, backgroundColor: COLORS.white }}>
-      {/* <View style={styles.container}>
-        <Text style={styles.userName}>Hello Rana</Text>
-        <Text style={styles.welcomeMessage}>Search any register student</Text>
-      </View> */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value={searchKeyword}
-            onChangeText={(text) => setSearchKeyword(text)}
-            placeholder="What is Student name?"
-          />
+      <ScrollView style={{ padding: 20, backgroundColor: COLORS.white }}>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchWrapper}>
+            <TextInput
+              style={styles.searchInput}
+              value={searchKeyword}
+              onChangeText={(text) => setSearchKeyword(text)}
+              placeholder="What is Student name?"
+            />
+          </View>
+          <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
+            <Image
+              source={require("../../assets/icons/search.png")}
+              resizeMode="contain"
+              style={styles.searchBtnImage}
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
-          <Image
-            source={require("../../assets/icons/search.png")}
-            resizeMode="contain"
-            style={styles.searchBtnImage}
-          />
-        </TouchableOpacity>
-      </View>
-      <View>
         <View>
-        <View style={styles.header}>
-        <Text style={styles.headerTitle}>Suggested Student</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>Show All</Text>
-        </TouchableOpacity>
-      </View>
+          <View>
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Suggested Student</Text>
+              <TouchableOpacity>
+                <Text style={styles.headerBtn}>Show All</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <FlatList
+              style={{ marginTop: 15 }}
+              data={searchResults}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderListItem}
+            />
+          </View>
         </View>
-        <FlatList
-        style={{marginTop:15,}}
-          data={searchResults}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderListItem}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
   );
 };
 
@@ -214,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     // ...SHADOWS.medium,
     shadowColor: COLORS.white,
-    marginBottom:10,
+    marginBottom: 10,
   },
   logoContainer: {
     width: 40,
@@ -228,11 +235,9 @@ const styles = StyleSheet.create({
   logoImage: {
     width: "100%",
     height: "100%",
-  
-    
   },
   textContainer: {
-    flexDirection:"row",
+    flexDirection: "row",
     // padding:10,
     // alignItems:"center",
     // justifyContent:"center",
@@ -242,23 +247,23 @@ const styles = StyleSheet.create({
     // marginLeft:30,
   },
   jobName: {
-    flex:0.5,
+    flex: 0.5,
     fontSize: SIZES.medium,
     // fontFamily: "DMBold",
     color: COLORS.primary,
-    paddingLeft:10,
+    paddingLeft: 10,
   },
   jobType: {
-    flex:0.4,
+    flex: 0.4,
     fontSize: SIZES.small + 2,
     // fontFamily: "DMRegular",
     color: COLORS.gray,
     marginTop: 3,
     textTransform: "capitalize",
-    paddingLeft:10
+    paddingLeft: 10,
   },
-  detailsIcon:{
-    flex:0.4,
+  detailsIcon: {
+    flex: 0.4,
   },
   header: {
     flexDirection: "row",
