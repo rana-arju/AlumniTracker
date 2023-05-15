@@ -17,12 +17,17 @@ import { statusApi } from "../../../apiRequests/adminApi";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
-const AdminCard = () => {
+const AdminCard = ({
+  searchResults,
+  setSearchResults,
+  setSearchKeyword,
+  againLoad,
+  setAgainLoad,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
-  const [againLoad, setAgainLoad] = useState("");
 
   const loadUserData = async () => {
     try {
@@ -70,7 +75,9 @@ const AdminCard = () => {
           setAgainLoad(data);
           Toast.show({
             type: "success",
-            text1: `Admin Successful!`,
+            text1: `${
+              data.isAdmin == true ? "Make Admin" : "Remove Admin"
+            } Successful!`,
             text2: "",
           });
         }
@@ -119,6 +126,8 @@ const AdminCard = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     refetch();
+    setSearchResults([]);
+    setSearchKeyword("");
     setRefreshing(false);
   }, []);
   useEffect(() => {
@@ -143,53 +152,101 @@ const AdminCard = () => {
         />
       ) : (
         <ScrollView style={{ marginBottom: 250 }}>
-          {data?.ApprovedList?.map((user, index) => (
-            <View key={index} style={styles.table}>
-              <Text style={{ fontSize: 10 }}>
-                {user.name.length > 12
-                  ? user.name.substring(0, 12) + "..."
-                  : user.name}
-              </Text>
-              <Text style={{ fontSize: 10 }}>
-                {user.email > 20 ? user.email.substring(0, 20) : user.email}
-              </Text>
-              <Text onPress={() => handleAdmin(user?._id, user?.isAdmin)}>
-                {!user.isAdmin && (
-                  <MaterialCommunityIcons
-                    name="toggle-switch-off"
-                    size={24}
-                    color={COLORS.tertiary}
-                  />
-                )}
-                {user.isAdmin && (
-                  <MaterialCommunityIcons
-                    name="toggle-switch"
-                    size={24}
-                    color={"#00A67E"}
-                  />
-                )}
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <Text
-                  style={[styles.iconBox, { marginRight: 10 }]}
-                  onPress={() => handleDelete(user._id)}
-                >
-                  <MaterialCommunityIcons
-                    name="delete-outline"
-                    size={22}
-                    color={COLORS.red}
-                  />
-                </Text>
-                <Text onPress={() => handleCardPress(user?._id)}>
-                  <Feather
-                    name="external-link"
-                    size={22}
-                    color={COLORS.tertiary}
-                  />
-                </Text>
-              </View>
-            </View>
-          ))}
+          {searchResults.length > 0
+            ? searchResults?.map((user, index) => (
+                <View key={index} style={styles.table}>
+                  <Text style={{ fontSize: 10 }}>
+                    {user.name.length > 12
+                      ? user.name.substring(0, 12) + "..."
+                      : user.name}
+                  </Text>
+                  <Text style={{ fontSize: 10 }}>
+                    {user.email > 20 ? user.email.substring(0, 20) : user.email}
+                  </Text>
+                  <Text onPress={() => handleAdmin(user?._id, user?.isAdmin)}>
+                    {!user.isAdmin && (
+                      <MaterialCommunityIcons
+                        name="toggle-switch-off"
+                        size={24}
+                        color={COLORS.tertiary}
+                      />
+                    )}
+                    {user.isAdmin && (
+                      <MaterialCommunityIcons
+                        name="toggle-switch"
+                        size={24}
+                        color={"#00A67E"}
+                      />
+                    )}
+                  </Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text
+                      style={[styles.iconBox, { marginRight: 10 }]}
+                      onPress={() => handleDelete(user._id)}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete-outline"
+                        size={22}
+                        color={COLORS.red}
+                      />
+                    </Text>
+                    <Text onPress={() => handleCardPress(user?._id)}>
+                      <Feather
+                        name="external-link"
+                        size={22}
+                        color={COLORS.tertiary}
+                      />
+                    </Text>
+                  </View>
+                </View>
+              ))
+            : data?.ApprovedList?.map((user, index) => (
+                <View key={index} style={styles.table}>
+                  <Text style={{ fontSize: 10 }}>
+                    {user.name.length > 12
+                      ? user.name.substring(0, 12) + "..."
+                      : user.name}
+                  </Text>
+                  <Text style={{ fontSize: 10 }}>
+                    {user.email > 20 ? user.email.substring(0, 20) : user.email}
+                  </Text>
+                  <Text onPress={() => handleAdmin(user?._id, user?.isAdmin)}>
+                    {!user.isAdmin && (
+                      <MaterialCommunityIcons
+                        name="toggle-switch-off"
+                        size={24}
+                        color={COLORS.tertiary}
+                      />
+                    )}
+                    {user.isAdmin && (
+                      <MaterialCommunityIcons
+                        name="toggle-switch"
+                        size={24}
+                        color={"#00A67E"}
+                      />
+                    )}
+                  </Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text
+                      style={[styles.iconBox, { marginRight: 10 }]}
+                      onPress={() => handleDelete(user._id)}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete-outline"
+                        size={22}
+                        color={COLORS.red}
+                      />
+                    </Text>
+                    <Text onPress={() => handleCardPress(user?._id)}>
+                      <Feather
+                        name="external-link"
+                        size={22}
+                        color={COLORS.tertiary}
+                      />
+                    </Text>
+                  </View>
+                </View>
+              ))}
         </ScrollView>
       )}
     </ScrollView>

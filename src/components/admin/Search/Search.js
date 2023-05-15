@@ -9,21 +9,58 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS, FONT, SIZES } from "../../../constants/theme";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import axios from "axios";
 
-const Search = ({ searchTerm, handleClick, setSearchTerm }) => {
-  const router = useNavigation();
+const Search = ({
+  searchKeyword,
+  setSearchKeyword,
+  userId,
+  setSearchResults,
+  againLoad,
+  setAgainLoad,
+}) => {
+  const options = {
+    method: "GET",
+    url: `https://alumni-tracker-backend-api.vercel.app/api/v1/SearchByName/${searchKeyword}`,
+    headers: {
+      Authorization: `Bearer ${userId?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  useEffect(() => {
+    (async () => {
+      await handleClick(searchKeyword);
+    })();
+  }, [searchKeyword, againLoad]);
+
+  const handleClick = async () => {
+    try {
+      console.log(options);
+      const response = await axios.request(options);
+      console.log("response", response);
+
+      if (response) {
+        setSearchResults(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+
   return (
     <ScrollView style={{ backgroundColor: COLORS.white, paddingBottom: 40 }}>
       <View style={styles.searchContainer}>
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
-            value={searchTerm}
-            onChangeText={(text) => setSearchTerm(text)}
-            placeholder="Enter user name?"
+            value={searchKeyword}
+            onChangeText={(input) => setSearchKeyword(input)}
+            placeholder="Enter name?"
           />
         </View>
         <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>

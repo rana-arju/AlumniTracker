@@ -17,6 +17,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const Search = () => {
   const navigation = useNavigation();
@@ -46,7 +47,6 @@ const Search = () => {
         setSearchResults(response.data);
       }
     } catch (error) {
-      console.log(error + " error");
     } finally {
     }
   };
@@ -67,48 +67,54 @@ const Search = () => {
     }
   };
   const handleNavigate = (item) => {
-    navigation.navigate("UserDetails", { item });
+    navigation.navigate("studentDetails", {
+      id: item._id,
+      token: userId?.token,
+    });
   };
 
   const renderListItem = ({ item }) => {
     return (
       <ScrollView>
-        <TouchableOpacity style={styles.containerItem}>
-        <TouchableOpacity style={styles.logoContainer}>
-          {item?.profile_image ? (
-            <Image
-              source={{
-                uri: item.profile_image,
-              }}
-              resizeMode="contain"
-              style={styles.logoImage}
-            />
-          ) : (
-            <Image
-              source={require("../../assets/images/user-profile.png")}
-              resizeMode="contain"
-              style={styles.logoImage}
-            />
-          )}
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={styles.jobName}>
-            {item.name.slice(0, 14)}
-            {item.name.length > 14 ? ".." : ""}
-          </Text>
-          <Text style={styles.jobType}>{item.department}</Text>
-          <TouchableWithoutFeedback onPress={() => handleNavigate(item)}>
-            <View>
-              <AntDesign
-                style={styles.detailsIcon}
-                name="arrowright"
-                size={24}
-                color="black"
+        <TouchableOpacity
+          style={styles.containerItem}
+          onPress={() => handleNavigate(item)}
+        >
+          <TouchableOpacity style={styles.logoContainer}>
+            {item?.profile_image ? (
+              <Image
+                source={{
+                  uri: item.profile_image,
+                }}
+                resizeMode="contain"
+                style={styles.logoImage}
               />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableOpacity>
+            ) : (
+              <Image
+                source={require("../../assets/images/user-profile.png")}
+                resizeMode="contain"
+                style={styles.logoImage}
+              />
+            )}
+          </TouchableOpacity>
+          <View style={styles.textContainer}>
+            <Text style={styles.jobName}>
+              {item.name.slice(0, 14)}
+              {item.name.length > 14 ? ".." : ""}
+            </Text>
+            <Text style={styles.jobType}>{item.department}</Text>
+            <TouchableWithoutFeedback>
+              <View>
+                <AntDesign
+                  style={styles.detailsIcon}
+                  name="arrowright"
+                  size={24}
+                  color={COLORS.gray}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     );
   };
@@ -121,7 +127,7 @@ const Search = () => {
             style={styles.searchInput}
             value={searchKeyword}
             onChangeText={(input) => setSearchKeyword(input)}
-            placeholder="What is Student name?"
+            placeholder="Enter name?"
           />
         </View>
         <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
@@ -135,10 +141,7 @@ const Search = () => {
       <View>
         <View>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Suggested Student</Text>
-            <TouchableOpacity>
-              <Text style={styles.headerBtn}>Show All</Text>
-            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Your Search Result</Text>
           </View>
         </View>
         <View>
@@ -157,7 +160,9 @@ const Search = () => {
                 marginTop: 15,
               }}
             >
-              <Text style={{ fontSize: 20,marginTop:100 }}>Not Found Data</Text>
+              <Text style={{ fontSize: 20, marginTop: 100 }}>
+                Not Found Data
+              </Text>
               <Text style={{ fontSize: 20 }}>Please Search</Text>
             </View>
           )}
@@ -261,7 +266,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     fontSize: SIZES.medium,
     // fontFamily: "DMBold",
-    color: COLORS.primary,
+    color: COLORS.gray,
     paddingLeft: 10,
   },
   jobType: {
@@ -272,6 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     textTransform: "capitalize",
     paddingLeft: 10,
+    textTransform: "uppercase",
   },
   detailsIcon: {
     flex: 0.4,
