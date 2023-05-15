@@ -1,20 +1,10 @@
 import axios from "axios";
 
-// const BaseURL = "http://10.0.2.2:8080/api/v1/";
-// const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
+const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
 
 export async function RecoverVerifyEmailRequest(email) {
-  const options = {
-    method: "GET",
-    url: `${BaseURL}/RecoverVerifyEmail/${email}`,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
- 
   try {
     const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
 
@@ -119,10 +109,3 @@ export async function RecoverResetPassRequest(email, otp, password) {
   }
 }
 
-// {
-//   methods: "GET",
-//   headers: {
-//     "Content-Type": "application/json",
-//     Accept: "application/json",
-//   },
-// }

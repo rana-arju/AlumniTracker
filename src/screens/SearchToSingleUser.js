@@ -13,7 +13,7 @@ import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../components/Loader";
 import axios from "axios";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 const SearchToSingleUser = ({ route }) => {
   const { item } = route.params;
@@ -30,11 +30,17 @@ const SearchToSingleUser = ({ route }) => {
     );
   };
   const handleNavigate = () => {
-    navigation.navigate('Search');
+    navigation.navigate("Search");
   };
   return (
     <View style={styles.aboutContainer}>
-        <AntDesign style={{}} name="arrowleft" size={24} onPress={handleNavigate} color="black" />
+      <AntDesign
+        style={{}}
+        name="arrowleft"
+        size={24}
+        onPress={handleNavigate}
+        color="black"
+      />
       <View>
         <Image
           style={styles.imgStyle}

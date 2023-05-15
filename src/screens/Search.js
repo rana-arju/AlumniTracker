@@ -23,10 +23,10 @@ const Search = () => {
   const [userId, setUserId] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  // console.log(searchResults)
+
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/SearchByName/${searchKeyword}`,
+    url: `https://alumni-tracker-backend-api.vercel.app/api/v1/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const Search = () => {
         setSearchResults(response.data);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error + " error");
     } finally {
     }
   };
@@ -57,7 +57,6 @@ const Search = () => {
       if (userData) {
         userData = JSON.parse(userData);
         setUserId(userData);
-        setSearchKeyword(userData);
       }
     } catch (error) {
       Toast.show({
@@ -73,7 +72,8 @@ const Search = () => {
 
   const renderListItem = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.containerItem}>
+      <ScrollView>
+        <TouchableOpacity style={styles.containerItem}>
         <TouchableOpacity style={styles.logoContainer}>
           {item?.profile_image ? (
             <Image
@@ -109,21 +109,18 @@ const Search = () => {
           </TouchableWithoutFeedback>
         </View>
       </TouchableOpacity>
+      </ScrollView>
     );
   };
 
   return (
-    <ScrollView style={{ padding: 20, backgroundColor: COLORS.white }}>
-      {/* <View style={styles.container}>
-        <Text style={styles.userName}>Hello Rana</Text>
-        <Text style={styles.welcomeMessage}>Search any register student</Text>
-      </View> */}
+    <TouchableOpacity style={{ padding: 20, backgroundColor: COLORS.white }}>
       <View style={styles.searchContainer}>
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
             value={searchKeyword}
-            onChangeText={(text) => setSearchKeyword(text)}
+            onChangeText={(input) => setSearchKeyword(input)}
             placeholder="What is Student name?"
           />
         </View>
@@ -144,14 +141,29 @@ const Search = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <FlatList
-          style={{ marginTop: 15 }}
-          data={searchResults}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderListItem}
-        />
+        <View>
+          {searchResults.length > 0 ? (
+            <FlatList
+              style={{ marginTop: 15 }}
+              data={searchResults}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderListItem}
+            />
+          ) : (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 15,
+              }}
+            >
+              <Text style={{ fontSize: 20,marginTop:100 }}>Not Found Data</Text>
+              <Text style={{ fontSize: 20 }}>Please Search</Text>
+            </View>
+          )}
+        </View>
       </View>
-    </ScrollView>
+    </TouchableOpacity>
   );
 };
 
