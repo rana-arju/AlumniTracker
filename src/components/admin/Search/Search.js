@@ -25,7 +25,7 @@ const Search = ({
 }) => {
   const options = {
     method: "GET",
-    url: `https://alumni-tracker-backend-api.vercel.app/api/v1/SearchByName/${searchKeyword}`,
+    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -39,15 +39,12 @@ const Search = ({
 
   const handleClick = async () => {
     try {
-      console.log(options);
       const response = await axios.request(options);
-      console.log("response", response);
 
       if (response) {
         setSearchResults(response.data);
       }
     } catch (error) {
-      console.log(error);
     } finally {
     }
   };

@@ -5,9 +5,15 @@ import Students from "../screens/Students";
 import Search from "../screens/Search";
 import { COLORS } from "../constants/theme";
 import Admin from "../screens/admin/Admin";
-import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import MakeAdmin from "../screens/admin/MakeAdmin";
 import AdminAction from "../screens/admin/AdminAction";
+import AllAdmin from "../screens/admin/AllAdmin";
 const Tab = createBottomTabNavigator();
 
 const AdminTab = () => {
@@ -98,7 +104,8 @@ const AdminTab = () => {
                 top: 10,
               }}
             >
-              <MaterialIcons                name="admin-panel-settings"
+              <MaterialIcons
+                name="admin-panel-settings"
                 color={color}
                 size={size}
               />
@@ -108,6 +115,30 @@ const AdminTab = () => {
                 }}
               >
                 Make Admin
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="AdminList"
+        component={AllAdmin}
+        options={{
+          tabBarIcon: ({ color, focused, size }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Feather name="user-check" color={color} size={size} />
+              <Text
+                style={{
+                  color: focused ? COLORS.tertiary : "#748c94",
+                }}
+              >
+                Admin List
               </Text>
             </View>
           ),

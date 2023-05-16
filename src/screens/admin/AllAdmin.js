@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MakeAdmin = () => {
+const AllAdmin = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,13 +73,13 @@ const MakeAdmin = () => {
         setSearchKeyword={setSearchKeyword}
         setAgainLoad={setAgainLoad}
         againLoad={againLoad}
-        endPoint="UserApprovedList"
+        endPoint="AdminList"
       />
     </View>
   );
 };
 
-export default MakeAdmin;
+export default AllAdmin;
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",

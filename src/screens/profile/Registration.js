@@ -81,7 +81,7 @@ const Registration = () => {
     try {
       setLoading(true);
       const { data } = await axios.post(
-        `https://alumni-tracker.onrender.com/api/v1/Registration`,
+        `https://worrisome-lion-necklace.cyclic.app/api/v1/Registration`,
         user,
         {
           headers: {
@@ -99,7 +99,7 @@ const Registration = () => {
         });
         await AsyncStorage.setItem(
           "userData",
-          JSON.stringify({ ...data, loggedIn: true })
+          JSON.stringify({ data, loggedIn: true })
         );
         navigation.navigate("editProfile");
       }
@@ -203,27 +203,28 @@ const Registration = () => {
               </Picker>
             </>
           )}
-          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
-            Select Your Department:
-          </Text>
-          <Picker
-            selectedValue={selectedDepartment}
-            onValueChange={(itemValue, itemIndex) => {
-              setSelectedDepartment(itemValue);
-              handleOnchange(itemValue, "department");
-            }}
-            style={styles.selectInput}
-          >
-            <Picker.Item label="Select Your Department" value="" />
-            <Picker.Item label="CMT" value="CMT" />
-            <Picker.Item label="CT" value="CT" />
-            <Picker.Item label="ET" value="ET" />
-            <Picker.Item label="RAC" value="RAC" />
-            <Picker.Item label="FT" value="FT" />
-            <Picker.Item label="THM" value="THM" />
-          </Picker>
+
           {selectedRole == "student" ? (
             <>
+              <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+                Select Your Department:
+              </Text>
+              <Picker
+                selectedValue={selectedDepartment}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedDepartment(itemValue);
+                  handleOnchange(itemValue, "department");
+                }}
+                style={styles.selectInput}
+              >
+                <Picker.Item label="Select Your Department" value="" />
+                <Picker.Item label="CMT" value="CMT" />
+                <Picker.Item label="CT" value="CT" />
+                <Picker.Item label="ET" value="ET" />
+                <Picker.Item label="RAC" value="RAC" />
+                <Picker.Item label="FT" value="FT" />
+                <Picker.Item label="THM" value="THM" />
+              </Picker>
               <Input
                 keyboardType="numeric"
                 onChangeText={(text) => handleOnchange(text, "roll")}

@@ -78,9 +78,7 @@ export default function ProfileImage({ imageURI, setImageURI, setUser, user }) {
             text2: "Profile photo update Successful!",
           });
         });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <View style={styles.container}>

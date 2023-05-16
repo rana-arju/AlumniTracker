@@ -13,7 +13,6 @@ import useFetch from "../../../../hook/useFetch";
 import { useCallback, useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { statusApi } from "../../../apiRequests/adminApi";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,6 +22,7 @@ const AdminCard = ({
   setSearchKeyword,
   againLoad,
   setAgainLoad,
+  endPoint,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState("");
@@ -49,8 +49,7 @@ const AdminCard = ({
   };
   useEffect(() => {
     loadUserData();
-  }, [refreshing, againLoad]);
-
+  }, [refreshing, againLoad, endPoint]);
   const handleAdmin = async (id, admin) => {
     let isAdmin;
     if (admin) {
@@ -92,7 +91,7 @@ const AdminCard = ({
     isLoading: loading,
     error,
     refetch,
-  } = useFetch("UserApprovedList", userId?.token);
+  } = useFetch(endPoint, userId?.token);
   const navigation = useNavigation();
 
   const handleCardPress = (id) => {
@@ -132,7 +131,7 @@ const AdminCard = ({
   }, []);
   useEffect(() => {
     refetch();
-  }, [againLoad]);
+  }, [againLoad, endPoint]);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -200,7 +199,7 @@ const AdminCard = ({
                   </View>
                 </View>
               ))
-            : data?.ApprovedList?.map((user, index) => (
+            : data?.map((user, index) => (
                 <View key={index} style={styles.table}>
                   <Text style={{ fontSize: 10 }}>
                     {user.name.length > 12

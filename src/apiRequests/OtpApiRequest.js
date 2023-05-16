@@ -2,7 +2,7 @@ import axios from "axios";
 
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BaseURL = "https://alumni-tracker-backend-api.vercel.app/api/v1/";
+const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1/";
 
 export async function RecoverVerifyEmailRequest(email) {
   try {
@@ -108,4 +108,3 @@ export async function RecoverResetPassRequest(email, otp, password) {
     return false;
   }
 }
-

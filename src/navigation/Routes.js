@@ -1,5 +1,5 @@
 import { Button, Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
@@ -17,10 +17,62 @@ import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
 import Admin from "../screens/admin/Admin";
 import AdminTab from "./AdminTab";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Drawer = createDrawerNavigator();
 
-const Routes = () => {
+const Routes = ({ route, navigation }) => {
+  const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    authUser();
+  }, []);
+
+  const authUser = async () => {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      if (userData) {
+        userData = JSON.parse(userData);
+        setUserData(userData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const options = {
+    method: "GET",
+    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userData?.id}`,
+    headers: {
+      Authorization: `Bearer ${userData?.token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.request(options);
+      if (response) {
+        setLoading(false);
+        setUser(response.data.user);
+        await AsyncStorage.setItem(
+          "userData",
+          JSON.stringify({ ...user, loggedIn: true, isAdmin: user.isAdmin })
+        );
+      }
+    } catch (error) {
+      setLoading(false);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    if (!userData) {
+      return;
+    }
+    fetchData();
+  }, [userData]);
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}
@@ -71,21 +123,23 @@ const Routes = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="Dashboard"
-        component={AdminTab}
-        options={{
-          drawerIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="view-dashboard"
-              size={24}
-              color={color}
-            />
-          ),
-          headerTitleAlign: "center",
-          headerRight: () => <HeaderProfile />,
-        }}
-      />
+      {user?.isAdmin && (
+        <Drawer.Screen
+          name="Dashboard"
+          component={AdminTab}
+          options={{
+            drawerIcon: ({ color }) => (
+              <MaterialCommunityIcons
+                name="view-dashboard"
+                size={24}
+                color={color}
+              />
+            ),
+            headerTitleAlign: "center",
+            headerRight: () => <HeaderProfile />,
+          }}
+        />
+      )}
     </Drawer.Navigator>
   );
 };

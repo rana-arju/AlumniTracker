@@ -13,7 +13,6 @@ const useFetch = (endPoint, token) => {
       "Content-Type": "application/json",
     },
   };
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -36,7 +35,7 @@ const useFetch = (endPoint, token) => {
       return;
     }
     fetchData();
-  }, [token]);
+  }, [token, endPoint]);
 
   const refetch = () => {
     if (!token) {

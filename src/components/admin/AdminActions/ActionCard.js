@@ -13,7 +13,6 @@ import useFetch from "../../../../hook/useFetch";
 import { useCallback, useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { statusApi } from "../../../apiRequests/adminApi";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 

@@ -360,30 +360,27 @@ const EditProfile = ({ navigation }) => {
             </>
           )}
 
-          <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
-            Select your department:
-          </Text>
-          <Picker
-            selectedValue={department}
-            onValueChange={(itemValue, itemIndex) => {
-              setDepartment(itemValue);
-              handleOnchange(itemValue, "department");
-            }}
-            style={styles.selectInput}
-          >
-            <Picker.Item label="Select your department" value="" />
-            <Picker.Item label="CMT" value="CMT" />
-            <Picker.Item label="CT" value="CT" />
-            <Picker.Item label="ET" value="ET" />
-            <Picker.Item label="RAC" value="RAC" />
-            <Picker.Item label="FT" value="FT" />
-            <Picker.Item label="THM" value="THM" />
-            {user?.role == "teacher" && (
-              <Picker.Item label="Other" value="Other" />
-            )}
-          </Picker>
           {user?.role == "student" && (
             <>
+              <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
+                Select your department:
+              </Text>
+              <Picker
+                selectedValue={department}
+                onValueChange={(itemValue, itemIndex) => {
+                  setDepartment(itemValue);
+                  handleOnchange(itemValue, "department");
+                }}
+                style={styles.selectInput}
+              >
+                <Picker.Item label="Select your department" value="" />
+                <Picker.Item label="CMT" value="CMT" />
+                <Picker.Item label="CT" value="CT" />
+                <Picker.Item label="ET" value="ET" />
+                <Picker.Item label="RAC" value="RAC" />
+                <Picker.Item label="FT" value="FT" />
+                <Picker.Item label="THM" value="THM" />
+              </Picker>
               <Text style={{ color: COLORS.gray, marginBottom: 5 }}>
                 Select session:
               </Text>

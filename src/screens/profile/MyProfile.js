@@ -60,7 +60,7 @@ const MyProfile = ({ navigation }) => {
 
   const options = {
     method: "GET",
-    url: `https://alumni-tracker.onrender.com/api/v1/GetSingleUser/${userId?.id}`,
+    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
