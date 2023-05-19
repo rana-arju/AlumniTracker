@@ -60,7 +60,7 @@ const MyProfile = ({ navigation }) => {
 
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
+    url: `https://alumni-tracker-backend-api.vercel.app/api/v1/GetSingleUser/${userId?.id}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -77,6 +77,7 @@ const MyProfile = ({ navigation }) => {
     } catch (error) {
       setLoading(false);
       setError(error);
+      console.log(error);
     } finally {
     }
   };

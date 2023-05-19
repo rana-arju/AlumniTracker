@@ -45,7 +45,6 @@ export default function App() {
       setInitialRouteName("Login");
     }
   };
-
   return (
     <NavigationContainer>
       {!initialRouteName ? (

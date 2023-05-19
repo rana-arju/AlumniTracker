@@ -23,13 +23,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Drawer = createDrawerNavigator();
 
 const Routes = ({ route, navigation }) => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState("");
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    authUser();
-  }, []);
+  const [user, setUser] = useState();
 
   const authUser = async () => {
     try {
@@ -42,6 +38,9 @@ const Routes = ({ route, navigation }) => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    authUser();
+  }, []);
   const options = {
     method: "GET",
     url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userData?.id}`,
@@ -53,13 +52,24 @@ const Routes = ({ route, navigation }) => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.request(options);
-      if (response) {
+      const { data } = await axios.request(options);
+      if (data) {
         setLoading(false);
-        setUser(response.data.user);
+        setUser(data.user);
         await AsyncStorage.setItem(
           "userData",
-          JSON.stringify({ ...user, loggedIn: true, isAdmin: user.isAdmin })
+          JSON.stringify({
+            name: data?.user?.name,
+            image: data?.user?.image,
+            email: data?.user?.email,
+            status: data?.user?.status,
+            role: data?.user?.role,
+            isAdmin: data?.user?.isAdmin,
+            department: data?.user?.department,
+            id: data?.user?.id,
+            loggedIn: true,
+            token: userData?.token,
+          })
         );
       }
     } catch (error) {
@@ -123,7 +133,7 @@ const Routes = ({ route, navigation }) => {
           ),
         }}
       />
-      {user?.isAdmin && (
+      {userData?.isAdmin && (
         <Drawer.Screen
           name="Dashboard"
           component={AdminTab}

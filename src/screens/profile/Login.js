@@ -43,7 +43,7 @@ const Login = ({ navigation }) => {
       if (user) {
         setLoading(true);
         const { data } = await axios.post(
-          `https://worrisome-lion-necklace.cyclic.app/api/v1/Login`,
+          `https://alumni-tracker-backend-api.vercel.app/api/v1/Login`,
           user,
           {
             headers: {
@@ -68,6 +68,7 @@ const Login = ({ navigation }) => {
       }
     } catch (error) {
       setLoading(false);
+      console.log(error);
       Toast.show({
         type: "error",
         text1: "Error",
