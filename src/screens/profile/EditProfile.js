@@ -200,7 +200,7 @@ const EditProfile = ({ navigation }) => {
           text1: "Profile update Successful!",
           text2: "Continue your contribution 👋",
         });
-        navigation.navigate("MyProfile");
+        navigation.navigate("Home");
       }
     } catch (error) {
       setLoading(false);
