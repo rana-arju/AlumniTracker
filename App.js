@@ -18,6 +18,7 @@ import OtpVerify from "./src/screens/otp/OtpVerify";
 import CreatePassword from "./src/screens/otp/CreatePassword";
 import OtpSend from "./src/screens/otp/OtpSend";
 import SearchToSingleUser from "./src/screens/SearchToSingleUser";
+import MyProfile from "./src/screens/profile/MyProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ export default function App() {
             <Stack.Screen name="sendOtp" component={OtpSend} />
             <Stack.Screen name="verifyOtp" component={OtpVerify} />
             <Stack.Screen name="createPassword" component={CreatePassword} />
+            <Stack.Screen name="myProfile" component={MyProfile} />
             {/* studentDetails Screen  */}
             <Stack.Screen name="Search" component={Search} />
             <Stack.Screen

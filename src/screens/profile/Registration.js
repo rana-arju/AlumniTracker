@@ -99,13 +99,14 @@ const Registration = () => {
         });
         await AsyncStorage.setItem(
           "userData",
-          JSON.stringify({ data, loggedIn: true })
+          JSON.stringify({ ...data, loggedIn: true })
         );
         navigation.navigate("editProfile");
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      console.log(error);
       const message = error.response.data.message;
       Toast.show({
         type: "error",
