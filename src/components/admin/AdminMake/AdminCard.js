@@ -15,6 +15,7 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL } from "../../../screens/otp/helper/Config";
 
 const AdminCard = ({
   searchResults,
@@ -27,7 +28,6 @@ const AdminCard = ({
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1";
 
   const loadUserData = async () => {
     try {
@@ -61,7 +61,7 @@ const AdminCard = ({
     if (userId) {
       try {
         const { data } = await axios.post(
-          `${BaseURL}/UpdateIsAdmin/${id}/${isAdmin}`,
+          `${BASE_URL}/UpdateIsAdmin/${id}/${isAdmin}`,
           { isAdmin },
           {
             headers: {
@@ -104,7 +104,7 @@ const AdminCard = ({
     if (id && userId) {
       try {
         const { data } = await axios.post(
-          `${BaseURL}/DeleteUser/${id}`,
+          `${BASE_URL}/DeleteUser/${id}`,
           {},
           {
             headers: {

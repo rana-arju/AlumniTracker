@@ -13,6 +13,7 @@ import ProfileImage from "../../components/ProfileImage";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { Positions } from "../../utils/data";
+import { BASE_URL } from "../otp/helper/Config";
 
 const EditProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -75,7 +76,7 @@ const EditProfile = ({ navigation }) => {
 
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
+    url: `${BASE_URL}/GetSingleUser/${userId?.id}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
@@ -167,7 +168,7 @@ const EditProfile = ({ navigation }) => {
       setLoading(true);
 
       const { data } = await axios.post(
-        `https://worrisome-lion-necklace.cyclic.app/api/v1/UpdateUser/${userId?.id}`,
+        `${BASE_URL}/UpdateUser/${userId?.id}`,
         user,
         {
           headers: {

@@ -2,11 +2,12 @@ import axios from "axios";
 
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const BaseURL = "https://worrisome-lion-necklace.cyclic.app/api/v1/";
+import { BASE_URL } from "../screens/otp/helper/Config";
+
 
 export async function RecoverVerifyEmailRequest(email) {
   try {
-    const URL = `${BaseURL}RecoverVerifyEmail/${email}`;
+    const URL = `${BASE_URL}/RecoverVerifyEmail/${email}`;
 
     let res = await axios.get(URL);
     if (res.data["status"] === "success" && res.status === 200) {
@@ -39,7 +40,7 @@ export async function RecoverVerifyEmailRequest(email) {
 
 export async function RecoverVerifyOTPRequest(email, otp) {
   try {
-    let URL = `${BaseURL}/RecoverVerifyOTP/${email}/${otp}`;
+    let URL = `${BASE_URL}/RecoverVerifyOTP/${email}/${otp}`;
     let res = await axios.get(URL);
     if (res.data["status"] === "success" && res.status === 200) {
       if (res.data["status"] === "fail") {
@@ -71,7 +72,7 @@ export async function RecoverVerifyOTPRequest(email, otp) {
 
 export async function RecoverResetPassRequest(email, otp, password) {
   try {
-    let URL = `${BaseURL}RecoverResetPass`;
+    let URL = `${BASE_URL}/RecoverResetPass`;
     let PostBody = { email: email, otp: otp, password: password };
     let res = await axios.post(URL, PostBody);
     if (res.status === 200) {

@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { BASE_URL } from "./otp/helper/Config";
 
 const Search = () => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ const Search = () => {
 
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/SearchByName/${searchKeyword}`,
+    url: `${BASE_URL}/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",

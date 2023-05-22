@@ -12,6 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { Positions } from "../../utils/data";
+import { BASE_URL } from "../otp/helper/Config";
 
 const Registration = () => {
   const navigation = useNavigation();
@@ -81,7 +82,7 @@ const Registration = () => {
     try {
       setLoading(true);
       const { data } = await axios.post(
-        `https://worrisome-lion-necklace.cyclic.app/api/v1/Registration`,
+        `${BASE_URL}/Registration`,
         user,
         {
           headers: {

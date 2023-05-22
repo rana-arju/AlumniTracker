@@ -14,6 +14,7 @@ import { COLORS, FONT, SIZES } from "../../../constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
+import { BASE_URL } from "../../../screens/otp/helper/Config";
 
 const Search = ({
   searchKeyword,
@@ -25,7 +26,7 @@ const Search = ({
 }) => {
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/SearchByName/${searchKeyword}`,
+    url: `${BASE_URL}/SearchByName/${searchKeyword}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",

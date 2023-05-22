@@ -1,13 +1,14 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../src/screens/otp/helper/Config";
 const useFetch = (endPoint, token) => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/${endPoint}`,
+    url: `${BASE_URL}/${endPoint}`,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
