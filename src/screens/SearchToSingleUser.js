@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import data from "../../data.json";
 import { COLORS } from "../constants/theme";
 import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";

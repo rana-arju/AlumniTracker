@@ -93,6 +93,7 @@ const EditProfile = ({ navigation }) => {
         setSession(response.data.user.session);
         setGender(response.data.user.gender);
         setImageURI(response.data.user.image);
+        setPosition(response?.data?.user.position);
       }
     } catch (error) {
       setLoading(false);
@@ -131,14 +132,43 @@ const EditProfile = ({ navigation }) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
+    let MobileRegex = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
 
-    if (!department) {
-      Toast.show({
-        type: "error",
-        text1: "Select role",
-        text2: "Select Any one role like: student or teacher",
-      });
-      isValid = false;
+    if (user.role == "student") {
+      if (!department) {
+        Toast.show({
+          type: "error",
+          text1: "Select department",
+          text2: "Select your department",
+        });
+        handleError("Select your department", "department");
+        isValid = false;
+      }
+      if (!user.fatherName) {
+        handleError("Enter your father name", "fatherName");
+        isValid = false;
+      }
+      if (!user.motherName) {
+        handleError("Enter your mother name", "motherName");
+        isValid = false;
+      }
+      if (!user.rollNumber) {
+        handleError("Enter your roll number", "rollNumber");
+        isValid = false;
+      }
+      if (!user.registrationNumber) {
+        handleError("Enter your registration number", "registrationNumber");
+        isValid = false;
+      }
+      if (!session) {
+        handleError("Select your session", "session");
+        Toast.show({
+          type: "error",
+          text1: "Select session",
+          text2: "Select your session",
+        });
+        isValid = false;
+      }
     }
     if (!user?.email) {
       handleError("Please input email", "email");
@@ -150,11 +180,13 @@ const EditProfile = ({ navigation }) => {
       isValid = false;
     }
 
-    // if (!user.mobile) {
-    //   handleError("Please input mobile number", "mobile");
-    //   isValid = false;
-    // }
-
+    if (!user.mobile) {
+      handleError("Please input mobile number", "mobile");
+      isValid = false;
+    } else if (MobileRegex.test(user.mobile) == false) {
+      handleError("Please valid mobile number", "mobile");
+      isValid = false;
+    }
     if (isValid) {
       updateProfile();
     }

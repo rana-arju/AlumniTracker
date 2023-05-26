@@ -14,12 +14,11 @@ import {
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useFetch from "../../hook/useFetch";
 const CustomDrawer = (props) => {
   const { navigation } = props;
   const [userDetails, setUserDetails] = useState();
-  useEffect(() => {
-    getUserData();
-  }, []);
+
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem("userData");
     if (userData) {
@@ -30,6 +29,14 @@ const CustomDrawer = (props) => {
     await AsyncStorage.setItem("userData", "");
     navigation.navigate("Login");
   };
+  const { data, isLoading, error, refetch } = useFetch(
+    `GetSingleUser/${userDetails?.id}`,
+    userDetails?.token
+  );
+  console.log("data", data);
+  useEffect(() => {
+    getUserData();
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -47,7 +54,9 @@ const CustomDrawer = (props) => {
           style={{ padding: 20 }}
         >
           <Image
-            source={{ uri: userDetails?.image }}
+            source={{
+              uri: isLoading ? userDetails?.image : data?.user?.image,
+            }}
             style={{
               height: 80,
               width: 80,
@@ -63,18 +72,20 @@ const CustomDrawer = (props) => {
                 marginBottom: 5,
               }}
             >
-              {userDetails?.name}
+              {isLoading ? userDetails.name : data?.user?.name}
             </Text>
-            {userDetails?.isAdmin && (
-              <Image
-                source={require("../../assets/icons/verified.png")}
-                style={{
-                  height: 20,
-                  width: 20,
-                  borderRadius: 40,
-                }}
-              />
-            )}
+            {isLoading
+              ? userDetails.isAdmin
+              : data?.user?.isAdmin && (
+                  <Image
+                    source={require("../../assets/icons/verified.png")}
+                    style={{
+                      height: 20,
+                      width: 20,
+                      borderRadius: 40,
+                    }}
+                  />
+                )}
           </View>
         </ImageBackground>
         <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10 }}>

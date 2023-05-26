@@ -35,6 +35,7 @@ const Registration = () => {
   const [loading, setLoading] = useState(false);
 
   const validate = () => {
+    let MobileRegex = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
     Keyboard.dismiss();
     let isValid = true;
     if (!selectedRole) {
@@ -58,19 +59,43 @@ const Registration = () => {
       isValid = false;
     }
 
-    // if (selectedRole == "teacher" && !user.mobile) {
-    //   handleError("Please input mobile number", "mobile");
-    //   isValid = false;
-    // }
+    if (selectedRole == "teacher") {
+      if (!user.mobile) {
+        handleError("Please input mobile number", "mobile");
+        isValid = false;
+      } else if (MobileRegex.test(user.mobile) == false) {
+        handleError("Please valid mobile number", "mobile");
+        isValid = false;
+      }
+    }
+    if (selectedRole == "student") {
+      if (!user.roll) {
+        handleError("Please enter your roll number", "roll");
+        isValid = false;
+      }
+      if (!user.registration) {
+        handleError("Please enter your roll number", "registration");
+        isValid = false;
+      }
+    }
 
     if (!user.password) {
       handleError("Please input password", "password");
       isValid = false;
-    } else if (user.password.length < 5) {
-      handleError("Min password length of 5", "password");
+    } else if (user.password.length < 8) {
+      handleError("Min password length of 8", "password");
+      isValid = false;
+    } else if (
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
+        user.password
+      ) == false
+    ) {
+      handleError(
+        "Enter strong password, mix capital, small, symbol",
+        "password"
+      );
       isValid = false;
     }
-
     if (isValid) {
       register();
     }
@@ -79,6 +104,7 @@ const Registration = () => {
     setLoading(true);
     // setTimeout(async () => {
     try {
+      console.log("user", user);
       setLoading(true);
       const { data } = await axios.post(
         `https://worrisome-lion-necklace.cyclic.app/api/v1/Registration`,
@@ -90,6 +116,7 @@ const Registration = () => {
           },
         }
       );
+      console.log("data", data);
       if (data.message == "success") {
         setLoading(false);
         Toast.show({
@@ -153,8 +180,11 @@ const Registration = () => {
             onFocus={() => handleError(null, "email")}
             iconName="email-outline"
             label="Email"
+            autoCapitalize="none"
             placeholder="Enter your email address"
             error={errors.email}
+            autoCorrect={false}
+            autoCompleteType="email"
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "password")}

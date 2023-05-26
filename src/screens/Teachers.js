@@ -15,7 +15,6 @@ import StudentCard from "../components/studentCard/StudentCard";
 import { useNavigation } from "@react-navigation/native";
 import useFetch from "../../hook/useFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const data = require("../../data.json");
 import Toast from "react-native-toast-message";
 import TeacherCard from "../components/teacherCard/TeacherCard";
 

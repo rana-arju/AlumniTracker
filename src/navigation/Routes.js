@@ -91,7 +91,6 @@ const Routes = ({ route, navigation }) => {
         drawerActiveBackgroundColor: COLORS.tertiary,
         drawerActiveTintColor: "#fff",
         drawerInactiveTintColor: "#333",
-
         drawerLabelStyle: {
           marginLeft: -25,
           fontSize: 15,
@@ -133,7 +132,7 @@ const Routes = ({ route, navigation }) => {
           ),
         }}
       />
-      {userData?.isAdmin && (
+      {user?.isAdmin && (
         <Drawer.Screen
           name="Dashboard"
           component={AdminTab}

@@ -7,14 +7,13 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import data from "../../data.json";
 import { COLORS } from "../constants/theme";
 import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../components/Loader";
 import axios from "axios";
 const StudentDetails = ({ navigation, route }) => {
-  const { id, token } = route.params;
+  const { id, token, isAdmin } = route.params;
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -98,6 +97,58 @@ const StudentDetails = ({ navigation, route }) => {
             <Text style={[styles.aboutPara]}>Position: {data?.position}</Text>
           </View>
         )}
+        {isAdmin && (
+          <>
+            {data?.email && (
+              <>
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Feather name="check-circle" size={20} color={"#fff"} />
+                  <Text style={[styles.aboutPara]}>Email: {data?.email}</Text>
+                </View>
+              </>
+            )}
+            {data?.fatherName && (
+              <>
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Feather name="check-circle" size={20} color={"#fff"} />
+                  <Text style={[styles.aboutPara]}>
+                    Father Name: {data?.fatherName}
+                  </Text>
+                </View>
+              </>
+            )}
+            {data?.motherName && (
+              <>
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Feather name="check-circle" size={20} color={"#fff"} />
+                  <Text style={[styles.aboutPara]}>
+                    Mother Name: {data?.motherName}
+                  </Text>
+                </View>
+              </>
+            )}
+            {data?.rollNumber && (
+              <>
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Feather name="check-circle" size={20} color={"#fff"} />
+                  <Text style={[styles.aboutPara]}>
+                    Roll Number: {data?.rollNumber}
+                  </Text>
+                </View>
+              </>
+            )}
+            {data?.registrationNumber && (
+              <>
+                <View style={{ flexDirection: "row", gap: 5 }}>
+                  <Feather name="check-circle" size={20} color={"#fff"} />
+                  <Text style={[styles.aboutPara]}>
+                    Registration Number: {data?.registrationNumber}
+                  </Text>
+                </View>
+              </>
+            )}
+          </>
+        )}
         {data?.department && (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
@@ -111,6 +162,12 @@ const StudentDetails = ({ navigation, route }) => {
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Feather name="check-circle" size={20} color={"#fff"} />
             <Text style={[styles.aboutPara]}>session: {data?.session}</Text>
+          </View>
+        )}
+        {data?.gender && (
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Feather name="check-circle" size={20} color={"#fff"} />
+            <Text style={[styles.aboutPara]}>Gender: {data?.gender}</Text>
           </View>
         )}
         {data.jobPosition && (

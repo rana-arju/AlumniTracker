@@ -25,9 +25,7 @@ const MyProfile = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadUserData();
-  }, []);
+
   useEffect(() => {
     if (!userId) {
       return;
@@ -57,7 +55,9 @@ const MyProfile = ({ navigation }) => {
       });
     }
   };
-
+  useEffect(() => {
+    loadUserData();
+  }, []);
   const options = {
     method: "GET",
     url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
