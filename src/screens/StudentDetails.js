@@ -12,6 +12,7 @@ import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../components/Loader";
 import axios from "axios";
+import { BASE_URL } from "./otp/helper/Config";
 const StudentDetails = ({ navigation, route }) => {
   const { id, token, isAdmin } = route.params;
   const [data, setData] = useState({});
@@ -20,7 +21,7 @@ const StudentDetails = ({ navigation, route }) => {
 
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${id}`,
+    url: `${BASE_URL}/GetSingleUser/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

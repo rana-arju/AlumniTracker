@@ -19,6 +19,7 @@ import Admin from "../screens/admin/Admin";
 import AdminTab from "./AdminTab";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "../screens/otp/helper/Config";
 
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +44,7 @@ const Routes = ({ route, navigation }) => {
   }, []);
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userData?.id}`,
+    url: `${BASE_URL}/GetSingleUser/${userData?.id}`,
     headers: {
       Authorization: `Bearer ${userData?.token}`,
       "Content-Type": "application/json",

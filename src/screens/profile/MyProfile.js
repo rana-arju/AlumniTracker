@@ -17,6 +17,7 @@ import Toast from "react-native-toast-message";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { BASE_URL } from "../otp/helper/Config";
 
 const MyProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
@@ -60,7 +61,7 @@ const MyProfile = ({ navigation }) => {
   }, []);
   const options = {
     method: "GET",
-    url: `https://worrisome-lion-necklace.cyclic.app/api/v1/GetSingleUser/${userId?.id}`,
+    url: `${BASE_URL}/GetSingleUser/${userId?.id}`,
     headers: {
       Authorization: `Bearer ${userId?.token}`,
       "Content-Type": "application/json",
