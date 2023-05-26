@@ -33,7 +33,6 @@ const CustomDrawer = (props) => {
     `GetSingleUser/${userDetails?.id}`,
     userDetails?.token
   );
-  console.log("data", data);
   useEffect(() => {
     getUserData();
   }, []);

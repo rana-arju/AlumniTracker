@@ -105,19 +105,13 @@ const Registration = () => {
     setLoading(true);
     // setTimeout(async () => {
     try {
-      console.log("user", user);
       setLoading(true);
-      const { data } = await axios.post(
-        `${BASE_URL}/Registration`,
-        user,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-      console.log("data", data);
+      const { data } = await axios.post(`${BASE_URL}/Registration`, user, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       if (data.message == "success") {
         setLoading(false);
         Toast.show({
