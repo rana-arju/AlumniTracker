@@ -15,7 +15,7 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import { BASE_URL } from "../../../screens/otp/helper/Config";
+import { BASE_URL } from "../../../helper/Config";
 
 const AdminCard = ({
   searchResults,

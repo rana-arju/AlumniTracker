@@ -19,7 +19,7 @@ import Admin from "../screens/admin/Admin";
 import AdminTab from "./AdminTab";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "../screens/otp/helper/Config";
+import { BASE_URL } from "../helper/Config";
 
 const Drawer = createDrawerNavigator();
 

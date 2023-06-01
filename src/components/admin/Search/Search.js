@@ -14,7 +14,7 @@ import { COLORS, FONT, SIZES } from "../../../constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
-import { BASE_URL } from "../../../screens/otp/helper/Config";
+import { BASE_URL } from "../../../helper/Config";
 
 const Search = ({
   searchKeyword,

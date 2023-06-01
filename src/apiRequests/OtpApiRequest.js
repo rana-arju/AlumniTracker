@@ -2,7 +2,7 @@ import axios from "axios";
 
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "../screens/otp/helper/Config";
+import { BASE_URL } from "../helper/Config";
 
 
 export async function RecoverVerifyEmailRequest(email) {
