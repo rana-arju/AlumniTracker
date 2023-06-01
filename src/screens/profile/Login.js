@@ -108,7 +108,6 @@ const Login = ({ navigation }) => {
             placeholder="Enter your email address"
             error={errors.email}
           />
-
           <Input
             onChangeText={(text) => handleOnchange(text, "password")}
             onFocus={() => handleError(null, "password")}

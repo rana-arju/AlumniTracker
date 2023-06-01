@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../src/screens/otp/helper/Config";
+import { BASE_URL } from "../src/helper/Config";
 const useFetch = (endPoint, token) => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);

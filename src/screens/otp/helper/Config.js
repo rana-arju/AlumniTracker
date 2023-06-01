@@ -1,1 +1,0 @@
-export const BASE_URL = "https://worrisome-lion-necklace.cyclic.app/api/v1"
