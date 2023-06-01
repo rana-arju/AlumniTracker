@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { Positions } from "../../utils/data";
-import { BASE_URL } from "../otp/helper/Config";
+import { BASE_URL } from "../../helper/Config";
 
 const Registration = () => {
   const navigation = useNavigation();

@@ -13,7 +13,7 @@ import ProfileImage from "../../components/ProfileImage";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { Positions } from "../../utils/data";
-import { BASE_URL } from "../otp/helper/Config";
+import { BASE_URL } from "../../helper/Config";
 
 const EditProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");

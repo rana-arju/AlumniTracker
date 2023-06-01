@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { BASE_URL } from "./otp/helper/Config";
+import { BASE_URL } from "../helper/Config";
 
 const Search = () => {
   const navigation = useNavigation();

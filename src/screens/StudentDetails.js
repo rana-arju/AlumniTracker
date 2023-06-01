@@ -12,7 +12,7 @@ import phone from "../../assets/icons/smartphone.png";
 import { Feather } from "@expo/vector-icons";
 import Loader from "../components/Loader";
 import axios from "axios";
-import { BASE_URL } from "./otp/helper/Config";
+import { BASE_URL } from "../helper/Config";
 const StudentDetails = ({ navigation, route }) => {
   const { id, token, isAdmin } = route.params;
   const [data, setData] = useState({});

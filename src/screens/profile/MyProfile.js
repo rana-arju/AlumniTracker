@@ -17,7 +17,7 @@ import Toast from "react-native-toast-message";
 import Loader from "../../components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { BASE_URL } from "../otp/helper/Config";
+import { BASE_URL } from "../../helper/Config";
 
 const MyProfile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
