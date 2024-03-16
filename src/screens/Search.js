@@ -145,10 +145,10 @@ const Search = () => {
             <Text style={styles.headerTitle}>Your Search Result</Text>
           </View>
         </View>
-        <View>
+        <View style={{paddingBottom: 330}}>
           {searchResults.length > 0 ? (
             <FlatList
-              style={{ marginTop: 15 }}
+              style={{ marginTop: 15}}
               data={searchResults}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderListItem}

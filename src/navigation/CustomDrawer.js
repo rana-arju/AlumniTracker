@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import React, { useEffect, useState } from "react";
 import {
   DrawerContentScrollView,
@@ -18,7 +19,18 @@ import useFetch from "../../hook/useFetch";
 const CustomDrawer = (props) => {
   const { navigation } = props;
   const [userDetails, setUserDetails] = useState();
-
+  // const customShare = async() => {
+  //   const shareOption = {
+  //     title: "Alumni Tracker App link",
+  //     message: "Install This App For Register!",
+  //     url: "https://play.google.com/store/apps/details?id=com.ranaarju.AlumniTracker&hl=en&gl=US&pli=1",
+  //   };
+  //   try {
+  //     const ShareResponse = await Share.open(shareOption);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem("userData");
     if (userData) {
@@ -92,7 +104,7 @@ const CustomDrawer = (props) => {
         </View>
       </DrawerContentScrollView>
       <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}>
-        <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
+        <TouchableOpacity onPress={""} style={{ paddingVertical: 15 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Ionicons name="share-social-outline" size={22} />
             <Text

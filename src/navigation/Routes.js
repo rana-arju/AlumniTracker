@@ -12,6 +12,7 @@ import {
   AntDesign,
   Ionicons,
   MaterialCommunityIcons,
+  Octicons,
 } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 import HeaderProfile from "../components/HeaderProfile";
@@ -20,6 +21,8 @@ import AdminTab from "./AdminTab";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../helper/Config";
+import AllJobs from "../screens/Jobs/AllJobs";
+import AddJob from "../screens/Jobs/AddJob";
 
 const Drawer = createDrawerNavigator();
 
@@ -127,6 +130,28 @@ const Routes = ({ route, navigation }) => {
           drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="account-edit-outline"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="All Jobs"
+        component={AllJobs}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Octicons name="briefcase" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Add Job"
+        component={AddJob}
+        options={{
+          drawerIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="briefcase-edit"
               size={24}
               color={color}
             />
