@@ -18,9 +18,7 @@ import Toast from "react-native-toast-message";
 import DatePicker from "react-native-neat-date-picker";
 
 import { Picker } from "@react-native-picker/picker";
-import axios from "axios";
-import { Positions } from "../../utils/data";
-import { BASE_URL } from "../../helper/Config";
+
 import { COLORS } from "../../constants/theme";
 import { Foundation } from "@expo/vector-icons";
 
@@ -39,33 +37,15 @@ const AddJob = ({ navigation }) => {
     // You should close the modal in here
     setShowDatePickerSingle(false);
 
-    // The parameter 'output' is an object containing date and dateString (for single mode).
-    // For range mode, the output contains startDate, startDateString, endDate, and EndDateString
-    console.log(output);
+    console.log(output.dateString);
     setDate(output.dateString);
   };
 
-  const [storeUser, setStoreUser] = useState({});
   const [employmentStatus, setEmploymentStatus] = useState("");
-  const [session, setSession] = useState("");
-  const [sessionYears, setSessionYears] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [gender, setGender] = useState("");
-  const [imageURI, setImageURI] = useState("");
-  const [position, setPosition] = useState("");
-
-  // session generate
-  useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    const sessionStartYear = 2004;
-    const sessionEndYear = currentYear;
-    const years = [];
-    for (let i = sessionStartYear; i < sessionEndYear; i++) {
-      years.push(`${i}-${i + 1}`);
-    }
-    setSessionYears(years);
-  }, []);
 
   useEffect(() => {
     loadUserData();
@@ -93,109 +73,50 @@ const AddJob = ({ navigation }) => {
     if (!userId) {
       return;
     }
-    fetchData();
   }, [userId]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchData();
     setRefreshing(false);
   }, []);
-
-  const options = {
-    method: "GET",
-    url: `${BASE_URL}/GetSingleUser/${userId?.id}`,
-    headers: {
-      Authorization: `Bearer ${userId?.token}`,
-      "Content-Type": "application/json",
-    },
-  };
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.request(options);
-      if (response) {
-        setLoading(false);
-        setStoreUser(response.data.user);
-        setUser(response.data.user);
-        setEmploymentStatus(response.data.user.department);
-        setSession(response.data.user.session);
-        setGender(response.data.user.gender);
-        setImageURI(response.data.user.image);
-        setPosition(response?.data?.user.position);
-      }
-    } catch (error) {
-      setLoading(false);
-    } finally {
-    }
-  };
 
   useEffect(() => {
     if (!userId) {
       return;
     }
-    fetchData();
   }, [userId]);
-  const initial = {
-    education: storeUser.education ? storeUser.education : userId?.education,
-    name: storeUser.name ? storeUser.name : userId.name,
-    salary: storeUser.salary ? storeUser.salary : "",
-    vacancy: storeUser.singleUser ? storeUser.singleUser : "",
-    registrationNumber: storeUser.registrationNumber
-      ? storeUser.registrationNumber
-      : "",
-    location: storeUser.location ? storeUser.location : "",
-    company: storeUser.company ? storeUser.company : "",
-    companyName: storeUser.companyName ? storeUser.companyName : "",
-    jobLocation: storeUser.jobLocation ? storeUser.jobLocation : "",
-    jobPosition: storeUser.jobPosition ? storeUser.jobPosition : "",
-    session: storeUser.session ? storeUser.session : "",
-    department: storeUser.department ? storeUser.department : "",
-    position: storeUser.position ? storeUser.position : "",
-    gender: storeUser.gender ? storeUser.gender : "",
-    image: storeUser.image ? storeUser.image : "",
-  };
-  const [user, setUser] = useState(initial);
+
+  const [user, setUser] = useState("");
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-    let salaryRegex = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
 
-    if (user.role == "student") {
+    if (user) {
       if (!employmentStatus) {
         Toast.show({
           type: "error",
-          text1: "Select department",
-          text2: "Select your department",
+          text1: "Select Employment Status",
+          text2: "Select Employment Status",
         });
-        handleError("Select your department", "department");
+        handleError("Select Employment Status", "employmentStatus");
         isValid = false;
       }
       if (!user.location) {
-        handleError("Enter your father name", "location");
+        handleError("Enter job location", "location");
         isValid = false;
       }
       if (!user.company) {
-        handleError("Enter your mother name", "company");
+        handleError("Enter company", "company");
         isValid = false;
       }
       if (!user.vacancy) {
-        handleError("Enter your roll number", "vacancy");
+        handleError("Enter total vacancy", "vacancy");
         isValid = false;
       }
-      if (!user.registrationNumber) {
-        handleError("Enter your registration number", "registrationNumber");
-        isValid = false;
-      }
-      if (!session) {
-        handleError("Select your session", "session");
-        Toast.show({
-          type: "error",
-          text1: "Select session",
-          text2: "Select your session",
-        });
+      if (!date) {
+        handleError("Select deadline", "deadline");
         isValid = false;
       }
     }
@@ -204,16 +125,25 @@ const AddJob = ({ navigation }) => {
       isValid = false;
     }
 
-    if (!user.name) {
-      handleError("Please input name", "name");
+    if (!user.position) {
+      handleError("Please enter position", "position");
       isValid = false;
     }
 
     if (!user.salary) {
-      handleError("Please input salary number", "salary");
+      handleError("Please input salary", "salary");
       isValid = false;
-    } else if (salaryRegex.test(user.salary) == false) {
-      handleError("Please valid salary number", "salary");
+    }
+    if (!user.requirements) {
+      handleError("Please enter requirements", "requirements");
+      isValid = false;
+    }
+    if (!user.jobContext) {
+      handleError("Please enter job context", "jobContext");
+      isValid = false;
+    }
+    if (!user.responsibilities) {
+      handleError("Please enter responsibilities", "responsibilities");
       isValid = false;
     }
     if (isValid) {
@@ -221,57 +151,6 @@ const AddJob = ({ navigation }) => {
     }
   };
 
-  const updateProfile = async () => {
-    setLoading(true);
-
-    try {
-      setLoading(true);
-
-      const { data } = await axios.post(
-        `${BASE_URL}/UpdateUser/${userId?.id}`,
-        user,
-        {
-          headers: {
-            Authorization: `Bearer ${userId?.token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-      if (data) {
-        setLoading(false);
-        setStoreUser(data);
-        await AsyncStorage.setItem(
-          "userData",
-          JSON.stringify({
-            name: data?.name,
-            image: data?.image,
-            education: data?.education,
-            status: data?.status,
-            role: data?.role,
-            isAdmin: data?.isAdmin,
-            department: data?.department,
-            id: data?.id,
-            loggedIn: true,
-            token: userId?.token,
-          })
-        );
-        Toast.show({
-          type: "success",
-          text1: "Profile update Successful!",
-          text2: "Continue your contribution 👋",
-        });
-        navigation.navigate("Home");
-      }
-    } catch (error) {
-      setLoading(false);
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Something went wrong",
-      });
-    }
-  };
   const handleOnchange = (text, input) => {
     setUser((prevState) => ({ ...prevState, [input]: text }));
   };
@@ -472,7 +351,6 @@ const AddJob = ({ navigation }) => {
             />
           </View>
 
-          
           <Button title="JOB POST" onPress={validate} />
         </View>
       </ScrollView>

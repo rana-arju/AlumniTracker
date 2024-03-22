@@ -22,7 +22,6 @@ const Search = ({
   userId,
   setSearchResults,
   againLoad,
-  setAgainLoad,
 }) => {
   const options = {
     method: "GET",

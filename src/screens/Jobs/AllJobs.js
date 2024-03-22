@@ -3,7 +3,6 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -12,6 +11,7 @@ import JobCard from "./JobCard";
 import { COLORS, SIZES } from "../../constants/theme";
 const data = [
   {
+    _id: 1,
     position: "Software Engineer (Full Stack Developer)",
     company: "Mercury IT International Limited",
     deadline: "13 Apr 2024",
@@ -19,7 +19,7 @@ const data = [
     gender: "Male",
     location: "cox's Bazar",
     salary: 3400,
-    author: {name: "Rana Arju", photo: ""},
+    author: { name: "Rana Arju", photo: "" },
     education: "Bachelor of Science (BSc) in Computer Science & Engineering",
     experience:
       "At least 2 years The applicants should have experience in the following business area Software Company",
@@ -34,6 +34,7 @@ const data = [
     employmentStatus: "Full Time",
   },
   {
+    _id: 2,
     position: "Sr. Officer/ Executive - Compost Plant",
     company: "Mercury IT International Limited",
     deadline: "13 Apr 2024",
@@ -56,6 +57,7 @@ const data = [
     employmentStatus: "Full Time",
   },
   {
+    _id: 3,
     position: "SQA Automation Engineer",
     company: "Automation Solutionz Bangladesh",
     deadline: "13 Apr 2024",
@@ -78,6 +80,7 @@ const data = [
     employmentStatus: "Full Time",
   },
   {
+    _id:4,
     position: "Executive-Human Resources",
     company: "Queens Healthcare Ltd QHL",
     deadline: "13 Apr 2024",
@@ -101,14 +104,14 @@ const data = [
   },
 ];
 const AllJobs = ({ navigation, route }) => {
-  // const { endPoint, token } = route.params;
+  // const {  token } = route.params;
   const [selectedJob, setSelectedJob] = useState();
   const handleCardPress = (item) => {
-    // navigation.navigate(`studentDetails`, {
-    //   id: item._id,
-    //   token: token,
-    // });
-    // setSelectedJob(item.job_id);
+    navigation.navigate(`jobDetails`, {
+      id: item._id,
+      // token: token,
+    });
+    setSelectedJob(item.job_id);
   };
   const renderSeparator = () => (
     <View
@@ -118,20 +121,20 @@ const AllJobs = ({ navigation, route }) => {
     />
   );
   const renderFooter = () => <View style={{ height: 50 }} />;
-//   const {  isLoading, error, refetch } = useFetch(endPoint, token);
+  //   const {  isLoading, error, refetch } = useFetch(endPoint, token);
   return (
     <View style={styles.container}>
-      <View >
+      <View>
         <Text style={styles.headerTitle}>All Jobs</Text>
       </View>
       <View style={styles.cardsContainer}>
         {
-        // isLoading ? (
-        //   <ActivityIndicator size="large" color={COLORS.primary} />
-        // ) : error ? (
-        //   <Text>Something went wrong</Text>
-        // ) : 
-        
+          // isLoading ? (
+          //   <ActivityIndicator size="large" color={COLORS.primary} />
+          // ) : error ? (
+          //   <Text>Something went wrong</Text>
+          // ) :
+
           <FlatList
             data={data}
             renderItem={({ item }) => (

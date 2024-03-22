@@ -19,6 +19,7 @@ import CreatePassword from "./src/screens/otp/CreatePassword";
 import OtpSend from "./src/screens/otp/OtpSend";
 import SearchToSingleUser from "./src/screens/SearchToSingleUser";
 import MyProfile from "./src/screens/profile/MyProfile";
+import JobDetails from "./src/screens/Jobs/JobDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,16 @@ export default function App() {
             <Stack.Screen
               name="UserDetails"
               component={SearchToSingleUser}
+              options={{
+                headerTitleStyle: {
+                  fontSize: 25,
+                },
+                headerTitleAlign: "center",
+              }}
+            />
+            <Stack.Screen
+              name="jobDetails"
+              component={JobDetails}
               options={{
                 headerTitleStyle: {
                   fontSize: 25,
